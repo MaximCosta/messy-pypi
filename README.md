@@ -10,14 +10,14 @@ Maxio && ArkanYota
 		├── src/
 		│   └── messy-pypi/
 		│       ├── __init__.py
-		│		├── function
-		│		│	├── main.projet.py
-		│		│	└── main.messy.py
-		│		├── class
-		│		│	├── main.projet.py
-		│		│	└── main.messy.py
-		│		└── init
-		│			└── main.init.py
+		│	├── function
+		│	│	├── main.projet.py
+		│	│	└── main.messy.py
+		│	├── class
+		│	│	├── main.projet.py
+		│	│	└── main.messy.py
+		│	└── init
+		│		└── main.init.py
 		└── tests/
 
 ## lib
