@@ -7,26 +7,46 @@
 		├── README.md
 		├── setup.cfg
 		├── setup.py
-		├── src/
-		│   └── messy-pypi/
-		│       ├── __init__.py
+		├── messy-pypi/
+		│   ├── __init__.py
 		│	├── function
-		│	│	├── main.projet.py
-		│	│	└── main.messy.py
-		│	├── class
-		│	│	├── main.projet.py
-		│	│	└── main.messy.py
-		│	└── init
-		│		└── main.init.py
+		│	│	├── main_projet.py
+		│	│	└── main_messy.py
+		│	└── class
+		│		├── main_projet.py
+		│		└── main_messy.py
 		└── tests/
 
 ## lib
 
 ## function
 
+### function.main_terminalGetKey.**getKey**
+
+Entrée: Any \
+Sortie: String of key
+
+Met en pause le terminal et attend l'appui d'une touche et retourne un string. \
+Touche differantes de Windows à Linux/MacOs \
+Ne pas print dirrectement la sortie car pour les touches spéciales la chaine est du type `\r` ou `\x1b`. Pour savoir la sortie à obtenir transformez encodez la sortie. 
+
+Compatible: Windows Linux MacOs
+
+### function.main_terminalFunction.**DrawChar**
+Entrée: x, y: int; char: String \
+Sotie: None
+
+Affiche `char` au potition (x,y) du terminal
+
+Compatible: terminaux ayant l'option Ansii `\033[...`
+
 ## class
 
 ## init
+// Pour importer `main_projet.py` il faut mettre `from function.main_projet import *` dans le `__init__.py` (* peux être remplacer par le nom de la fonction à importer) 
 
 ## colab
 Maxio && ArkanYota
+
+## infos
+!(Lien tuto)[https://medium.com/@joel.barmettler/how-to-upload-your-python-package-to-pypi-65edc5fe9c56]
