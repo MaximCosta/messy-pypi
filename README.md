@@ -47,6 +47,21 @@ Affiche `char` au potition (x,y) du terminal
 
 Compatible: terminaux ayant l'option Ansii `\033[...`
 
+### function.main_terminalFunction.**countNumberOfLinesInFile**
+Entrée: folder: str, match="(.py$|.md$)" : str \
+Sotie: int
+
+Renvoie le nombre de lignes dans les fichier qui match avec le regex `match` dans le fichier `folder` de les les dossier enfants et petit-enfants et encore plus petits
+Et supprime les lignes vides
+
+### function.main_terminalFunction.**countNumberOfLinesInFolderWithMatch**
+Entrée: file: str
+Sortie: int
+
+Renvoie le nombre de lignes dans le fichier `file`
+Info: You can set "../../Here"
+Info: C'est le fichier a partir du dossier de ce fichier
+
 ## class
 
 ## init
