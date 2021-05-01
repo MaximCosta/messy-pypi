@@ -23,14 +23,21 @@
 
 ### function.main_terminalGetKey.**getKey**
 
-Entrée: Any \
+Entrée: None \
 Sortie: String of key
 
 Met en pause le terminal et attend l'appui d'une touche et retourne un string. \
 Touche differantes de Windows à Linux/MacOs \
-Ne pas print dirrectement la sortie car pour les touches spéciales la chaine est du type `\r` ou `\x1b`. Pour savoir la sortie à obtenir transformez encodez la sortie. 
+Ne pas print dirrectement la sortie car pour les touches spéciales la chaine est du type `\r` ou `\x1b`. Pour savoir la sortie à obtenir transformez encodez la sortie. Utilisez `function.main_terminalGetKey.getBytesKey`.
 
 Compatible: Windows Linux MacOs
+
+### function.main_terminalGetKey.**getBytesKey**
+
+Entrée : None \
+Sortie : Bytes String 
+
+Retourne getKey mais en encoder pour pouvoir le print()
 
 ### function.main_terminalFunction.**DrawChar**
 Entrée: x, y: int; char: String \
