@@ -76,6 +76,9 @@ TODO
 ### functions.main_terminalFunction.**TerminalSize**
 TODO
 
+### functions.main_terminalFunction.**MessageTropPetitPage**
+TODO
+
 ## classes
 
 ## init
@@ -93,3 +96,4 @@ Maxio && ArkanYota
 - Demineur
 - Snake
 - printColor
+- insert https://github.com/ARKANYOTA/ImageEnPoints
