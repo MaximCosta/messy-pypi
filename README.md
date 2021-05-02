@@ -81,6 +81,11 @@ TODO
 
 ## classes
 
+### classes.main_customElement.List
+list custom pour python, avec 
+	-rm : permet de supprimer le premier element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur
+	-rmA : permet de supprimer tout les element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur
+
 ## init
 // Pour importer `main_projet.py` il faut mettre `from functions.main_projet import *` dans le `__init__.py` (* peux être remplacer par le nom de la fonction à importer) 
 
