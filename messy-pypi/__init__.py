@@ -1,3 +1,0 @@
-from function.main_terminalGetKey import getKey, getBytesKey
-from function.main_terminalFunctions import DrawChar
-from function.main_countlignes import countNumberOfLinesInFolderWithMatch, countNumberOfLinesInFile

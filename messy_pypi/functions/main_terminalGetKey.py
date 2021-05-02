@@ -1,10 +1,10 @@
-def getKey() -> str:
+        
+def getKey(debug:bool=False) -> str:
     """
     Warning: Ne renvoie pas la même valeur entre Windows et Linux/MacOs
     Warning2: Sur Linux/MacOs, Il faut presser 2 foix le button Echap pour que il soit effectuer
     Pause le terminal jusqua la rentrer d'un input
     """
-
     from sys import platform
     if platform[:3] == 'win':
         __keydict = {
@@ -136,8 +136,12 @@ def getKey() -> str:
                 return c1 + c2 + c3
             c4 = getchar()
             return c1 + c2 + c3 + c4
-        
-    return getkey()
+    
+    key = getkey()
+    if debug and key=="\x03":
+        exit()
+    else:
+        return key
 
-def getBytesKey() -> str:
-    return getKey().encode()
+def getBytesKey(debug:bool=False) -> str:
+    return getKey(debug=debug).encode()
