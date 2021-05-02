@@ -1,4 +1,5 @@
 import os
+import time
 
 def DrawChar(x: int, y: int, char: str) -> None:
     """
@@ -8,7 +9,8 @@ def DrawChar(x: int, y: int, char: str) -> None:
     print(f"\033[{y};{x}H{char}")
 
 def Clear() -> None:
-    os.system("cls||clear")
+    # os.system("cls||clear")
+    print("\033[2J\033[1;1H")
 
 def TerminalSize(item: str=None) -> (tuple[int, int] or int):
     """
@@ -24,11 +26,12 @@ def TerminalSize(item: str=None) -> (tuple[int, int] or int):
         case "Y":
             return size[1]
 
-def MessageTropPetitPage(size) -> bool:
+def MessageTropPetitPage(sizex, sizey) -> bool:
     """
-    size: (int, int)
+    sizex, sizey: int
     """
-    if size > TerminalSize("X") or size > TerminalSize("Y"):
+    if sizex > TerminalSize("X") or sizey > TerminalSize("Y"):
         print("Trio ptit")
+        time.sleep(.50)
         return True
     return False
