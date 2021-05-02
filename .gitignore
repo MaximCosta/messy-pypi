@@ -1,9 +1,8 @@
 .vscode/
+.idea/
 
 __pycache__/
 *.py[cod]
 *$py.classes
 
 *.swp
-
-.idea/
