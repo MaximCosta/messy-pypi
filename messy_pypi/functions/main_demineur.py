@@ -31,12 +31,13 @@ def demineur():
                 for k in range(-1, 2):
                     for l in range(-1,2):
                         if not ( k == 0 and l == 0):
-                            try:
-                                if  Plateau[i+k][j+l] == 9:
+                            if 0 <= i+k < 10 and 0 <= j+l < 10:
+                                if Plateau[i+k][j+l] == 9:
                                     somme +=1
-                            except:
-                                pass
-                Ligne += [somme]
+                if somme == 0:
+                    Ligne += [10]
+                else:
+                    Ligne += [-somme]
         NouveauPlateau += [Ligne]
     del Ligne
     Plateau = NouveauPlateau
@@ -53,19 +54,30 @@ def demineur():
             if key == "q" or key == "\x1b[D":
                 x = max(0, x-1)
             if key == "d" or key == "\x1b[C":
-                x = min(size, x+1)
+                x = min(size-1, x+1)
             if key == "z" or key == "\x1b[A":
                 y = max(0, y-1)
             if key == "s" or key == "\x1b[B":
-                y = min(size, y+1)
-
-            print(Plateau)
+                y = min(size-1, y+1)
+            if key == "a":
+                if Plateau[x][y] == 9:
+                    GameOpen = False
+                    continue
+                if Plateau[x][y] < 0:
+                    Plateau[x][y] = -Plateau[x][y]
+                if Plateau[x][y] == 10:
+                    Plateau[x][y] = 0 
+            #print(Plateau)
             for i in range(len(Plateau)):
                 print("\n ", end="")
                 for j in range(len(Plateau[i])):
                     match Plateau[i][j]:
-                        case 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8:
+                        case 0:
+                            charItem = " "
+                        case 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8:
                             charItem = Plateau[i][j]
+                        case -1 | -2 | -3 | -4 | -5 | -6 | -7 | -8:
+                            charItem = "\033[32m\u2588\033[0m"
                         case 10:
                             charItem = "\u2588"
                         case 9:
@@ -75,10 +87,10 @@ def demineur():
                         case _:
                             charItem = "X"
                     DrawChar(((TerminalSize("X")-size)//2)+i,((TerminalSize("Y")-size)//2)+j, charItem)
-            # DrawChar(140,30, "X")
+            DrawChar(((TerminalSize("X")-size)//2)+x,((TerminalSize("Y")-size)//2)+y, "X")
             # DrawChar((TerminalSize("Y")//2), 10, "Y")
             # print(x,y, size)
-# ⓪①②③④⑤⑥⑦⑧ ⓵⓶⓷⓸⓹⓺⓻⓼⓽⓾ 
+# ⓪①②③④⑤⑥⑦⑧ ⓵⓶⓷⓸⓹⓺⓻⓼⓽⓾
 
 """
 
