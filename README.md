@@ -87,6 +87,12 @@ list custom pour python, avec \
 	`- rma(elt)` : permet de supprimer tout les element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
 	`- length` : renvoie le poid du tableau \
 	`- indexExist(index)` : renvoie True si l'index existe sinon False \
+\
+
+### classes.main_minesweeper
+permet de jouer au démineur avec pygame \
+	`Main.start()` : permet de lancer le jeux \
+\
 
 ## init
 // Pour importer `main_projet.py` il faut mettre `from functions.main_projet import *` dans le `__init__.py` (* peux être remplacer par le nom de la fonction à importer) 
@@ -104,3 +110,7 @@ Maxio && ArkanYota
 - Snake
 - printColor
 - insert https://github.com/ARKANYOTA/ImageEnPoints
+
+### Maxio
+- Minesweeper (pygame)
+- CustomClass

@@ -1,8 +1,9 @@
 import os
+import pygame
 from enum import Enum, auto
 from random import randint
 
-import pygame
+
 
 
 class Main:
@@ -16,7 +17,9 @@ class Main:
         player = Player()
         grid = Grid(player)
         running = True
+        clock = pygame.time.Clock()
         while running:
+            clock.tick(30)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -47,8 +50,6 @@ class Main:
             grid.draw(surface)
             Stats.draw(surface, 'Lives remaining', (950, 100))
             Stats.draw(surface, str(player.get_health()), (1020, 200))
-            Stats.draw(surface, 'RMB to mark mine', (950, 550))
-            Stats.draw(surface, 'press b to show mines', (920, 650))
             pygame.display.flip()
 
 
@@ -89,25 +90,39 @@ class Cell:
         self.font_color = (0, 0, 0)
         self.marked = False
         self.explosion = False
+        self.img_flag = pygame.image.load('../resources/minesweeper/cell-flagged.png')
+        self.img_flag = pygame.transform.scale(self.img_flag, (self.size, self.size))
+
+        self.img_explode = pygame.image.load('../resources/minesweeper/mine-exploded.png')
+        self.img_explode = pygame.transform.scale(self.img_explode, (self.size, self.size))
+
+        self.img_mine = pygame.image.load('../resources/minesweeper/mine.png')
+        self.img_mine = pygame.transform.scale(self.img_mine, (self.size, self.size))
+
+        self.img_cell = []
+        for i in range(9):
+            _img = pygame.image.load(f'../resources/minesweeper/cell-{i}.png')
+            _img = pygame.transform.scale(_img, (self.size, self.size))
+            self.img_cell.append(_img)
 
     def draw(self, surface):
-        if self.visible:
-            pygame.draw.rect(surface, self.color, (self.pos[0], self.pos[1], self.size, self.size))
+        if self.visible and not self.label and not(self.show_mine and self.mine):
+            surface.blit(self.img_cell[0], (self.pos[0], self.pos[1]))
+        elif self.label:
+            self.show_label(surface, self.mine_counter, self.pos)
         elif self.marked:
-            pygame.draw.rect(surface, (150, 50, 50), (self.pos[0], self.pos[1], self.size, self.size))
+            surface.blit(self.img_flag, (self.pos[0], self.pos[1]))
+        elif self.show_mine and self.mine:
+            surface.blit(self.img_mine, (self.pos[0], self.pos[1]))
+        elif self.explosion:
+            surface.blit(self.img_explode, (self.pos[0], self.pos[1]))
         else:
             pygame.draw.rect(surface, (50, 50, 50), (self.pos[0], self.pos[1], self.size, self.size))
-        if self.show_mine and self.mine:
-            pygame.draw.circle(surface, (10, 10, 10), (self.pos[0] + 15, self.pos[1] + 15), 15)
-        if self.explosion:
-            pygame.draw.circle(surface, (255, 10, 10), (self.pos[0] + 15, self.pos[1] + 15), 15)
-
-        if self.label:
-            self.show_label(surface, self.mine_counter, self.pos)
 
     def show_label(self, surface, label, pos):
-        textsurface = pygame.font.SysFont('Comic Sans MS', 18).render(label, False, self.font_color)
-        surface.blit(textsurface, (pos[0] + 10, pos[1] + 4))
+        # textsurface = pygame.font.SysFont('Comic Sans MS', 18).render(label, False, self.font_color)
+        # surface.blit(textsurface, (pos[0] + 10, pos[1] + 4))
+        surface.blit(self.img_cell[int(label)], (pos[0], pos[1]))
 
 
 class Grid:
