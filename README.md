@@ -95,12 +95,12 @@ list custom pour python, avec \
 	`- minv` : retourne la valeur min du tableau \
 	`- mini` : retourne l'index de la valeur min \
 	`- length` : renvoie le poid du tableau \
-\
+
 
 ### classes.main_minesweeper
 permet de jouer au démineur avec pygame \
 	`Main.start()` : permet de lancer le jeux \
-\
+
 
 ## init
 // Pour importer `main_projet.py` il faut mettre `from functions.main_projet import *` dans le `__init__.py` (* peux être remplacer par le nom de la fonction à importer) 
