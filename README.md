@@ -101,6 +101,9 @@ list custom pour python, avec \
 permet de jouer au démineur avec pygame \
 	`Main.start()` : permet de lancer le jeux \
 
+### classes.main_tetris
+permet de jouer a tetris avec pygame \
+	`tetris().main_menu()` : permet de lancer le jeux \
 
 ## init
 // Pour importer `main_projet.py` il faut mettre `from functions.main_projet import *` dans le `__init__.py` (* peux être remplacer par le nom de la fonction à importer) 
@@ -121,4 +124,6 @@ Maxio && ArkanYota
 
 ### Maxio
 - Minesweeper (pygame)
+- Tetris (pygame)
 - CustomClass
+
