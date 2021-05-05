@@ -79,31 +79,36 @@ TODO
 ### functions.main_terminalFunction.**MessageTropPetitPage**
 TODO
 
+
+### functions.main_duplicateFile.**check_for_duplicates**
+`check_for_duplicates(paths='./',remove=False)`
+paths est le chemin racine pour le scan, si remove = True, les fichiers dupliquer trouver seront supprimer.
+
 ## classes
 
 ### classes.main_customElement.List
 list custom pour python, avec \
-	`- rm(elt)` : permet de supprimer le premier element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
-	`- rmAll(elt)` : permet de supprimer tout les element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
-	`- indexExist(index)` : renvoie True si l'index existe sinon False \
-	`- replace(start,end)` : remplace la valeur de depart part la nouvelle, sur le premiere element trouvé \
-	`- replaceAll(start,end,maxreplace)` : remplace la valeur de depart part le nouvelle, opération sur tout le tableau \
-	`- find(elt)` : trouve l'index d'un element par sa valeur, retourne l'index \
-	`- findAll(elt)` : retourne tout l'index de tout les element corespondant \
-	`- maxv` : retourne la valeur max du tableau \
-	`- maxi` : retourne l'index de la valeur max \
-	`- minv` : retourne la valeur min du tableau \
-	`- mini` : retourne l'index de la valeur min \
-	`- length` : renvoie le poid du tableau \
+	`- rm(elt)` : permet de supprimer le premier element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \n
+	`- rmAll(elt)` : permet de supprimer tout les element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \n
+	`- indexExist(index)` : renvoie True si l'index existe sinon False \n
+	`- replace(start,end)` : remplace la valeur de depart part la nouvelle, sur le premiere element trouvé \n
+	`- replaceAll(start,end,maxreplace)` : remplace la valeur de depart part le nouvelle, opération sur tout le tableau \n
+	`- find(elt)` : trouve l'index d'un element par sa valeur, retourne l'index \n
+	`- findAll(elt)` : retourne tout l'index de tout les element corespondant \n
+	`- maxv` : retourne la valeur max du tableau \n
+	`- maxi` : retourne l'index de la valeur max \n
+	`- minv` : retourne la valeur min du tableau \n
+	`- mini` : retourne l'index de la valeur min \n
+	`- length` : renvoie le poid du tableau \n
 
 
 ### classes.main_minesweeper
-permet de jouer au démineur avec pygame \
-	`Main.start()` : permet de lancer le jeux \
+permet de jouer au démineur avec pygame \n
+	`Main.start()` : permet de lancer le jeux \n
 
 ### classes.main_tetris
-permet de jouer a tetris avec pygame \
-	`tetris().main_menu()` : permet de lancer le jeux \
+permet de jouer a tetris avec pygame \n
+	`tetris().main_menu()` : permet de lancer le jeux \n
 
 ## init
 // Pour importer `main_projet.py` il faut mettre `from functions.main_projet import *` dans le `__init__.py` (* peux être remplacer par le nom de la fonction à importer) 
@@ -125,5 +130,6 @@ Maxio && ArkanYota
 ### Maxio
 - Minesweeper (pygame)
 - Tetris (pygame)
+- duplicateFile
 - CustomClass
 
