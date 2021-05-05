@@ -95,6 +95,9 @@ list custom pour python, avec \
 	`- replaceAll(start,end,maxreplace)` : remplace la valeur de depart part le nouvelle, opération sur tout le tableau \
 	`- find(elt)` : trouve l'index d'un element par sa valeur, retourne l'index \
 	`- findAll(elt)` : retourne tout l'index de tout les element corespondant \
+	`- clearDuplicate()` : supprimer toutes les doublont \
+	`- showDuplicate()` : renvoie les valeurs dupliquer \
+	`- countAll()` : renvoie une list de tuple avec avec  \
 	`- maxv` : retourne la valeur max du tableau \
 	`- maxi` : retourne l'index de la valeur max \
 	`- minv` : retourne la valeur min du tableau \
@@ -131,5 +134,5 @@ Maxio && ArkanYota
 - Minesweeper (pygame)
 - Tetris (pygame)
 - duplicateFile	
-- CustomClass
+- CustomElement
 
