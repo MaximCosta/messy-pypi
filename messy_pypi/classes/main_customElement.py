@@ -34,6 +34,26 @@ class List(list):
                 indexl.append(key)
         return indexl
 
+    def clearDuplicate(self) -> None:
+        dup = List(set(self))
+        self.clear()
+        self.extend(dup)
+        
+    def showDuplicate(self) -> dict:
+        dup = []
+        counta = self.countAll()
+        for i in counta:
+            if i[1]>1:
+                dup.append(i[0])
+        return dup
+        
+    def countAll(self) -> list[tuple[any, int]]:
+        counta = []
+        unique = list(set(self))
+        for elt in unique:
+            counta.append((elt,self.count(elt)))
+        return counta
+
     @property
     def maxv(self) -> any:
         return max(self)
@@ -51,5 +71,5 @@ class List(list):
         return self.index(min(self))
 
     @property
-    def length(self):
+    def length(self) -> int:
         return len(self)
