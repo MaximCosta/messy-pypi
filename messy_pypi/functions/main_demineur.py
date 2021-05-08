@@ -45,29 +45,18 @@ def demineur():
     # Cache = [[1 for j in range(size)] for i in range(size)]
     x,y = size//2, size//2
     InGame = False # Si le joueur est dans une partie ou si il est sur le menu d'acceuil
-
+    PlayerAGagner = False
+    GameOver = False
     while GameOpen:
-        SizeTropPetit = MessageTropPetitPage(size+2, size+2)
-        if not SizeTropPetit:
-            key = getKey(debug=True)
+        if PlayerAGagner:
             Clear()
-            if key == "q" or key == "\x1b[D":
-                x = max(0, x-1)
-            if key == "d" or key == "\x1b[C":
-                x = min(size-1, x+1)
-            if key == "z" or key == "\x1b[A":
-                y = max(0, y-1)
-            if key == "s" or key == "\x1b[B":
-                y = min(size-1, y+1)
-            if key == "a":
-                if Plateau[x][y] == 9:
-                    GameOpen = False
-                    continue
-                if Plateau[x][y] < 0:
-                    Plateau[x][y] = -Plateau[x][y]
-                if Plateau[x][y] == 10:
-                    Plateau[x][y] = 0 
-            #print(Plateau)
+            DrawChar(1,1,"Vous avez gagné\nrestart: Enter\nexit: CtrlC")
+            key = getKey(debug=True)
+            if key == "\r":
+                demineur()
+        elif GameOver:
+            Clear()
+            DrawChar(1,1,"Vous avez perdu\nrestart: Enter\nexit: CtrlC")
             for i in range(len(Plateau)):
                 print("\n ", end="")
                 for j in range(len(Plateau[i])):
@@ -77,23 +66,76 @@ def demineur():
                         case 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8:
                             charItem = Plateau[i][j]
                         case -1 | -2 | -3 | -4 | -5 | -6 | -7 | -8:
-                            charItem = "\033[32m\u2588\033[0m"
+                            # charItem = "\033[32m\u2588\033[0m"
+                            charItem = "\u2588"
                         case 10:
                             charItem = "\u2588"
                         case 9:
-                            charItem = "\033[31m\u2588\033[0m"
+                            # charItem = "\033[31m\u2588\033[0m"
+                            charItem = "\033[31m☭\033[0m"
                         case 12:
                             charItem = "\033[31m☭\033[0m"
                         case _:
-                            charItem = "X"
+                            charItem = "?"
                     DrawChar(((TerminalSize("X")-size)//2)+i,((TerminalSize("Y")-size)//2)+j, charItem)
-            DrawChar(((TerminalSize("X")-size)//2)+x,((TerminalSize("Y")-size)//2)+y, "X")
-            # DrawChar((TerminalSize("Y")//2), 10, "Y")
-            # print(x,y, size)
-# ⓪①②③④⑤⑥⑦⑧ ⓵⓶⓷⓸⓹⓺⓻⓼⓽⓾
+            key = getKey(debug=True)
+            if key == "\r":
+                demineur()
+        else:
+            DrawChar(1,1,"left: q ou leftarrow\nup: z ou uparrow\nright: d ou rightarrow\ndown: s ou downarrow\nclick: a ou Enter\nflag: e # Feature")
+            SizeTropPetit = MessageTropPetitPage(size+2, size+2)
+            if not SizeTropPetit:
+                #print(Plateau)
+                PlayerAGagner = True
+                for i in range(len(Plateau)):
+                    print("\n ", end="")
+                    for j in range(len(Plateau[i])):
+                        match Plateau[i][j]:
+                            case 0:
+                                charItem = " "
+                            case 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8:
+                                charItem = Plateau[i][j]
+                            case -1 | -2 | -3 | -4 | -5 | -6 | -7 | -8:
+                                # charItem = "\033[32m\u2588\033[0m"
+                                charItem = "\u2588"
+                                PlayerAGagner = False 
+                            case 10:
+                                charItem = "\u2588"
+                                PlayerAGagner = False 
+                            case 9:
+                                # charItem = "\033[31m\u2588\033[0m"
+                                charItem = "\u2588"
+                            case 12:
+                                charItem = "\033[31m☭\033[0m"
+                            case _:
+                                charItem = "?"
+                        DrawChar(((TerminalSize("X")-size)//2)+i,((TerminalSize("Y")-size)//2)+j, charItem)
+                DrawChar(((TerminalSize("X")-size)//2)+x,((TerminalSize("Y")-size)//2)+y, "X")
+                key = getKey(debug=True)
+                Clear()
+                if key == "q" or key == "\x1b[D":
+                    x = max(0, x-1)
+                if key == "d" or key == "\x1b[C":
+                    x = min(size-1, x+1)
+                if key == "z" or key == "\x1b[A":
+                    y = max(0, y-1)
+                if key == "s" or key == "\x1b[B":
+                    y = min(size-1, y+1)
+                if key == "a" or key == "\r":
+                    if Plateau[x][y] == 9:
+                        GameOver = True
+                    if Plateau[x][y] < 0:
+                        Plateau[x][y] = -Plateau[x][y]
+                    if Plateau[x][y] == 10:
+                        Plateau[x][y] = 0 
+                if key == "e":
+                    pass # drapeau
+                # DrawChar((TerminalSize("Y")//2), 10, "Y")
+                # print(x,y, size)
+    # ⓪①②③④⑤⑥⑦⑧ ⓵⓶⓷⓸⓹⓺⓻⓼⓽⓾
 
-"""
+    """
 
-TODO:
+    TODO:
 
-"""
+    """

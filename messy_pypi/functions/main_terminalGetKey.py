@@ -145,3 +145,4 @@ def getKey(debug:bool=False) -> str:
 
 def getBytesKey(debug:bool=False) -> str:
     return getKey(debug=debug).encode()
+
