@@ -109,18 +109,23 @@ paths est le chemin racine pour le scan, si remove = True, les fichiers duplique
 list custom pour python, avec \
 	`- rm(elt)` : permet de supprimer le premier element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
 	`- rmAll(elt)` : permet de supprimer tout les element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
+	`- rmAll([elt,...])` : permet de supprimer tout les element dans la liste contenu dans le tableau, s'ils n'existe pas ne renvoie pas d'erreur \
 	`- indexExist(index)` : renvoie True si l'index existe sinon False \
 	`- replace(start,end)` : remplace la valeur de depart part la nouvelle, sur le premiere element trouvé \
 	`- replaceAll(start,end,maxreplace)` : remplace la valeur de depart part le nouvelle, opération sur tout le tableau \
 	`- find(elt)` : trouve l'index d'un element par sa valeur, retourne l'index \
 	`- findAll(elt)` : retourne tout l'index de tout les element corespondant \
+	`- clearNotValue()` : supprime toutes les valeurs null : [0,'',None,False, ...] \
 	`- clearDuplicate()` : supprimer toutes les doublont \
 	`- showDuplicate()` : renvoie les valeurs dupliquer \
 	`- countAll()` : renvoie une list de tuple avec avec  \
+	`- toType()` : transforme tout les float et int sous forme de string ex: '1.0' -> 1.0, '1'-> 1  \
 	`- maxv` : retourne la valeur max du tableau \
 	`- maxi` : retourne l'index de la valeur max \
+	`- maxl` : retourne la valeur avec le len max du tableau \
 	`- minv` : retourne la valeur min du tableau \
 	`- mini` : retourne l'index de la valeur min \
+	`- minl` : retourne la valeur avec le len min du tableau \
 	`- length` : renvoie le poid du tableau \
 
 
