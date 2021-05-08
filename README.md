@@ -79,14 +79,39 @@ TODO
 ### functions.main_terminalFunction.**MessageTropPetitPage**
 TODO
 
+
+### functions.main_duplicateFile.**check_for_duplicates**
+`check_for_duplicates(paths='./',remove=False)`
+paths est le chemin racine pour le scan, si remove = True, les fichiers dupliquer trouver seront supprimer.
+
 ## classes
 
 ### classes.main_customElement.List
 list custom pour python, avec \
 	`- rm(elt)` : permet de supprimer le premier element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
-	`- rma(elt)` : permet de supprimer tout les element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
-	`- length` : renvoie le poid du tableau \
+	`- rmAll(elt)` : permet de supprimer tout les element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
 	`- indexExist(index)` : renvoie True si l'index existe sinon False \
+	`- replace(start,end)` : remplace la valeur de depart part la nouvelle, sur le premiere element trouvé \
+	`- replaceAll(start,end,maxreplace)` : remplace la valeur de depart part le nouvelle, opération sur tout le tableau \
+	`- find(elt)` : trouve l'index d'un element par sa valeur, retourne l'index \
+	`- findAll(elt)` : retourne tout l'index de tout les element corespondant \
+	`- clearDuplicate()` : supprimer toutes les doublont \
+	`- showDuplicate()` : renvoie les valeurs dupliquer \
+	`- countAll()` : renvoie une list de tuple avec avec  \
+	`- maxv` : retourne la valeur max du tableau \
+	`- maxi` : retourne l'index de la valeur max \
+	`- minv` : retourne la valeur min du tableau \
+	`- mini` : retourne l'index de la valeur min \
+	`- length` : renvoie le poid du tableau \
+
+
+### classes.main_minesweeper
+permet de jouer au démineur avec pygame \
+	`Main.start()` : permet de lancer le jeux \
+
+### classes.main_tetris
+permet de jouer a tetris avec pygame \
+	`tetris().main_menu()` : permet de lancer le jeux \
 
 ## init
 // Pour importer `main_projet.py` il faut mettre `from functions.main_projet import *` dans le `__init__.py` (* peux être remplacer par le nom de la fonction à importer) 
@@ -104,3 +129,10 @@ Maxio && ArkanYota
 - Snake
 - printColor
 - insert https://github.com/ARKANYOTA/ImageEnPoints
+
+### Maxio
+- Minesweeper (pygame)
+- Tetris (pygame)
+- duplicateFile	
+- CustomElement
+
