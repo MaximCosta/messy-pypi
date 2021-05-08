@@ -133,9 +133,3 @@ def demineur():
                 # DrawChar((TerminalSize("Y")//2), 10, "Y")
                 # print(x,y, size)
     # ⓪①②③④⑤⑥⑦⑧ ⓵⓶⓷⓸⓹⓺⓻⓼⓽⓾
-
-    """
-
-    TODO:
-
-    """

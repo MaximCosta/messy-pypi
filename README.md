@@ -61,7 +61,7 @@ Renvoie le nombre de lignes dans les fichier qui match avec le regex `match` dan
 Et supprime les lignes vides
 
 ### functions.main_terminalFunction.**countNumberOfLinesInFolderWithMatch**
-Entrée: file: str
+Entrée: file: str \
 Sortie: int
 
 Renvoie le nombre de lignes dans le fichier `file`
@@ -69,16 +69,35 @@ Info: You can set "../../Here"
 Info: C'est le fichier a partir du dossier de ce fichier
 
 
+### functions.main_demineur.**demineur**
+Entrée: None \
+Sortie: None \
+PythonVersion: 3.10 (Match Case) 
+
+Lance un demineur sur le terminal
+
 ### functions.main_terminalFunction.**Clear**
-TODO
+Entrée: None \
+Sortie: None 
+
+Clear le terminal avec l'assci `\033[2J\033[1;1H`
+
 
 
 ### functions.main_terminalFunction.**TerminalSize**
-TODO
+Entrée: item: str=None \ 
+Sortie: tuple[int, int] or int
+X: >
+Y: \/
+
+Retourne la taille de l'écran sous forme de tuple.
+Ou retorune la taille X ou Y si item vaux "X" ou "Y"
 
 ### functions.main_terminalFunction.**MessageTropPetitPage**
-TODO
+Entrée: sizex, sizey: int
+Sortie: bool
 
+Si le terminal est plus petit que la taille indiquée il Affiche Trop petit et rénvoie True sinon False
 
 ### functions.main_duplicateFile.**check_for_duplicates**
 `check_for_duplicates(paths='./',remove=False)`
