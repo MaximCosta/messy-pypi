@@ -109,7 +109,7 @@ paths est le chemin racine pour le scan, si remove = True, les fichiers duplique
 list custom pour python, avec \
 	`- rm(elt)` : permet de supprimer le premier element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
 	`- rmAll(elt)` : permet de supprimer tout les element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
-	`- rmAll([elt,...])` : permet de supprimer tout les element dans la liste contenu dans le tableau, s'ils n'existe pas ne renvoie pas d'erreur \
+	`- rmMAll([elt,...])` : permet de supprimer tout les element dans la liste contenu dans le tableau, s'ils n'existe pas ne renvoie pas d'erreur \
 	`- indexExist(index)` : renvoie True si l'index existe sinon False \
 	`- replace(start,end)` : remplace la valeur de depart part la nouvelle, sur le premiere element trouvé \
 	`- replaceAll(start,end,maxreplace)` : remplace la valeur de depart part le nouvelle, opération sur tout le tableau \
