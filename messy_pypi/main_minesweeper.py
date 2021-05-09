@@ -1,9 +1,8 @@
 import os
-import pygame
 from enum import Enum, auto
 from random import randint
 
-
+import pygame
 
 
 class Main:
@@ -106,7 +105,7 @@ class Cell:
             self.img_cell.append(_img)
 
     def draw(self, surface):
-        if self.visible and not self.label and not(self.show_mine and self.mine):
+        if self.visible and not self.label and not (self.show_mine and self.mine):
             surface.blit(self.img_cell[0], (self.pos[0], self.pos[1]))
         elif self.label:
             self.show_label(surface, self.mine_counter, self.pos)

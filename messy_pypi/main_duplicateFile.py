@@ -1,9 +1,9 @@
-
 from __future__ import print_function
-from collections import defaultdict
+
 import hashlib
 import os
 import sys
+from collections import defaultdict
 
 
 def chunk_reader(fobj, chunk_size=1024):
@@ -12,6 +12,7 @@ def chunk_reader(fobj, chunk_size=1024):
         if not chunk:
             return
         yield chunk
+
 
 def get_hash(filename, first_chunk_only=False, hash=hashlib.sha1):
     hashobj = hash()
@@ -25,9 +26,10 @@ def get_hash(filename, first_chunk_only=False, hash=hashlib.sha1):
     file_object.close()
     return hashed
 
+
 def check_for_duplicates(paths, hash=hashlib.sha1, remove=False):
-    hashes_by_size = defaultdict(list)  
-    hashes_on_1k = defaultdict(list)  
+    hashes_by_size = defaultdict(list)
+    hashes_on_1k = defaultdict(list)
     hashes_full = {}
     for path in paths:
         for dirpath, dirnames, filenames in os.walk(path):
@@ -52,7 +54,7 @@ def check_for_duplicates(paths, hash=hashlib.sha1, remove=False):
         if len(files_list) < 2:
             continue
         for filename in files_list:
-            try: 
+            try:
                 full_hash = get_hash(filename, first_chunk_only=False)
                 duplicate = hashes_full.get(full_hash)
                 if duplicate:
@@ -63,6 +65,7 @@ def check_for_duplicates(paths, hash=hashlib.sha1, remove=False):
                     hashes_full[full_hash] = filename
             except (OSError,):
                 continue
+
 
 if __name__ == "__main__":
     if sys.argv[1:]:

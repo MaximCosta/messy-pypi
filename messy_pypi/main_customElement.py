@@ -1,11 +1,11 @@
 class List(list):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-    
-    def rmMAll(self,elts: list[any]) -> None:
+
+    def rmMAll(self, elts: list[any]) -> None:
         for elt in elts:
             self.rmAll(elt)
-    
+
     def rmAll(self, elt: any) -> None:
         while elt in self:
             self.remove(elt)
@@ -39,7 +39,7 @@ class List(list):
         return indexl
 
     def clearNotValue(self) -> None:
-        for k,v in self:
+        for k, v in self:
             if not v:
                 del self[k]
 
@@ -64,8 +64,8 @@ class List(list):
         return counta
 
     def toType(self) -> None:
-        for key,val in enumerate(self):
-            if val.replace('.','',1).lstrip('-').isdigit():
+        for key, val in enumerate(self):
+            if val.replace('.', '', 1).lstrip('-').isdigit():
                 if '.' in val:
                     self[key] = float(val)
                 else:
@@ -81,7 +81,7 @@ class List(list):
 
     @property
     def maxl(self):
-        l = list(map(lambda x: len(x),self))
+        l = list(map(lambda x: len(x), self))
         return self[l.index(max(l))]
 
     @property
@@ -91,10 +91,10 @@ class List(list):
     @property
     def mini(self) -> int:
         return self.index(min(self))
-    
+
     @property
     def minl(self):
-        l = list(map(lambda x: len(x),self))
+        l = list(map(lambda x: len(x), self))
         return self[l.index(min(l))]
 
     @property

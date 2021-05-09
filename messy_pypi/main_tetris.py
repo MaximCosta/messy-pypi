@@ -242,15 +242,15 @@ class tetris:
     def update_score(self, nscore):
         score = self.max_score()
 
-        with open('../resources/tetris/scores.txt', 'w') as f:
+        with open('resources/tetris/scores.txt', 'w') as f:
             if int(score) > nscore:
                 f.write(str(score))
             else:
                 f.write(str(nscore))
 
     def max_score(self):
-        if os.path.exists('../resources/tetris/scores.txt'):
-            with open('../resources/tetris/scores.txt', 'r') as f:
+        if os.path.exists('resources/tetris/scores.txt'):
+            with open('resources/tetris/scores.txt', 'r') as f:
                 lines = f.readlines()
                 score = lines[0].strip()
         else:

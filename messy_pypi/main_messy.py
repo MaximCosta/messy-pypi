@@ -1,5 +1,4 @@
 import math
-import os
 import subprocess
 import urllib.parse as urlparse
 from typing import Generator
@@ -9,8 +8,7 @@ from urllib.parse import urlencode
 import requests
 from bs4 import BeautifulSoup
 
-os.chdir('..')
-from classes.main_messy import List
+from main_customElement import List
 
 
 def human_delta_time(time: int, currentValue: str = 'seconde', minValue: str = 'seconde', maxValue: str = 'jour',
