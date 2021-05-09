@@ -113,13 +113,13 @@ def demineur():
                 DrawChar(((TerminalSize("X")-size)//2)+x,((TerminalSize("Y")-size)//2)+y, "X")
                 key = getKey(debug=True)
                 Clear()
-                if key == "q" or key == "\x1b[D":
+                if key == "q" or key == "\x1b[D" or key == "left":
                     x = max(0, x-1)
-                if key == "d" or key == "\x1b[C":
+                if key == "d" or key == "\x1b[C" or key == "right":
                     x = min(size-1, x+1)
-                if key == "z" or key == "\x1b[A":
+                if key == "z" or key == "\x1b[A" or key == "up":
                     y = max(0, y-1)
-                if key == "s" or key == "\x1b[B":
+                if key == "s" or key == "\x1b[B" or key == "down":
                     y = min(size-1, y+1)
                 if key == "a" or key == "\r":
                     if Plateau[x][y] == 9:

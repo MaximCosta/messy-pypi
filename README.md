@@ -85,10 +85,10 @@ Clear le terminal avec l'assci `\033[2J\033[1;1H`
 
 
 ### functions.main_terminalFunction.**TerminalSize**
-Entrée: item: str=None \ 
-Sortie: tuple[int, int] or int
-X: >
-Y: \/
+Entrée: item: str=None \
+Sortie: tuple[int, int] or int \
+X: > \
+Y: \/ \
 
 Retourne la taille de l'écran sous forme de tuple.
 Ou retorune la taille X ou Y si item vaux "X" ou "Y"
@@ -148,6 +148,7 @@ Maxio && ArkanYota
 - Snake
 - printColor
 - insert https://github.com/ARKANYOTA/ImageEnPoints
+- GameMakerTerminal
 
 ### Maxio
 - Minesweeper (pygame)

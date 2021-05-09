@@ -10,8 +10,11 @@ def DrawChar(x: int, y: int, char: str) -> None:
 
 def Clear() -> None:
     # os.system("cls||clear")
-    print("\033[2J\033[1;1H")
-
+    if os.name=="nt":
+        os.system("cls")
+    else:
+        os.system("clear")
+        
 def TerminalSize(item: str=None) -> (tuple[int, int] or int):
     """
     X: >
