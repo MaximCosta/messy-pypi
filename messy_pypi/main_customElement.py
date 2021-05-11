@@ -1,6 +1,24 @@
+from typing import Iterator
+
+
 class List(list):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def prepend(self, value) -> None:
+        self.insert(0, value)
+
+    def rmAllBeside(self, elt: any = None, index: int = None):
+        if index:
+            del self[index + 1:]
+        if elt:
+            del self[self.find(elt) + 1:]
+
+    def rmAllBehind(self, elt: any = None, index: int = None):
+        if index:
+            del self[:index]
+        if elt:
+            del self[:self.find(elt)]
 
     def rmMAll(self, elts: list[any]) -> None:
         for elt in elts:
@@ -48,7 +66,7 @@ class List(list):
         self.clear()
         self.extend(dup)
 
-    def showDuplicate(self) -> dict:
+    def showDuplicate(self) -> list:
         dup = []
         counta = self.countAll()
         for i in counta:
@@ -70,6 +88,14 @@ class List(list):
                     self[key] = float(val)
                 else:
                     self[key] = int(val)
+
+    @property
+    def enumerate(self) -> enumerate:
+        return enumerate(self)
+
+    @property
+    def renumerate(self) -> Iterator:
+        return reversed(list(self.enumerate))
 
     @property
     def maxv(self) -> any:

@@ -11,10 +11,27 @@ from bs4 import BeautifulSoup
 from main_customElement import List
 
 
-def human_delta_time(time: int, currentValue: str = 'seconde', minValue: str = 'seconde', maxValue: str = 'jour',
-                     remove: list = None) -> str:
+def human_delta_time(time: int, curValue: str = 'seconde', minValue: str = 'seconde', maxValue: str = 'jour',
+                     remove: list = []) -> str:
     word = List(['seconde', 'minute', 'heure', 'jour', 'mois', 'année'])
-    if remove: word.rmMALL(remove)
+    if curValue not in word: return
+    if minValue not in word: return
+    if maxValue not in word: return
+    if remove: word.rmMAll(remove)
+    word.rmAllBehind(minValue)
+    word.rmAllBeside(maxValue)
+    init_time = time
+    old = curValue
+    data = {}
+    for key, val in word.renumerate:
+        if curValue == val:
+            continue
+
+
+def reloop(elt: list = []):
+    while True:
+        for i in elt:
+            yield elt
 
 
 def split_every_n(seq: any, n: int) -> Generator:
@@ -44,13 +61,29 @@ def show_wifi_pwd() -> None:
 
 
 def human_number_word(n: (int or float)) -> str:
-    millnames = ['', ' Mille', ' Million', ' Milliard',
-                 ' Billion', ' Billiard', ' Trillion',
-                 ' Trilliard', ' Quadrillion', ' Quadrilliard',
-                 ' Quintillion', ' Quintilliard', ' Sextillion',
-                 ' Sextilliard', ' Septillion', ' Septilliard',
-                 ' Octillion', ' Octilliard', ' Nonillion',
-                 ' Nonilliard', ' Decillion', ' Decilliard']
+    millnames = ['',
+                 ' Mille',
+                 ' Million',
+                 ' Milliard',
+                 ' Billion',
+                 ' Billiard',
+                 ' Trillion',
+                 ' Trilliard',
+                 ' Quadrillion',
+                 ' Quadrilliard',
+                 ' Quintillion',
+                 ' Quintilliard',
+                 ' Sextillion',
+                 ' Sextilliard',
+                 ' Septillion',
+                 ' Septilliard',
+                 ' Octillion',
+                 ' Octilliard',
+                 ' Nonillion',
+                 ' Nonilliard',
+                 ' Decillion',
+                 ' Decilliard'
+                 ]
     n = float(n)
     millidx = max(0, min(len(millnames) - 1, int(math.floor(0 if n == 0 else math.log10(abs(n)) / 3))))
     return '{:.0f}{}'.format(n / 10 ** (3 * millidx), millnames[millidx])
