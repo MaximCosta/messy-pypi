@@ -30,8 +30,8 @@ Sortie: String of key
 
 Met en pause le terminal et attend l'appui d'une touche et retourne un string. \
 Touche differantes de Windows à Linux/MacOs \
-Ne pas print dirrectement la sortie car pour les touches spéciales la chaine est du type `\r` ou `\x1b`. Pour savoir la sortie à obtenir transformez encodez la sortie. Utilisez `functions.main_terminalGetKey.getBytesKey`.
-Si `debug` est à True le termial fera exit quand la on appuira sur `Ctrl+C` 
+Ne pas print directement la sortie car pour les touches spéciales la chaine est du type `\r` ou `\x1b`. Pour savoir la sortie à obtenir transformez encoder la sortie. Utilisez `functions.main_terminalGetKey.getBytesKey`.
+Si `debug` est à True le terminal fera exit quand l’on appuira sur `Ctrl+C` 
 
 Compatible: Windows Linux MacOs
 
@@ -43,7 +43,7 @@ Sortie : Bytes String
 Retourne getKey mais en encoder pour pouvoir le print()
 Si `debug` est à True le termial fera exit quand la on appuira sur `Ctrl+C` 
 
-### functions.main_terminalFunction.**DrawChar**
+### functions.main_terminalFunction.**print_char**
 Entrée: x, y: int; char: String \
 Sotie: None
 
@@ -53,14 +53,14 @@ le point Origine se trouve en haut à gauche et commance par 1
 
 Compatible: terminaux ayant l'option Ansii `\033[...`
 
-### functions.main_terminalFunction.**countNumberOfLinesInFile**
+### functions.main_terminalFunction.**count_number_of_lines_in_file**
 Entrée: folder: str, match="(.py$|.md$)" : str \
 Sotie: int
 
 Renvoie le nombre de lignes dans les fichier qui match avec le regex `match` dans le fichier `folder` de les les dossier enfants et petit-enfants et encore plus petits
 Et supprime les lignes vides
 
-### functions.main_terminalFunction.**countNumberOfLinesInFolderWithMatch**
+### functions.main_terminalFunction.**count_number_of_lines_in_folder**
 Entrée: file: str \
 Sortie: int
 
@@ -76,15 +76,15 @@ PythonVersion: 3.10 (Match Case)
 
 Lance un demineur sur le terminal
 
-### functions.main_terminalFunction.**Clear**
+### functions.main_terminalFunction.**clear**
 Entrée: None \
 Sortie: None 
 
-Clear le terminal avec l'assci `\033[2J\033[1;1H`
+clear le terminal avec l'assci `\033[2J\033[1;1H`
 
 
 
-### functions.main_terminalFunction.**TerminalSize**
+### functions.main_terminalFunction.**terminal_size**
 Entrée: item: str=None \
 Sortie: tuple[int, int] or int \
 X: > \
@@ -93,7 +93,7 @@ Y: \/ \
 Retourne la taille de l'écran sous forme de tuple.
 Ou retorune la taille X ou Y si item vaux "X" ou "Y"
 
-### functions.main_terminalFunction.**MessageTropPetitPage**
+### functions.main_terminalFunction.**message_page_trop_petite**
 Entrée: sizex, sizey: int
 Sortie: bool
 
@@ -159,9 +159,10 @@ Maxio && ArkanYota
 - printColor
 - insert https://github.com/ARKANYOTA/ImageEnPoints
 - GameMakerTerminal
-- Tri par insertion avec recherche dicotomique
-- Recherche dicotomique dans JSON
-- Tri un base de donnée de façon dicotomique (potentielelmene avec sort()) 
+- Tri par insertion avec recherche dichotomique
+- Recherche dichotomique dans JSON
+- Tri un base de donnée de façon dichotomique (potentiellement avec sort()) 
+- app launcher for use app functions 
 
 ### Maxio
 - Minesweeper (pygame)
@@ -169,5 +170,6 @@ Maxio && ArkanYota
 - duplicateFile	
 - CustomElement
 
-### Nous 2:
+### Nous 2
 - Translate for all. Francais anglais
+- Documentation
