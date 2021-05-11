@@ -159,6 +159,9 @@ Maxio && ArkanYota
 - printColor
 - insert https://github.com/ARKANYOTA/ImageEnPoints
 - GameMakerTerminal
+- Tri par insertion avec recherche dicotomique
+- Recherche dicotomique dans JSON
+- Tri un base de donnée de façon dicotomique (potentielelmene avec sort()) 
 
 ### Maxio
 - Minesweeper (pygame)
