@@ -115,13 +115,13 @@ list custom pour python, avec \
 	`- rmMAll([elt,...])` : permet de supprimer tout les element dans la liste contenu dans le tableau, s'ils n'existe pas ne renvoie pas d'erreur \
 	`- indexExist(index)` : renvoie True si l'index existe sinon False \
 	`- replace(start,end)` : remplace la valeur de depart part la nouvelle, sur le premiere element trouvé \
-	`- replaceAll(start,end,maxreplace)` : remplace la valeur de depart part le nouvelle, opération sur tout le tableau \
+	`- replaceAll(start,end,maxreplace)` : remplace la valeur de depart part le nouveau, opération sur tout le tableau \
 	`- find(elt)` : trouve l'index d'un element par sa valeur, retourne l'index \
-	`- findAll(elt)` : retourne tout l'index de tout les element corespondant \
+	`- findAll(elt)` : retourne tout l'index de tout les element correspondent \
 	`- clearNotValue()` : supprime toutes les valeurs null : [0,'',None,False, ...] \
 	`- clearDuplicate()` : supprimer toutes les doublont \
 	`- showDuplicate()` : renvoie les valeurs dupliquer \
-	`- countAll()` : renvoie une list de tuple avec avec  \
+	`- countAll()` : renvoie une list de tuple avec le count de chaque element \
 	`- toType()` : transforme tout les float et int sous forme de string ex: '1.0' -> 1.0, '1'-> 1  \
 	`- enumerate` : un iterator enumerate -> list(liste.enumerate) => [(index,value),...] \
 	`- renumerate` : un iterator enumerate reverse -> list(liste.renumerate) => [(index-1,value-1),...] \
