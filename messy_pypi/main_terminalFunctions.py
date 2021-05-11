@@ -21,13 +21,12 @@ def TerminalSize(item: str=None) -> (tuple[int, int] or int):
     Y: \/
     """
     size = os.get_terminal_size()
-    match item:
-        case None:
-            return size[0], size[1]
-        case "X":
-            return size[0]
-        case "Y":
-            return size[1]
+    if item == None:
+        return size[0], size[1]
+    elif item == "X":
+        return size[0]
+    elif item == "Y":
+        return size[1]
 
 def MessageTropPetitPage(sizex, sizey) -> bool:
     """

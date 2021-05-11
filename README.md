@@ -164,3 +164,5 @@ Maxio && ArkanYota
 - duplicateFile	
 - CustomElement
 
+### Nous 2:
+- Translate for all. Francais anglais
