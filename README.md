@@ -107,6 +107,9 @@ paths est le chemin racine pour le scan, si remove = True, les fichiers duplique
 
 ### classes.main_customElement.List
 list custom pour python, avec \
+	`- prepend(elt)` : permet d'inserer l'element a l'index zero \
+	`- rmAllBeside(elt, index)` : permet de supprimer tout les element après la premiere itération de l'element ou après l'index \
+	`- rmAllBehind(elt, index)` : permet de supprimer tout les element avnt la premiere itération de l'element ou avant l'index \
 	`- rm(elt)` : permet de supprimer le premier element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
 	`- rmAll(elt)` : permet de supprimer tout les element dans la liste correspondant, s'il n'existe pas ne renvoie pas d'erreur \
 	`- rmMAll([elt,...])` : permet de supprimer tout les element dans la liste contenu dans le tableau, s'ils n'existe pas ne renvoie pas d'erreur \
@@ -120,6 +123,8 @@ list custom pour python, avec \
 	`- showDuplicate()` : renvoie les valeurs dupliquer \
 	`- countAll()` : renvoie une list de tuple avec avec  \
 	`- toType()` : transforme tout les float et int sous forme de string ex: '1.0' -> 1.0, '1'-> 1  \
+	`- enumerate` : un iterator enumerate -> list(liste.enumerate) => [(index,value),...] \
+	`- renumerate` : un iterator enumerate reverse -> list(liste.renumerate) => [(index-1,value-1),...] \
 	`- maxv` : retourne la valeur max du tableau \
 	`- maxi` : retourne l'index de la valeur max \
 	`- maxl` : retourne la valeur avec le len max du tableau \
