@@ -35,14 +35,14 @@ def human_delta_time(time: int, curValue: str = 'seconde', minValue: str = 'seco
     data = {}
 
     for key, val in bword.renumerate:
-        print(key, val, init_time)
+        #print(key, val, init_time)
         if int(init_time):
             if (val in word):
                 data[val] = int(init_time)
                 init_time -= int(init_time)
         init_time *= calc[val][1]
 
-    print(data)
+    return data
 
 
 def reloop(elt: list = []):
