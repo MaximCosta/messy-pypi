@@ -172,8 +172,9 @@ Maxio && ArkanYota
 - Tetris (pygame)
 - duplicateFile	
 - CustomElement
+- messy
 
 ### Nous 2
-- messy
+
 - Translate for all. Francais anglais
 - Documentation
