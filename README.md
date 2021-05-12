@@ -123,6 +123,9 @@ list custom pour python, avec \
 	`- showDuplicate()` : renvoie les valeurs dupliquer \
 	`- countAll()` : renvoie une list de tuple avec le count de chaque element \
 	`- toType()` : transforme tout les float et int sous forme de string ex: '1.0' -> 1.0, '1'-> 1  \
+	`- include(elt)`: retourne True ou False dépendant si l'element est present ou non \
+	`- includes(elts)`: retourne True ou False dépendant si les elements sont present ou non \
+	`- copy()`: return copy of list with init new class List \
 	`- enumerate` : un iterator enumerate -> list(liste.enumerate) => [(index,value),...] \
 	`- renumerate` : un iterator enumerate reverse -> list(liste.renumerate) => [(index-1,value-1),...] \
 	`- maxv` : retourne la valeur max du tableau \

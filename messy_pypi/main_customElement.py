@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Iterator
 
 
@@ -47,7 +49,9 @@ class List(list):
             self[self.index(start)] = end
 
     def find(self, elt: any) -> int:
-        return self.index(elt)
+        if elt in self:
+            return self.index(elt)
+        return None
 
     def findAll(self, elt: any) -> list[int]:
         indexl = list()
@@ -88,6 +92,23 @@ class List(list):
                     self[key] = float(val)
                 else:
                     self[key] = int(val)
+
+    def include(self, elt: any) -> bool:
+        if elt in self:
+            return True
+        return False
+
+    def inclues(self, elts: list) -> bool:
+        for elt in elts:
+            if elt not in self:
+                return False
+        return True
+
+    def __copy__(self) -> List:
+        return List(self)
+
+    def copy(self) -> List:
+        return List(self)
 
     @property
     def enumerate(self) -> enumerate:
