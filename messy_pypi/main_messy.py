@@ -23,9 +23,8 @@ def human_delta_time(time: int, curValue: str = 'seconde', minValue: str = 'seco
         'mois': (12, 30.5),
         'année': (1, 12)
     }
-    if curValue not in word: return None
-    if minValue not in word: return None
-    if maxValue not in word: return None
+
+    if not word.includes([curValue, minValue, maxValue]): return None
 
     word.rmAllBehind(minValue)
     word.rmAllBeside(maxValue)
@@ -35,9 +34,9 @@ def human_delta_time(time: int, curValue: str = 'seconde', minValue: str = 'seco
     data = {}
 
     for key, val in bword.renumerate:
-        #print(key, val, init_time)
+        # print(key, val, init_time)
         if int(init_time):
-            if (val in word):
+            if word.include(val):
                 data[val] = int(init_time)
                 init_time -= int(init_time)
         init_time *= calc[val][1]

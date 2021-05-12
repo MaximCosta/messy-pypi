@@ -98,7 +98,7 @@ class List(list):
             return True
         return False
 
-    def inclues(self, elts: list) -> bool:
+    def includes(self, elts: list) -> bool:
         for elt in elts:
             if elt not in self:
                 return False
