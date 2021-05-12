@@ -2,7 +2,7 @@ import os
 import re
 
 
-def countNumberOfLinesInFile(file: str) -> int:
+def count_number_of_lines_in_file(file: str) -> int:
     """
     Entrée: file: str
     Sortie: int
@@ -15,7 +15,7 @@ def countNumberOfLinesInFile(file: str) -> int:
         return len(text)
 
 
-def countNumberOfLinesInFolderWithMatch(folder: str, match: str = "(.py$|.md$)") -> int:
+def count_number_of_lines_in_folder(folder: str, match: str = "(.py$|.md$)") -> int:
     """
     Info: You can set "../../Here"
     Info: C'est le fichier a partir du dossier de ce fichier
@@ -24,5 +24,5 @@ def countNumberOfLinesInFolderWithMatch(folder: str, match: str = "(.py$|.md$)")
     for root, directories, files in os.walk(folder, topdown=False):
         for name in files:
             if re.search(match, name):
-                nombres_lignes += countNumberOfLinesInFile(os.path.join(root, name))
+                nombres_lignes += count_number_of_lines_in_file(os.path.join(root, name))
     return nombres_lignes

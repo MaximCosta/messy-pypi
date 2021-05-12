@@ -1,39 +1,43 @@
 import os
 import time
 
-def DrawChar(x: int, y: int, char: str) -> None:
+
+def print_char(x: int, y: int, char: str) -> None:
     """
     x: >
-    y: \/
+    y: \\/
     """
     print(f"\033[{y};{x}H{char}")
 
-def Clear() -> None:
+
+def clear() -> None:
     # os.system("cls||clear")
-    if os.name=="nt":
+    if os.name == "nt":
         os.system("cls")
     else:
         os.system("clear")
-        
-def TerminalSize(item: str=None) -> (tuple[int, int] or int):
+
+
+def terminal_size(item: str = None) -> (tuple[int, int] or int):
     """
     X: >
-    Y: \/
+    Y: \\/
     """
     size = os.get_terminal_size()
-    if item == None:
+    if item is None:
         return size[0], size[1]
     elif item == "X":
         return size[0]
     elif item == "Y":
         return size[1]
 
-def MessageTropPetitPage(sizex, sizey) -> bool:
+
+def message_page_trop_petite(sizex, sizey) -> bool:
     """
     sizex, sizey: int
     """
-    if sizex > TerminalSize("X") or sizey > TerminalSize("Y"):
-        print("Trio ptit")
+    if sizex > terminal_size("X") or sizey > terminal_size("Y"):
+        print("Trop petit")
         time.sleep(.50)
         return True
     return False
