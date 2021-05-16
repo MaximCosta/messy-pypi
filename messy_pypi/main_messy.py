@@ -12,7 +12,7 @@ from main_customElement import List
 
 
 def human_delta_time(time: int, curValue: str = 'seconde', minValue: str = 'seconde', maxValue: str = 'jour',
-                     remove: list = []) -> (str or None):
+                     remove: list[str] = []) -> (dict or None):
     word = List(['seconde', 'minute', 'heure', 'jour', 'mois', 'année'])
     bword = word.copy()
     calc = {
