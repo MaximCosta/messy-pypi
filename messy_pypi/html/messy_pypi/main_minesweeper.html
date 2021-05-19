@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>messy_pypi.main_minesweeper API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>messy_pypi.main_minesweeper</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import os
+from enum import Enum, auto
+from random import randint
+
+import pygame
+
+
+class Main:
+    @staticmethod
+    def start():
+        pygame.font.init()
+        os.environ[&#39;SDL_VIDEO_WINDOW_POS&#39;] = &#34;%d,%d&#34; % (400, 100)
+        surface = pygame.display.set_mode((1200, 900))
+        pygame.display.set_caption(&#39;Minesweeper&#39;)
+        state = States.running
+        player = Player()
+        grid = Grid(player)
+        running = True
+        clock = pygame.time.Clock()
+        while running:
+            clock.tick(30)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.MOUSEBUTTONDOWN and state == States.running:
+                    if pygame.mouse.get_pressed()[0]:
+                        pos = pygame.mouse.get_pos()
+                        grid.click(pos[0], pos[1])
+                    elif pygame.mouse.get_pressed()[2]:
+                        pos = pygame.mouse.get_pos()
+                        grid.mark_mine(pos[0] // 30, pos[1] // 30)
+                    if grid.check_if_win():
+                        state = States.win
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE and (state == States.game_over or state == States.win):
+                        grid.reload()
+                        state = States.running
+                    if event.key == pygame.K_b:
+                        grid.show_mines()
+            surface.fill((0, 0, 0))
+            if player.get_health() == 0:
+                state = States.game_over
+            if state == States.game_over:
+                Stats.draw(surface, &#39;Game over!&#39;, (970, 350))
+                Stats.draw(surface, &#39;Press Space to restart&#39;, (920, 400))
+            elif state == States.win:
+                Stats.draw(surface, &#39;You win!&#39;, (1000, 350))
+                Stats.draw(surface, &#39;Press Space to restart&#39;, (920, 400))
+            grid.draw(surface)
+            Stats.draw(surface, &#39;Lives remaining&#39;, (950, 100))
+            Stats.draw(surface, str(player.get_health()), (1020, 200))
+            pygame.display.flip()
+
+
+class States(Enum):
+    running = auto()
+    game_over = auto()
+    win = auto()
+
+
+class Player:
+    def __init__(self):
+        self.health = 5
+
+    def sub_health(self):
+        self.health -= 1
+
+    def get_health(self):
+        return self.health
+
+
+class Stats:
+    @staticmethod
+    def draw(surface, label, pos):
+        textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 24).render(label, False, (255, 255, 255))
+        surface.blit(textsurface, (pos[0], pos[1]))
+
+
+class Cell:
+    def __init__(self, pos, random_mine):
+        self.visible = False
+        self.mine = random_mine
+        self.show_mine = False
+        self.size = 30
+        self.color = (200, 200, 200)
+        self.pos = pos
+        self.label = False
+        self.mine_counter = 0
+        self.font_color = (0, 0, 0)
+        self.marked = False
+        self.explosion = False
+        self.img_flag = pygame.image.load(&#39;../resources/minesweeper/cell-flagged.png&#39;)
+        self.img_flag = pygame.transform.scale(self.img_flag, (self.size, self.size))
+
+        self.img_explode = pygame.image.load(&#39;../resources/minesweeper/mine-exploded.png&#39;)
+        self.img_explode = pygame.transform.scale(self.img_explode, (self.size, self.size))
+
+        self.img_mine = pygame.image.load(&#39;../resources/minesweeper/mine.png&#39;)
+        self.img_mine = pygame.transform.scale(self.img_mine, (self.size, self.size))
+
+        self.img_cell = []
+        for i in range(9):
+            _img = pygame.image.load(f&#39;../resources/minesweeper/cell-{i}.png&#39;)
+            _img = pygame.transform.scale(_img, (self.size, self.size))
+            self.img_cell.append(_img)
+
+    def draw(self, surface):
+        if self.visible and not self.label and not (self.show_mine and self.mine):
+            surface.blit(self.img_cell[0], (self.pos[0], self.pos[1]))
+        elif self.label:
+            self.show_label(surface, self.mine_counter, self.pos)
+        elif self.marked:
+            surface.blit(self.img_flag, (self.pos[0], self.pos[1]))
+        elif self.show_mine and self.mine:
+            surface.blit(self.img_mine, (self.pos[0], self.pos[1]))
+        elif self.explosion:
+            surface.blit(self.img_explode, (self.pos[0], self.pos[1]))
+        else:
+            pygame.draw.rect(surface, (50, 50, 50), (self.pos[0], self.pos[1], self.size, self.size))
+
+    def show_label(self, surface, label, pos):
+        # textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 18).render(label, False, self.font_color)
+        # surface.blit(textsurface, (pos[0] + 10, pos[1] + 4))
+        surface.blit(self.img_cell[int(label)], (pos[0], pos[1]))
+
+
+class Grid:
+    def __init__(self, player):
+        self.player = player
+        self.cells = []
+        self.search_dirs = [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1)]
+
+        for y in range(30):
+            self.cells.append([])
+            for x in range(30):
+                self.cells[y].append(Cell((x * 30, y * 30), self.random_mines()))
+
+        self.lines = []
+
+        for y in range(1, 31, 1):
+            temp = []
+            temp.append((0, y * 30))
+            temp.append((900, y * 30))
+            self.lines.append(temp)
+
+        for x in range(1, 31, 1):
+            temp = []
+            temp.append((x * 30, 0))
+            temp.append((x * 30, 900))
+            self.lines.append(temp)
+
+    def random_mines(self):
+        r = randint(0, 10)
+        if r &gt; 9:
+            return True
+        else:
+            return False
+
+    def draw(self, surface):
+        for row in self.cells:
+            for cell in row:
+                cell.draw(surface)
+        for line in self.lines:
+            pygame.draw.line(surface, (0, 125, 0), line[0], line[1])
+
+    def is_within_bounds(self, x, y):
+        return x &gt;= 0 and x &lt; 30 and y &gt;= 0 and y &lt; 30
+
+    def search(self, x, y):
+        if not self.is_within_bounds(x, y):
+            return
+
+        cell = self.cells[y][x]
+
+        if cell.visible:
+            return
+
+        if cell.mine:
+            cell.explosion = True
+            self.player.sub_health()
+            return
+
+        cell.visible = True
+
+        num_mines = self.num_of_mines(x, y)
+
+        if num_mines &gt; 0:
+            cell.label = True
+            cell.mine_counter = str(num_mines)
+            return
+
+        for xx, yy in self.search_dirs:
+            self.search(x + xx, y + yy)
+
+    def num_of_mines(self, x, y):
+        counter = 0
+        for xx, yy in self.search_dirs:
+            if self.is_within_bounds(x + xx, y + yy) and self.cells[y + yy][x + xx].mine:
+                counter += 1
+        return counter
+
+    def click(self, x, y):
+        grid_x, grid_y = x // 30, y // 30
+        self.search(grid_x, grid_y)
+
+    def reload(self):
+        self.player.health = 5
+        for row in self.cells:
+            for cell in row:
+                cell.visible = False
+                cell.label = False
+                cell.marked = False
+                cell.show_mine = False
+                cell.explosion = False
+                cell.mine = self.random_mines()
+
+    def check_if_win(self):
+        if self.player.health &lt; 1:
+            return False
+        for row in self.cells:
+            for cell in row:
+                if not cell.visible and not cell.mine:
+                    return False
+        return True
+
+    def show_mines(self):
+        for row in self.cells:
+            for cell in row:
+                if not cell.show_mine:
+                    cell.show_mine = True
+                else:
+                    cell.show_mine = False
+
+    def mark_mine(self, x, y):
+        self.cells[y][x].marked = True</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="messy_pypi.main_minesweeper.Cell"><code class="flex name class">
+<span>class <span class="ident">Cell</span></span>
+<span>(</span><span>pos, random_mine)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Cell:
+    def __init__(self, pos, random_mine):
+        self.visible = False
+        self.mine = random_mine
+        self.show_mine = False
+        self.size = 30
+        self.color = (200, 200, 200)
+        self.pos = pos
+        self.label = False
+        self.mine_counter = 0
+        self.font_color = (0, 0, 0)
+        self.marked = False
+        self.explosion = False
+        self.img_flag = pygame.image.load(&#39;../resources/minesweeper/cell-flagged.png&#39;)
+        self.img_flag = pygame.transform.scale(self.img_flag, (self.size, self.size))
+
+        self.img_explode = pygame.image.load(&#39;../resources/minesweeper/mine-exploded.png&#39;)
+        self.img_explode = pygame.transform.scale(self.img_explode, (self.size, self.size))
+
+        self.img_mine = pygame.image.load(&#39;../resources/minesweeper/mine.png&#39;)
+        self.img_mine = pygame.transform.scale(self.img_mine, (self.size, self.size))
+
+        self.img_cell = []
+        for i in range(9):
+            _img = pygame.image.load(f&#39;../resources/minesweeper/cell-{i}.png&#39;)
+            _img = pygame.transform.scale(_img, (self.size, self.size))
+            self.img_cell.append(_img)
+
+    def draw(self, surface):
+        if self.visible and not self.label and not (self.show_mine and self.mine):
+            surface.blit(self.img_cell[0], (self.pos[0], self.pos[1]))
+        elif self.label:
+            self.show_label(surface, self.mine_counter, self.pos)
+        elif self.marked:
+            surface.blit(self.img_flag, (self.pos[0], self.pos[1]))
+        elif self.show_mine and self.mine:
+            surface.blit(self.img_mine, (self.pos[0], self.pos[1]))
+        elif self.explosion:
+            surface.blit(self.img_explode, (self.pos[0], self.pos[1]))
+        else:
+            pygame.draw.rect(surface, (50, 50, 50), (self.pos[0], self.pos[1], self.size, self.size))
+
+    def show_label(self, surface, label, pos):
+        # textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 18).render(label, False, self.font_color)
+        # surface.blit(textsurface, (pos[0] + 10, pos[1] + 4))
+        surface.blit(self.img_cell[int(label)], (pos[0], pos[1]))</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="messy_pypi.main_minesweeper.Cell.draw"><code class="name flex">
+<span>def <span class="ident">draw</span></span>(<span>self, surface)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def draw(self, surface):
+    if self.visible and not self.label and not (self.show_mine and self.mine):
+        surface.blit(self.img_cell[0], (self.pos[0], self.pos[1]))
+    elif self.label:
+        self.show_label(surface, self.mine_counter, self.pos)
+    elif self.marked:
+        surface.blit(self.img_flag, (self.pos[0], self.pos[1]))
+    elif self.show_mine and self.mine:
+        surface.blit(self.img_mine, (self.pos[0], self.pos[1]))
+    elif self.explosion:
+        surface.blit(self.img_explode, (self.pos[0], self.pos[1]))
+    else:
+        pygame.draw.rect(surface, (50, 50, 50), (self.pos[0], self.pos[1], self.size, self.size))</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Cell.show_label"><code class="name flex">
+<span>def <span class="ident">show_label</span></span>(<span>self, surface, label, pos)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def show_label(self, surface, label, pos):
+    # textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 18).render(label, False, self.font_color)
+    # surface.blit(textsurface, (pos[0] + 10, pos[1] + 4))
+    surface.blit(self.img_cell[int(label)], (pos[0], pos[1]))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Grid"><code class="flex name class">
+<span>class <span class="ident">Grid</span></span>
+<span>(</span><span>player)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Grid:
+    def __init__(self, player):
+        self.player = player
+        self.cells = []
+        self.search_dirs = [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1)]
+
+        for y in range(30):
+            self.cells.append([])
+            for x in range(30):
+                self.cells[y].append(Cell((x * 30, y * 30), self.random_mines()))
+
+        self.lines = []
+
+        for y in range(1, 31, 1):
+            temp = []
+            temp.append((0, y * 30))
+            temp.append((900, y * 30))
+            self.lines.append(temp)
+
+        for x in range(1, 31, 1):
+            temp = []
+            temp.append((x * 30, 0))
+            temp.append((x * 30, 900))
+            self.lines.append(temp)
+
+    def random_mines(self):
+        r = randint(0, 10)
+        if r &gt; 9:
+            return True
+        else:
+            return False
+
+    def draw(self, surface):
+        for row in self.cells:
+            for cell in row:
+                cell.draw(surface)
+        for line in self.lines:
+            pygame.draw.line(surface, (0, 125, 0), line[0], line[1])
+
+    def is_within_bounds(self, x, y):
+        return x &gt;= 0 and x &lt; 30 and y &gt;= 0 and y &lt; 30
+
+    def search(self, x, y):
+        if not self.is_within_bounds(x, y):
+            return
+
+        cell = self.cells[y][x]
+
+        if cell.visible:
+            return
+
+        if cell.mine:
+            cell.explosion = True
+            self.player.sub_health()
+            return
+
+        cell.visible = True
+
+        num_mines = self.num_of_mines(x, y)
+
+        if num_mines &gt; 0:
+            cell.label = True
+            cell.mine_counter = str(num_mines)
+            return
+
+        for xx, yy in self.search_dirs:
+            self.search(x + xx, y + yy)
+
+    def num_of_mines(self, x, y):
+        counter = 0
+        for xx, yy in self.search_dirs:
+            if self.is_within_bounds(x + xx, y + yy) and self.cells[y + yy][x + xx].mine:
+                counter += 1
+        return counter
+
+    def click(self, x, y):
+        grid_x, grid_y = x // 30, y // 30
+        self.search(grid_x, grid_y)
+
+    def reload(self):
+        self.player.health = 5
+        for row in self.cells:
+            for cell in row:
+                cell.visible = False
+                cell.label = False
+                cell.marked = False
+                cell.show_mine = False
+                cell.explosion = False
+                cell.mine = self.random_mines()
+
+    def check_if_win(self):
+        if self.player.health &lt; 1:
+            return False
+        for row in self.cells:
+            for cell in row:
+                if not cell.visible and not cell.mine:
+                    return False
+        return True
+
+    def show_mines(self):
+        for row in self.cells:
+            for cell in row:
+                if not cell.show_mine:
+                    cell.show_mine = True
+                else:
+                    cell.show_mine = False
+
+    def mark_mine(self, x, y):
+        self.cells[y][x].marked = True</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="messy_pypi.main_minesweeper.Grid.check_if_win"><code class="name flex">
+<span>def <span class="ident">check_if_win</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_if_win(self):
+    if self.player.health &lt; 1:
+        return False
+    for row in self.cells:
+        for cell in row:
+            if not cell.visible and not cell.mine:
+                return False
+    return True</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Grid.click"><code class="name flex">
+<span>def <span class="ident">click</span></span>(<span>self, x, y)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def click(self, x, y):
+    grid_x, grid_y = x // 30, y // 30
+    self.search(grid_x, grid_y)</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Grid.draw"><code class="name flex">
+<span>def <span class="ident">draw</span></span>(<span>self, surface)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def draw(self, surface):
+    for row in self.cells:
+        for cell in row:
+            cell.draw(surface)
+    for line in self.lines:
+        pygame.draw.line(surface, (0, 125, 0), line[0], line[1])</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Grid.is_within_bounds"><code class="name flex">
+<span>def <span class="ident">is_within_bounds</span></span>(<span>self, x, y)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_within_bounds(self, x, y):
+    return x &gt;= 0 and x &lt; 30 and y &gt;= 0 and y &lt; 30</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Grid.mark_mine"><code class="name flex">
+<span>def <span class="ident">mark_mine</span></span>(<span>self, x, y)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mark_mine(self, x, y):
+    self.cells[y][x].marked = True</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Grid.num_of_mines"><code class="name flex">
+<span>def <span class="ident">num_of_mines</span></span>(<span>self, x, y)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def num_of_mines(self, x, y):
+    counter = 0
+    for xx, yy in self.search_dirs:
+        if self.is_within_bounds(x + xx, y + yy) and self.cells[y + yy][x + xx].mine:
+            counter += 1
+    return counter</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Grid.random_mines"><code class="name flex">
+<span>def <span class="ident">random_mines</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def random_mines(self):
+    r = randint(0, 10)
+    if r &gt; 9:
+        return True
+    else:
+        return False</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Grid.reload"><code class="name flex">
+<span>def <span class="ident">reload</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reload(self):
+    self.player.health = 5
+    for row in self.cells:
+        for cell in row:
+            cell.visible = False
+            cell.label = False
+            cell.marked = False
+            cell.show_mine = False
+            cell.explosion = False
+            cell.mine = self.random_mines()</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Grid.search"><code class="name flex">
+<span>def <span class="ident">search</span></span>(<span>self, x, y)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def search(self, x, y):
+    if not self.is_within_bounds(x, y):
+        return
+
+    cell = self.cells[y][x]
+
+    if cell.visible:
+        return
+
+    if cell.mine:
+        cell.explosion = True
+        self.player.sub_health()
+        return
+
+    cell.visible = True
+
+    num_mines = self.num_of_mines(x, y)
+
+    if num_mines &gt; 0:
+        cell.label = True
+        cell.mine_counter = str(num_mines)
+        return
+
+    for xx, yy in self.search_dirs:
+        self.search(x + xx, y + yy)</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Grid.show_mines"><code class="name flex">
+<span>def <span class="ident">show_mines</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def show_mines(self):
+    for row in self.cells:
+        for cell in row:
+            if not cell.show_mine:
+                cell.show_mine = True
+            else:
+                cell.show_mine = False</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Main"><code class="flex name class">
+<span>class <span class="ident">Main</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Main:
+    @staticmethod
+    def start():
+        pygame.font.init()
+        os.environ[&#39;SDL_VIDEO_WINDOW_POS&#39;] = &#34;%d,%d&#34; % (400, 100)
+        surface = pygame.display.set_mode((1200, 900))
+        pygame.display.set_caption(&#39;Minesweeper&#39;)
+        state = States.running
+        player = Player()
+        grid = Grid(player)
+        running = True
+        clock = pygame.time.Clock()
+        while running:
+            clock.tick(30)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.MOUSEBUTTONDOWN and state == States.running:
+                    if pygame.mouse.get_pressed()[0]:
+                        pos = pygame.mouse.get_pos()
+                        grid.click(pos[0], pos[1])
+                    elif pygame.mouse.get_pressed()[2]:
+                        pos = pygame.mouse.get_pos()
+                        grid.mark_mine(pos[0] // 30, pos[1] // 30)
+                    if grid.check_if_win():
+                        state = States.win
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE and (state == States.game_over or state == States.win):
+                        grid.reload()
+                        state = States.running
+                    if event.key == pygame.K_b:
+                        grid.show_mines()
+            surface.fill((0, 0, 0))
+            if player.get_health() == 0:
+                state = States.game_over
+            if state == States.game_over:
+                Stats.draw(surface, &#39;Game over!&#39;, (970, 350))
+                Stats.draw(surface, &#39;Press Space to restart&#39;, (920, 400))
+            elif state == States.win:
+                Stats.draw(surface, &#39;You win!&#39;, (1000, 350))
+                Stats.draw(surface, &#39;Press Space to restart&#39;, (920, 400))
+            grid.draw(surface)
+            Stats.draw(surface, &#39;Lives remaining&#39;, (950, 100))
+            Stats.draw(surface, str(player.get_health()), (1020, 200))
+            pygame.display.flip()</code></pre>
+</details>
+<h3>Static methods</h3>
+<dl>
+<dt id="messy_pypi.main_minesweeper.Main.start"><code class="name flex">
+<span>def <span class="ident">start</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def start():
+    pygame.font.init()
+    os.environ[&#39;SDL_VIDEO_WINDOW_POS&#39;] = &#34;%d,%d&#34; % (400, 100)
+    surface = pygame.display.set_mode((1200, 900))
+    pygame.display.set_caption(&#39;Minesweeper&#39;)
+    state = States.running
+    player = Player()
+    grid = Grid(player)
+    running = True
+    clock = pygame.time.Clock()
+    while running:
+        clock.tick(30)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN and state == States.running:
+                if pygame.mouse.get_pressed()[0]:
+                    pos = pygame.mouse.get_pos()
+                    grid.click(pos[0], pos[1])
+                elif pygame.mouse.get_pressed()[2]:
+                    pos = pygame.mouse.get_pos()
+                    grid.mark_mine(pos[0] // 30, pos[1] // 30)
+                if grid.check_if_win():
+                    state = States.win
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and (state == States.game_over or state == States.win):
+                    grid.reload()
+                    state = States.running
+                if event.key == pygame.K_b:
+                    grid.show_mines()
+        surface.fill((0, 0, 0))
+        if player.get_health() == 0:
+            state = States.game_over
+        if state == States.game_over:
+            Stats.draw(surface, &#39;Game over!&#39;, (970, 350))
+            Stats.draw(surface, &#39;Press Space to restart&#39;, (920, 400))
+        elif state == States.win:
+            Stats.draw(surface, &#39;You win!&#39;, (1000, 350))
+            Stats.draw(surface, &#39;Press Space to restart&#39;, (920, 400))
+        grid.draw(surface)
+        Stats.draw(surface, &#39;Lives remaining&#39;, (950, 100))
+        Stats.draw(surface, str(player.get_health()), (1020, 200))
+        pygame.display.flip()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Player"><code class="flex name class">
+<span>class <span class="ident">Player</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Player:
+    def __init__(self):
+        self.health = 5
+
+    def sub_health(self):
+        self.health -= 1
+
+    def get_health(self):
+        return self.health</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="messy_pypi.main_minesweeper.Player.get_health"><code class="name flex">
+<span>def <span class="ident">get_health</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_health(self):
+    return self.health</code></pre>
+</details>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Player.sub_health"><code class="name flex">
+<span>def <span class="ident">sub_health</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sub_health(self):
+    self.health -= 1</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="messy_pypi.main_minesweeper.States"><code class="flex name class">
+<span>class <span class="ident">States</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An enumeration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class States(Enum):
+    running = auto()
+    game_over = auto()
+    win = auto()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="messy_pypi.main_minesweeper.States.game_over"><code class="name">var <span class="ident">game_over</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="messy_pypi.main_minesweeper.States.running"><code class="name">var <span class="ident">running</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="messy_pypi.main_minesweeper.States.win"><code class="name">var <span class="ident">win</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="messy_pypi.main_minesweeper.Stats"><code class="flex name class">
+<span>class <span class="ident">Stats</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Stats:
+    @staticmethod
+    def draw(surface, label, pos):
+        textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 24).render(label, False, (255, 255, 255))
+        surface.blit(textsurface, (pos[0], pos[1]))</code></pre>
+</details>
+<h3>Static methods</h3>
+<dl>
+<dt id="messy_pypi.main_minesweeper.Stats.draw"><code class="name flex">
+<span>def <span class="ident">draw</span></span>(<span>surface, label, pos)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def draw(surface, label, pos):
+    textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 24).render(label, False, (255, 255, 255))
+    surface.blit(textsurface, (pos[0], pos[1]))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="messy_pypi" href="index.html">messy_pypi</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="messy_pypi.main_minesweeper.Cell" href="#messy_pypi.main_minesweeper.Cell">Cell</a></code></h4>
+<ul class="">
+<li><code><a title="messy_pypi.main_minesweeper.Cell.draw" href="#messy_pypi.main_minesweeper.Cell.draw">draw</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Cell.show_label" href="#messy_pypi.main_minesweeper.Cell.show_label">show_label</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="messy_pypi.main_minesweeper.Grid" href="#messy_pypi.main_minesweeper.Grid">Grid</a></code></h4>
+<ul class="two-column">
+<li><code><a title="messy_pypi.main_minesweeper.Grid.check_if_win" href="#messy_pypi.main_minesweeper.Grid.check_if_win">check_if_win</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Grid.click" href="#messy_pypi.main_minesweeper.Grid.click">click</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Grid.draw" href="#messy_pypi.main_minesweeper.Grid.draw">draw</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Grid.is_within_bounds" href="#messy_pypi.main_minesweeper.Grid.is_within_bounds">is_within_bounds</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Grid.mark_mine" href="#messy_pypi.main_minesweeper.Grid.mark_mine">mark_mine</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Grid.num_of_mines" href="#messy_pypi.main_minesweeper.Grid.num_of_mines">num_of_mines</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Grid.random_mines" href="#messy_pypi.main_minesweeper.Grid.random_mines">random_mines</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Grid.reload" href="#messy_pypi.main_minesweeper.Grid.reload">reload</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Grid.search" href="#messy_pypi.main_minesweeper.Grid.search">search</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Grid.show_mines" href="#messy_pypi.main_minesweeper.Grid.show_mines">show_mines</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="messy_pypi.main_minesweeper.Main" href="#messy_pypi.main_minesweeper.Main">Main</a></code></h4>
+<ul class="">
+<li><code><a title="messy_pypi.main_minesweeper.Main.start" href="#messy_pypi.main_minesweeper.Main.start">start</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="messy_pypi.main_minesweeper.Player" href="#messy_pypi.main_minesweeper.Player">Player</a></code></h4>
+<ul class="">
+<li><code><a title="messy_pypi.main_minesweeper.Player.get_health" href="#messy_pypi.main_minesweeper.Player.get_health">get_health</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.Player.sub_health" href="#messy_pypi.main_minesweeper.Player.sub_health">sub_health</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="messy_pypi.main_minesweeper.States" href="#messy_pypi.main_minesweeper.States">States</a></code></h4>
+<ul class="">
+<li><code><a title="messy_pypi.main_minesweeper.States.game_over" href="#messy_pypi.main_minesweeper.States.game_over">game_over</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.States.running" href="#messy_pypi.main_minesweeper.States.running">running</a></code></li>
+<li><code><a title="messy_pypi.main_minesweeper.States.win" href="#messy_pypi.main_minesweeper.States.win">win</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="messy_pypi.main_minesweeper.Stats" href="#messy_pypi.main_minesweeper.Stats">Stats</a></code></h4>
+<ul class="">
+<li><code><a title="messy_pypi.main_minesweeper.Stats.draw" href="#messy_pypi.main_minesweeper.Stats.draw">draw</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>
