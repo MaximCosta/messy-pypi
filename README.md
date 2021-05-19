@@ -103,6 +103,13 @@ Si le terminal est plus petit que la taille indiquée il Affiche Trop petit et r
 `check_for_duplicates(paths='./',remove=False)`
 paths est le chemin racine pour le scan, si remove = True, les fichiers dupliquer trouver seront supprimé.
 
+### functions.main_messe.**human_delta_time**
+`human_delta_time(time:int, curValue:str='seconde', minValue='seconde', minValue='jour', remove: list[str] = []) -> (dict or None)`
+permet a partir d'un nombre de le transformé en Année,Mois,Jour,Heure,Minute,Seconde.
+`human_delta_time(86461) -> {'jour': 1, 'minute': 1, 'seconde': 1}`
+
+`human_delta_time(30,curValue='jour',remove=['jour']) -> {'heure':720}`
+
 ## classes
 
 ### classes.main_customElement.List
@@ -123,6 +130,10 @@ list custom pour python, avec \
 	`- showDuplicate()` : renvoie les valeurs dupliquer \
 	`- countAll()` : renvoie une list de tuple avec le count de chaque element \
 	`- toType()` : transforme tout les float et int sous forme de string ex: '1.0' -> 1.0, '1'-> 1  \
+	`- include(elt)`: retourne True ou False dépendant si l'element est present ou non \
+	`- includes(elts)`: retourne True ou False dépendant si les elements sont present ou non \
+	`- copy()`: return copy of list with init new class List \
+	`- help`: affiche la doc suivant \
 	`- enumerate` : un iterator enumerate -> list(liste.enumerate) => [(index,value),...] \
 	`- renumerate` : un iterator enumerate reverse -> list(liste.renumerate) => [(index-1,value-1),...] \
 	`- maxv` : retourne la valeur max du tableau \
@@ -169,8 +180,9 @@ Maxio && ArkanYota
 - Tetris (pygame)
 - duplicateFile	
 - CustomElement
+- messy
 
 ### Nous 2
-- messy
+
 - Translate for all. Francais anglais
 - Documentation

@@ -12,20 +12,36 @@ from main_customElement import List
 
 
 def human_delta_time(time: int, curValue: str = 'seconde', minValue: str = 'seconde', maxValue: str = 'jour',
-                     remove: list = []) -> str:
+                     remove: list[str] = []) -> (dict or None):
     word = List(['seconde', 'minute', 'heure', 'jour', 'mois', 'année'])
-    if curValue not in word: return
-    if minValue not in word: return
-    if maxValue not in word: return
-    if remove: word.rmMAll(remove)
+    bword = word.copy()
+    calc = {
+        'seconde': ((60 * 60 * 24 * 30.5 * 12), 1),
+        'minute': ((60 * 24 * 30.5 * 12), 60),
+        'heure': ((24 * 30.5 * 12), 60),
+        'jour': ((30.5 * 12), 24),
+        'mois': (12, 30.5),
+        'année': (1, 12)
+    }
+
+    if not word.includes([curValue, minValue, maxValue]): return None
+
     word.rmAllBehind(minValue)
     word.rmAllBeside(maxValue)
-    init_time = time
-    old = curValue
+    if remove: word.rmMAll(remove)
+
+    init_time = time / calc[curValue][0]
     data = {}
-    for key, val in word.renumerate:
-        if curValue == val:
-            continue
+
+    for key, val in bword.renumerate:
+        # print(key, val, init_time)
+        if int(init_time):
+            if word.include(val):
+                data[val] = int(init_time)
+                init_time -= int(init_time)
+        init_time *= calc[val][1]
+
+    return data
 
 
 def reloop(elt: list = []):
