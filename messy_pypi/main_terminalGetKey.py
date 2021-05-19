@@ -2,7 +2,7 @@ def getKey(debug: bool = False) -> str:
     """
     Warning: Ne renvoie pas la même valeur entre Windows et Linux/MacOs
     Warning2: Sur Linux/MacOs, Il faut presser 2 foix le button Echap pour que il soit effectuer
-    Pause le terminal jusqua la rentrer d'un input
+    Pause le terminal jusqu'a la rentrer d'un input
     """
     from sys import platform
     if platform[:3] == 'win':
@@ -96,7 +96,7 @@ def getKey(debug: bool = False) -> str:
                 c = chr(n)
             except:
                 c = '\0'
-            return (n, c)
+            return n, c
 
         def getkey():
             n, c = getch()
@@ -143,5 +143,5 @@ def getKey(debug: bool = False) -> str:
         return key
 
 
-def getBytesKey(debug: bool = False) -> str:
+def get_key_bytes(debug: bool = False) -> str:
     return getKey(debug=debug).encode()

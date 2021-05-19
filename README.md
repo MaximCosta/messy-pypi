@@ -30,12 +30,12 @@ Sortie: String of key
 
 Met en pause le terminal et attend l'appui d'une touche et retourne un string. \
 Touche different de Windows à Linux/MacOs \
-Ne pas print directement la sortie car pour les touches spéciales la chaine est du type `\r` ou `\x1b`. Pour savoir la sortie à obtenir transformez encoder la sortie. Utilisez `functions.main_terminalGetKey.getBytesKey`.
+Ne pas print directement la sortie car pour les touches spéciales la chaine est du type `\r` ou `\x1b`. Pour savoir la sortie à obtenir transformez encoder la sortie. Utilisez `functions.main_terminalGetKey.get_key_bytes`.
 Si `debug` est à True le terminal fera exit quand l’on appuiera sur `Ctrl+C` 
 
 Compatible: Windows Linux macOS
 
-### functions.main_terminalGetKey.**getBytesKey**
+### functions.main_terminalGetKey.**get_key_bytes**
 
 Entrée : debug:bool=False \
 Sortie : Bytes String 
