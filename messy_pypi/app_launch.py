@@ -1,7 +1,7 @@
 from main_demineur import demineur
 from main_terminalFunctions import clear
 from main_countlignes import count_number_of_lines_in_file, count_number_of_lines_in_folder
-
+import os
 
 def launch():
     print("---")
@@ -30,6 +30,7 @@ def launch():
             if menu == "1":
                 count_number_of_lines_in_folder(input("folder"), input("match"))
             elif menu == "2":
+                print("DOSSIER "+ str(os.getcwd())+"/../")
                 print("All Ext\t", count_number_of_lines_in_folder("../", "(.py$|.md$|.png$|.txt$|LICENCE|.json$)"),
                       "\t Pour être plus précis: (.py$|.md$|.png$|.txt$|LICENCE|.json$)")
                 print("py$ md$\t", count_number_of_lines_in_folder("../", "(.py$|.md$)"))
