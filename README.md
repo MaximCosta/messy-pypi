@@ -165,7 +165,7 @@ Maxio && ArkanYota
 ## TODO
 
 ### ArkanYota
-- Demineur
+- :check: Demineur
 - Snake
 - printColor
 - Insert https://github.com/ARKANYOTA/ImageEnPoints
@@ -174,6 +174,7 @@ Maxio && ArkanYota
 - Recherche dichotomique dans JSON
 - Tri un base de donnée de façon dichotomique (potentiellement avec sort()) 
 - App launcher for use app functions `app_lanuch.py` ->  Add interface graphique 
+- Reader of readme terminal
 
 ### Maxio
 - Minesweeper (pygame)
