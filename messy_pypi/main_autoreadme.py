@@ -19,3 +19,4 @@ def list_files(folder: str) -> int:
                 l.append(os.path.join(root, name))
     return l
 
+

@@ -27,11 +27,12 @@ def count_number_of_lines_in_folder(folder: str, match: str = "(.py$|.md$)") -> 
                 nombres_lignes += count_number_of_lines_in_file(os.path.join(root, name))
     return nombres_lignes
 
-def count_number_of_lines_in_folder_verbose(folder: str, match: str = "(.py$|.md$)") -> int:
+def count_number_of_lines_in_folder_verbose(folder: str, match: str = "(.py$|.md$)", otherinfo=False) -> int:
     """
     Info: You can set "../../Here"
     Info: C'est le fichier a partir du dossier de ce fichier
     """
+    dico_otherinfo= {}
     nombres_lignes = 0
     for root, directories, files in os.walk(folder, topdown=False):
         print("\033[31mroot:\033[0m "+root)
@@ -40,14 +41,51 @@ def count_number_of_lines_in_folder_verbose(folder: str, match: str = "(.py$|.md
         for name in files:
             if re.search(match, name):
                 print("\033[31m---\033[0m")
+                print("\033[36mname:\033[0m "+str(name))
                 print("\033[34mpath:\033[0m "+str(os.path.join(root, name)))
-                print("\033[35mlignes:\033[0m "+str(count_number_of_lines_in_file(os.path.join(root, name))))
-                nombres_lignes += count_number_of_lines_in_file(os.path.join(root, name))
+                ligne=count_number_of_lines_in_file(os.path.join(root, name))
+                print("\033[35mlignes:\033[0m "+str(ligne))
+                if otherinfo:
+                    if name in dico_otherinfo:
+                        if isinstance(dico_otherinfo[name], list):
+                            dico_otherinfo[name] = dico_otherinfo[name]+[ligne]
+                        else:
+                            dico_otherinfo[name] = [dico_otherinfo[name], ligne]
+                    else:
+                        dico_otherinfo[name] = ligne
+
+                nombres_lignes += ligne
         print("\n"+"="*(os.get_terminal_size()[0])+"\n")
-    return nombres_lignes
+
+    if otherinfo:
+        maxllen = 0
+        info_byext = {}
+        for i in dico_otherinfo.keys():
+            maxllen = max(len(i), maxllen)
+        for i,j in dico_otherinfo.items():
+            l = 0
+            if isinstance(j, list):
+                for k in j:
+                    l+=k
+            else:
+                l=j
+            print("name: "+str(i.center(maxllen))+"\t list: "+str(j)+"\t ligne: "+str(l)+"\t ext:"+str(i.split('.')[-1]))
+            if i.split('.')[-1] in info_byext:
+                info_byext[i.split('.')[-1]] += l
+            else:
+                info_byext[i.split('.')[-1]] = l
+        print("==-==-==-==-==-==")
+        for i,j in info_byext.items():
+            print(str(i)+"\t: "+str(j))
+
+        print("\n"+"="*(os.get_terminal_size()[0])+"\n")
+        return nombres_lignes
+    else:
+        return nombres_lignes
+
 
 if __name__ == "__main__":
-    match = "\.py$|\.md$|\.html$|\.css$|\.txt$|LICENCE$|\.cfg$"
-    print("nombre de lignes: "+str(count_number_of_lines_in_folder_verbose(".", match)))
+    match = "\.py$|\.md$|\.html$|\.css$|\.txt$|LICENCE$|\.cfg$|\.json$"
+    print("nombre de lignes: "+str(count_number_of_lines_in_folder_verbose(".", match, otherinfo=True)))
     print("match: "+match)
     print("fichier courant: "+str(os.getcwd()))

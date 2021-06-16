@@ -161,6 +161,8 @@ Maxio && ArkanYota
 
 ## infos
 !(Lien tuto)[https://medium.com/@joel.barmettler/how-to-upload-your-python-package-to-pypi-65edc5fe9c56]
+- Pour avoir la liste de toutes les modules existants on peux faire print(help('modules')) mais faut le reformater
+
 
 ## TODO
 
@@ -175,6 +177,7 @@ Maxio && ArkanYota
 - Tri un base de donnée de façon dichotomique (potentiellement avec sort()) 
 - App launcher for use app functions `app_lanuch.py` ->  Add interface graphique 
 - Reader of readme terminal
+- Tableau dans le terminal
 
 ### Maxio
 - Minesweeper (pygame)
