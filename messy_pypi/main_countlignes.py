@@ -55,7 +55,10 @@ def count_number_of_lines_in_folder_verbose(folder: str, match: str = "(.py$|.md
                         dico_otherinfo[name] = ligne
 
                 nombres_lignes += ligne
-        print("\n"+"="*(os.get_terminal_size()[0])+"\n")
+        try:
+            print("\n"+"="*(os.get_terminal_size()[0])+"\n")
+        except:
+            print("\n"+"="*25+"\n")
 
     if otherinfo:
         maxllen = 0
@@ -77,8 +80,11 @@ def count_number_of_lines_in_folder_verbose(folder: str, match: str = "(.py$|.md
         print("==-==-==-==-==-==")
         for i,j in info_byext.items():
             print(str(i)+"\t: "+str(j))
-
-        print("\n"+"="*(os.get_terminal_size()[0])+"\n")
+            
+        try:
+            print("\n"+"="*(os.get_terminal_size()[0])+"\n")
+        except:
+            print("\n"+"="*25+"\n")
         return nombres_lignes
     else:
         return nombres_lignes
