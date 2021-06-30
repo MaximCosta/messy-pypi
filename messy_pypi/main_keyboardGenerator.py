@@ -15,19 +15,29 @@ def keygen():
     print("\033[2J")
 
     #keychoosed = input("Choose Default keyoard: ")
-
+    x, y = 0,0
     while True:
         print("\033[2J")
         print("\033[1;1H"+ (lambda EmptyKeyboard: keyboard_empty if EmptyKeyboard else keyboard)(EmptyKeyboard))
-
-        if ShowHelp: printposkey()
+        print(f"\033[{1};{18}H{x = }, {y = }")
+        if ShowHelp: 
+            current = printposkey(x, y)
+            if current:
+                print(f"\033[{1};{40}H{current=}")
 
         key = getKey(debug=True)
         if key=="h":
             ShowHelp = not ShowHelp
         elif key=="k":
             EmptyKeyboard = not EmptyKeyboard
-
+        elif key=="\x1b[A": # UP
+            x+=1
+        elif key=="\x1b[B": # DOWN
+            x-=1
+        elif key=="\x1b[C": # RIGHT 
+            y+=1
+        elif key=="\x1b[D": # LEFT 
+            y-=1
 
 def config_to_dicoallkey(path_to_config):
     dicoallkey = {}
@@ -47,11 +57,16 @@ def config_to_dicoallkey(path_to_config):
     # print(dicoallkey)
     
 
-def printposkey():
+def printposkey(x, y):
     # prend keyboard_keypos et le place sur le clavier.
+    current = False
     for key, pos in keyboard_keypos.items():
-        ##
-        print(f"\033[{str((abs(pos[0]-5))*3+5)};{str(pos[1])}H{key[1:-1]}")
+        if pos==(x,y):
+            print(f"\033[33m\033[{str((abs(pos[0]-5))*3+5)};{str(pos[1])}H{key[1:-1]}\033[0m")
+            current = key[1:-1]
+        else:
+            print(f"\033[{str((abs(pos[0]-5))*3+5)};{str(pos[1])}H{key[1:-1]}")
+    return current
 
 ## OTHER
 def inputbar(before = ""):
@@ -94,7 +109,45 @@ def showconfig():
     for i, j in key.items():
         print(i, j)
 
+def textconfigremoveuseless():
+    import re
+    # transforme :
+    # key <AE11> { [ exclam,          8,              exclamdown,      U2E18      ], type[Group1] = "FOUR_LEVEL_ALPHABETIC" };  // reversed interrobang
+    # en: key <AE11> { [ exclam, 8, exclamdown, U2E18] };
+    with open('resources/keyboard/allkeywithtouch.txt', "r") as f:
+        a = f.readlines()
+    b = [i.strip().split("//")[0] for i in a]
+    for t in range(10):
+        b = [i.replace("\t", " ").replace('  ', " ").replace("\n", "") for i in b]
+    e = [re.sub(',?\w+\[\w+\]\ ?=\ ?\"\w*\"\ ?,?\ ?', "", i) for i in b]
+    f = [re.sub('(,?\w+\[\w+\]\ ?=\ ?)|(,?\ ?\w+\=<\w+>?)', "", i) for i in e]
+    return f
 
+def find_all_key_and_char(f):
+    import re
+    list_char =set() 
+    list_key = set() 
+    for i in f:
+        m = re.search("<[A-Za-z0-9_]*>", i)
+        if m:
+            list_key.add(m.group(0))
+    for i in f:
+        m = re.search("\[.*\]", i)
+        if m:
+            for a in [a.strip() for a in m.group(0).replace("[", "").replace(']', "").split(",")]:
+                list_char.add(a)
+    return list_char, list_key
+
+if __name__ == "__main__":
+    find_all_key_and_char(textconfigremoveuseless())
+    # keygen()
+    # updateconfig()
+    # print("\033[2J")
+    # inputbar("\033[10;10H")
+    # print(get_key_bytes())
+    # showconfig()
+    # tri_du_dico()
+    # config_to_dicoallkey("/home/ay/messy-pypi/messy_pypi/resources/keyboard/config")
 """
 DEFINITION DES VARIABLES:
 

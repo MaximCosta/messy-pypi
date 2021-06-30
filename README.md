@@ -178,6 +178,8 @@ Maxio && ArkanYota
 - App launcher for use app functions `app_lanuch.py` ->  Add interface graphique 
 - Reader of readme terminal
 - Tableau dans le terminal
+- Shell dans le terminal: basée sur vim
+- autocompletion, with /bin files
 
 ### Maxio
 - Minesweeper (pygame)

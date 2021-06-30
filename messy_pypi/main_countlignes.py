@@ -61,6 +61,7 @@ def count_number_of_lines_in_folder_verbose(folder: str, match: str = "(.py$|.md
             print("\n"+"="*25+"\n")
 
     if otherinfo:
+        print(dico_otherinfo)
         maxllen = 0
         info_byext = {}
         for i in dico_otherinfo.keys():
@@ -91,7 +92,16 @@ def count_number_of_lines_in_folder_verbose(folder: str, match: str = "(.py$|.md
 
 
 if __name__ == "__main__":
-    match = "\.py$|\.md$|\.html$|\.css$|\.txt$|LICENCE$|\.cfg$|\.json$"
+    import sys
+    
+    if len(sys.argv) > 1:
+        if sys.argv[1]=="--help":
+            print("use: python3.10 main_countlines.py [match]")
+            exit()
+        match = sys.argv[1]
+    else:
+        match = "\.py$|\.md$|\.html$|\.css$|\.txt$|LICENCE$|\.cfg$|\.json$"
     print("nombre de lignes: "+str(count_number_of_lines_in_folder_verbose(".", match, otherinfo=True)))
     print("match: "+match)
     print("fichier courant: "+str(os.getcwd()))
+    print(sys.argv)
