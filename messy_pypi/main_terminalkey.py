@@ -35,7 +35,17 @@ escape = {
 	"[21" :					"f10",
 	"[23" :					"f11",
 	"[24" :					"f12"
-	}
+}
+mouse_state = {
+	"\033[<0;" : "mouse_scroll_down",
+	"\033[<1;" : "",
+	"\033[<2;" : "",
+	"\033[<35" : "",
+	"\033[<64" : "mouse_scroll_up",
+	"\033[<65" : "mouse_scroll_down",
+	"\033[<32" : "",
+	"\033[<33" : ""
+}
 new = threading.Event()
 idle = threading.Event()
 mouse_move = threading.Event()
@@ -113,6 +123,7 @@ mouse_direct_on		= "\033[?1003h"							#* Enable reporting of mouse position at 
 mouse_direct_off	= "\033[?1003l"							#* Disable direct mouse reporting
 
 input_key = ""
+input_save= ""
 clean_key = ""
 click_state = ""
 liste = [""]
@@ -170,7 +181,8 @@ while True:
 			liste.append(clean_key)
 			if len(liste) > 10: del liste[0]
 			clean_key = ""
+		input_save = input_key
 		input_key = ""
 
 
-	print(fr"{liste[-1]=}, {mouse_pos=}, {mouse_move.is_set()=}, {click_state=}")
+	print(fr"{liste[-1]=}, {mouse_pos=}, {click_state=}, {input_save=}")
