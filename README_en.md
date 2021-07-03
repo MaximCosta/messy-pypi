@@ -1,8 +1,7 @@
 # Messy_Pypi
 
 ## LANG
-
-[This in English](README_en.md)
+[This in French](README_en.md)
 
 ## Structure
 ```
