@@ -87,14 +87,14 @@ class States(Enum):
 
 
 class Player:
-    def __init__(self):
-        self.health = 5
+    def __init__(cls):
+        cls.health = 5
 
-    def sub_health(self):
-        self.health -= 1
+    def sub_health(cls):
+        cls.health -= 1
 
-    def get_health(self):
-        return self.health
+    def get_health(cls):
+        return cls.health
 
 
 class Stats:
@@ -105,162 +105,162 @@ class Stats:
 
 
 class Cell:
-    def __init__(self, pos, random_mine):
-        self.visible = False
-        self.mine = random_mine
-        self.show_mine = False
-        self.size = 30
-        self.color = (200, 200, 200)
-        self.pos = pos
-        self.label = False
-        self.mine_counter = 0
-        self.font_color = (0, 0, 0)
-        self.marked = False
-        self.explosion = False
-        self.img_flag = pygame.image.load(&#39;../resources/minesweeper/cell-flagged.png&#39;)
-        self.img_flag = pygame.transform.scale(self.img_flag, (self.size, self.size))
+    def __init__(cls, pos, random_mine):
+        cls.visible = False
+        cls.mine = random_mine
+        cls.show_mine = False
+        cls.size = 30
+        cls.color = (200, 200, 200)
+        cls.pos = pos
+        cls.label = False
+        cls.mine_counter = 0
+        cls.font_color = (0, 0, 0)
+        cls.marked = False
+        cls.explosion = False
+        cls.img_flag = pygame.image.load(&#39;../resources/minesweeper/cell-flagged.png&#39;)
+        cls.img_flag = pygame.transform.scale(cls.img_flag, (cls.size, cls.size))
 
-        self.img_explode = pygame.image.load(&#39;../resources/minesweeper/mine-exploded.png&#39;)
-        self.img_explode = pygame.transform.scale(self.img_explode, (self.size, self.size))
+        cls.img_explode = pygame.image.load(&#39;../resources/minesweeper/mine-exploded.png&#39;)
+        cls.img_explode = pygame.transform.scale(cls.img_explode, (cls.size, cls.size))
 
-        self.img_mine = pygame.image.load(&#39;../resources/minesweeper/mine.png&#39;)
-        self.img_mine = pygame.transform.scale(self.img_mine, (self.size, self.size))
+        cls.img_mine = pygame.image.load(&#39;../resources/minesweeper/mine.png&#39;)
+        cls.img_mine = pygame.transform.scale(cls.img_mine, (cls.size, cls.size))
 
-        self.img_cell = []
+        cls.img_cell = []
         for i in range(9):
             _img = pygame.image.load(f&#39;../resources/minesweeper/cell-{i}.png&#39;)
-            _img = pygame.transform.scale(_img, (self.size, self.size))
-            self.img_cell.append(_img)
+            _img = pygame.transform.scale(_img, (cls.size, cls.size))
+            cls.img_cell.append(_img)
 
-    def draw(self, surface):
-        if self.visible and not self.label and not (self.show_mine and self.mine):
-            surface.blit(self.img_cell[0], (self.pos[0], self.pos[1]))
-        elif self.label:
-            self.show_label(surface, self.mine_counter, self.pos)
-        elif self.marked:
-            surface.blit(self.img_flag, (self.pos[0], self.pos[1]))
-        elif self.show_mine and self.mine:
-            surface.blit(self.img_mine, (self.pos[0], self.pos[1]))
-        elif self.explosion:
-            surface.blit(self.img_explode, (self.pos[0], self.pos[1]))
+    def draw(cls, surface):
+        if cls.visible and not cls.label and not (cls.show_mine and cls.mine):
+            surface.blit(cls.img_cell[0], (cls.pos[0], cls.pos[1]))
+        elif cls.label:
+            cls.show_label(surface, cls.mine_counter, cls.pos)
+        elif cls.marked:
+            surface.blit(cls.img_flag, (cls.pos[0], cls.pos[1]))
+        elif cls.show_mine and cls.mine:
+            surface.blit(cls.img_mine, (cls.pos[0], cls.pos[1]))
+        elif cls.explosion:
+            surface.blit(cls.img_explode, (cls.pos[0], cls.pos[1]))
         else:
-            pygame.draw.rect(surface, (50, 50, 50), (self.pos[0], self.pos[1], self.size, self.size))
+            pygame.draw.rect(surface, (50, 50, 50), (cls.pos[0], cls.pos[1], cls.size, cls.size))
 
-    def show_label(self, surface, label, pos):
-        # textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 18).render(label, False, self.font_color)
+    def show_label(cls, surface, label, pos):
+        # textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 18).render(label, False, cls.font_color)
         # surface.blit(textsurface, (pos[0] + 10, pos[1] + 4))
-        surface.blit(self.img_cell[int(label)], (pos[0], pos[1]))
+        surface.blit(cls.img_cell[int(label)], (pos[0], pos[1]))
 
 
 class Grid:
-    def __init__(self, player):
-        self.player = player
-        self.cells = []
-        self.search_dirs = [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1)]
+    def __init__(cls, player):
+        cls.player = player
+        cls.cells = []
+        cls.search_dirs = [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1)]
 
         for y in range(30):
-            self.cells.append([])
+            cls.cells.append([])
             for x in range(30):
-                self.cells[y].append(Cell((x * 30, y * 30), self.random_mines()))
+                cls.cells[y].append(Cell((x * 30, y * 30), cls.random_mines()))
 
-        self.lines = []
+        cls.lines = []
 
         for y in range(1, 31, 1):
             temp = []
             temp.append((0, y * 30))
             temp.append((900, y * 30))
-            self.lines.append(temp)
+            cls.lines.append(temp)
 
         for x in range(1, 31, 1):
             temp = []
             temp.append((x * 30, 0))
             temp.append((x * 30, 900))
-            self.lines.append(temp)
+            cls.lines.append(temp)
 
-    def random_mines(self):
+    def random_mines(cls):
         r = randint(0, 10)
         if r &gt; 9:
             return True
         else:
             return False
 
-    def draw(self, surface):
-        for row in self.cells:
+    def draw(cls, surface):
+        for row in cls.cells:
             for cell in row:
                 cell.draw(surface)
-        for line in self.lines:
+        for line in cls.lines:
             pygame.draw.line(surface, (0, 125, 0), line[0], line[1])
 
-    def is_within_bounds(self, x, y):
+    def is_within_bounds(cls, x, y):
         return x &gt;= 0 and x &lt; 30 and y &gt;= 0 and y &lt; 30
 
-    def search(self, x, y):
-        if not self.is_within_bounds(x, y):
+    def search(cls, x, y):
+        if not cls.is_within_bounds(x, y):
             return
 
-        cell = self.cells[y][x]
+        cell = cls.cells[y][x]
 
         if cell.visible:
             return
 
         if cell.mine:
             cell.explosion = True
-            self.player.sub_health()
+            cls.player.sub_health()
             return
 
         cell.visible = True
 
-        num_mines = self.num_of_mines(x, y)
+        num_mines = cls.num_of_mines(x, y)
 
         if num_mines &gt; 0:
             cell.label = True
             cell.mine_counter = str(num_mines)
             return
 
-        for xx, yy in self.search_dirs:
-            self.search(x + xx, y + yy)
+        for xx, yy in cls.search_dirs:
+            cls.search(x + xx, y + yy)
 
-    def num_of_mines(self, x, y):
+    def num_of_mines(cls, x, y):
         counter = 0
-        for xx, yy in self.search_dirs:
-            if self.is_within_bounds(x + xx, y + yy) and self.cells[y + yy][x + xx].mine:
+        for xx, yy in cls.search_dirs:
+            if cls.is_within_bounds(x + xx, y + yy) and cls.cells[y + yy][x + xx].mine:
                 counter += 1
         return counter
 
-    def click(self, x, y):
+    def click(cls, x, y):
         grid_x, grid_y = x // 30, y // 30
-        self.search(grid_x, grid_y)
+        cls.search(grid_x, grid_y)
 
-    def reload(self):
-        self.player.health = 5
-        for row in self.cells:
+    def reload(cls):
+        cls.player.health = 5
+        for row in cls.cells:
             for cell in row:
                 cell.visible = False
                 cell.label = False
                 cell.marked = False
                 cell.show_mine = False
                 cell.explosion = False
-                cell.mine = self.random_mines()
+                cell.mine = cls.random_mines()
 
-    def check_if_win(self):
-        if self.player.health &lt; 1:
+    def check_if_win(cls):
+        if cls.player.health &lt; 1:
             return False
-        for row in self.cells:
+        for row in cls.cells:
             for cell in row:
                 if not cell.visible and not cell.mine:
                     return False
         return True
 
-    def show_mines(self):
-        for row in self.cells:
+    def show_mines(cls):
+        for row in cls.cells:
             for cell in row:
                 if not cell.show_mine:
                     cell.show_mine = True
                 else:
                     cell.show_mine = False
 
-    def mark_mine(self, x, y):
-        self.cells[y][x].marked = True</code></pre>
+    def mark_mine(cls, x, y):
+        cls.cells[y][x].marked = True</code></pre>
 </details>
 </section>
 <section>
@@ -283,56 +283,56 @@ class Grid:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Cell:
-    def __init__(self, pos, random_mine):
-        self.visible = False
-        self.mine = random_mine
-        self.show_mine = False
-        self.size = 30
-        self.color = (200, 200, 200)
-        self.pos = pos
-        self.label = False
-        self.mine_counter = 0
-        self.font_color = (0, 0, 0)
-        self.marked = False
-        self.explosion = False
-        self.img_flag = pygame.image.load(&#39;../resources/minesweeper/cell-flagged.png&#39;)
-        self.img_flag = pygame.transform.scale(self.img_flag, (self.size, self.size))
+    def __init__(cls, pos, random_mine):
+        cls.visible = False
+        cls.mine = random_mine
+        cls.show_mine = False
+        cls.size = 30
+        cls.color = (200, 200, 200)
+        cls.pos = pos
+        cls.label = False
+        cls.mine_counter = 0
+        cls.font_color = (0, 0, 0)
+        cls.marked = False
+        cls.explosion = False
+        cls.img_flag = pygame.image.load(&#39;../resources/minesweeper/cell-flagged.png&#39;)
+        cls.img_flag = pygame.transform.scale(cls.img_flag, (cls.size, cls.size))
 
-        self.img_explode = pygame.image.load(&#39;../resources/minesweeper/mine-exploded.png&#39;)
-        self.img_explode = pygame.transform.scale(self.img_explode, (self.size, self.size))
+        cls.img_explode = pygame.image.load(&#39;../resources/minesweeper/mine-exploded.png&#39;)
+        cls.img_explode = pygame.transform.scale(cls.img_explode, (cls.size, cls.size))
 
-        self.img_mine = pygame.image.load(&#39;../resources/minesweeper/mine.png&#39;)
-        self.img_mine = pygame.transform.scale(self.img_mine, (self.size, self.size))
+        cls.img_mine = pygame.image.load(&#39;../resources/minesweeper/mine.png&#39;)
+        cls.img_mine = pygame.transform.scale(cls.img_mine, (cls.size, cls.size))
 
-        self.img_cell = []
+        cls.img_cell = []
         for i in range(9):
             _img = pygame.image.load(f&#39;../resources/minesweeper/cell-{i}.png&#39;)
-            _img = pygame.transform.scale(_img, (self.size, self.size))
-            self.img_cell.append(_img)
+            _img = pygame.transform.scale(_img, (cls.size, cls.size))
+            cls.img_cell.append(_img)
 
-    def draw(self, surface):
-        if self.visible and not self.label and not (self.show_mine and self.mine):
-            surface.blit(self.img_cell[0], (self.pos[0], self.pos[1]))
-        elif self.label:
-            self.show_label(surface, self.mine_counter, self.pos)
-        elif self.marked:
-            surface.blit(self.img_flag, (self.pos[0], self.pos[1]))
-        elif self.show_mine and self.mine:
-            surface.blit(self.img_mine, (self.pos[0], self.pos[1]))
-        elif self.explosion:
-            surface.blit(self.img_explode, (self.pos[0], self.pos[1]))
+    def draw(cls, surface):
+        if cls.visible and not cls.label and not (cls.show_mine and cls.mine):
+            surface.blit(cls.img_cell[0], (cls.pos[0], cls.pos[1]))
+        elif cls.label:
+            cls.show_label(surface, cls.mine_counter, cls.pos)
+        elif cls.marked:
+            surface.blit(cls.img_flag, (cls.pos[0], cls.pos[1]))
+        elif cls.show_mine and cls.mine:
+            surface.blit(cls.img_mine, (cls.pos[0], cls.pos[1]))
+        elif cls.explosion:
+            surface.blit(cls.img_explode, (cls.pos[0], cls.pos[1]))
         else:
-            pygame.draw.rect(surface, (50, 50, 50), (self.pos[0], self.pos[1], self.size, self.size))
+            pygame.draw.rect(surface, (50, 50, 50), (cls.pos[0], cls.pos[1], cls.size, cls.size))
 
-    def show_label(self, surface, label, pos):
-        # textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 18).render(label, False, self.font_color)
+    def show_label(cls, surface, label, pos):
+        # textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 18).render(label, False, cls.font_color)
         # surface.blit(textsurface, (pos[0] + 10, pos[1] + 4))
-        surface.blit(self.img_cell[int(label)], (pos[0], pos[1]))</code></pre>
+        surface.blit(cls.img_cell[int(label)], (pos[0], pos[1]))</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="messy_pypi.main_minesweeper.Cell.draw"><code class="name flex">
-<span>def <span class="ident">draw</span></span>(<span>self, surface)</span>
+<span>def <span class="ident">draw</span></span>(<span>cls, surface)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -340,23 +340,23 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def draw(self, surface):
-    if self.visible and not self.label and not (self.show_mine and self.mine):
-        surface.blit(self.img_cell[0], (self.pos[0], self.pos[1]))
-    elif self.label:
-        self.show_label(surface, self.mine_counter, self.pos)
-    elif self.marked:
-        surface.blit(self.img_flag, (self.pos[0], self.pos[1]))
-    elif self.show_mine and self.mine:
-        surface.blit(self.img_mine, (self.pos[0], self.pos[1]))
-    elif self.explosion:
-        surface.blit(self.img_explode, (self.pos[0], self.pos[1]))
+<pre><code class="python">def draw(cls, surface):
+    if cls.visible and not cls.label and not (cls.show_mine and cls.mine):
+        surface.blit(cls.img_cell[0], (cls.pos[0], cls.pos[1]))
+    elif cls.label:
+        cls.show_label(surface, cls.mine_counter, cls.pos)
+    elif cls.marked:
+        surface.blit(cls.img_flag, (cls.pos[0], cls.pos[1]))
+    elif cls.show_mine and cls.mine:
+        surface.blit(cls.img_mine, (cls.pos[0], cls.pos[1]))
+    elif cls.explosion:
+        surface.blit(cls.img_explode, (cls.pos[0], cls.pos[1]))
     else:
-        pygame.draw.rect(surface, (50, 50, 50), (self.pos[0], self.pos[1], self.size, self.size))</code></pre>
+        pygame.draw.rect(surface, (50, 50, 50), (cls.pos[0], cls.pos[1], cls.size, cls.size))</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Cell.show_label"><code class="name flex">
-<span>def <span class="ident">show_label</span></span>(<span>self, surface, label, pos)</span>
+<span>def <span class="ident">show_label</span></span>(<span>cls, surface, label, pos)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -364,10 +364,10 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def show_label(self, surface, label, pos):
-    # textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 18).render(label, False, self.font_color)
+<pre><code class="python">def show_label(cls, surface, label, pos):
+    # textsurface = pygame.font.SysFont(&#39;Comic Sans MS&#39;, 18).render(label, False, cls.font_color)
     # surface.blit(textsurface, (pos[0] + 10, pos[1] + 4))
-    surface.blit(self.img_cell[int(label)], (pos[0], pos[1]))</code></pre>
+    surface.blit(cls.img_cell[int(label)], (pos[0], pos[1]))</code></pre>
 </details>
 </dd>
 </dl>
@@ -383,119 +383,119 @@ class Grid:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Grid:
-    def __init__(self, player):
-        self.player = player
-        self.cells = []
-        self.search_dirs = [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1)]
+    def __init__(cls, player):
+        cls.player = player
+        cls.cells = []
+        cls.search_dirs = [(0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1)]
 
         for y in range(30):
-            self.cells.append([])
+            cls.cells.append([])
             for x in range(30):
-                self.cells[y].append(Cell((x * 30, y * 30), self.random_mines()))
+                cls.cells[y].append(Cell((x * 30, y * 30), cls.random_mines()))
 
-        self.lines = []
+        cls.lines = []
 
         for y in range(1, 31, 1):
             temp = []
             temp.append((0, y * 30))
             temp.append((900, y * 30))
-            self.lines.append(temp)
+            cls.lines.append(temp)
 
         for x in range(1, 31, 1):
             temp = []
             temp.append((x * 30, 0))
             temp.append((x * 30, 900))
-            self.lines.append(temp)
+            cls.lines.append(temp)
 
-    def random_mines(self):
+    def random_mines(cls):
         r = randint(0, 10)
         if r &gt; 9:
             return True
         else:
             return False
 
-    def draw(self, surface):
-        for row in self.cells:
+    def draw(cls, surface):
+        for row in cls.cells:
             for cell in row:
                 cell.draw(surface)
-        for line in self.lines:
+        for line in cls.lines:
             pygame.draw.line(surface, (0, 125, 0), line[0], line[1])
 
-    def is_within_bounds(self, x, y):
+    def is_within_bounds(cls, x, y):
         return x &gt;= 0 and x &lt; 30 and y &gt;= 0 and y &lt; 30
 
-    def search(self, x, y):
-        if not self.is_within_bounds(x, y):
+    def search(cls, x, y):
+        if not cls.is_within_bounds(x, y):
             return
 
-        cell = self.cells[y][x]
+        cell = cls.cells[y][x]
 
         if cell.visible:
             return
 
         if cell.mine:
             cell.explosion = True
-            self.player.sub_health()
+            cls.player.sub_health()
             return
 
         cell.visible = True
 
-        num_mines = self.num_of_mines(x, y)
+        num_mines = cls.num_of_mines(x, y)
 
         if num_mines &gt; 0:
             cell.label = True
             cell.mine_counter = str(num_mines)
             return
 
-        for xx, yy in self.search_dirs:
-            self.search(x + xx, y + yy)
+        for xx, yy in cls.search_dirs:
+            cls.search(x + xx, y + yy)
 
-    def num_of_mines(self, x, y):
+    def num_of_mines(cls, x, y):
         counter = 0
-        for xx, yy in self.search_dirs:
-            if self.is_within_bounds(x + xx, y + yy) and self.cells[y + yy][x + xx].mine:
+        for xx, yy in cls.search_dirs:
+            if cls.is_within_bounds(x + xx, y + yy) and cls.cells[y + yy][x + xx].mine:
                 counter += 1
         return counter
 
-    def click(self, x, y):
+    def click(cls, x, y):
         grid_x, grid_y = x // 30, y // 30
-        self.search(grid_x, grid_y)
+        cls.search(grid_x, grid_y)
 
-    def reload(self):
-        self.player.health = 5
-        for row in self.cells:
+    def reload(cls):
+        cls.player.health = 5
+        for row in cls.cells:
             for cell in row:
                 cell.visible = False
                 cell.label = False
                 cell.marked = False
                 cell.show_mine = False
                 cell.explosion = False
-                cell.mine = self.random_mines()
+                cell.mine = cls.random_mines()
 
-    def check_if_win(self):
-        if self.player.health &lt; 1:
+    def check_if_win(cls):
+        if cls.player.health &lt; 1:
             return False
-        for row in self.cells:
+        for row in cls.cells:
             for cell in row:
                 if not cell.visible and not cell.mine:
                     return False
         return True
 
-    def show_mines(self):
-        for row in self.cells:
+    def show_mines(cls):
+        for row in cls.cells:
             for cell in row:
                 if not cell.show_mine:
                     cell.show_mine = True
                 else:
                     cell.show_mine = False
 
-    def mark_mine(self, x, y):
-        self.cells[y][x].marked = True</code></pre>
+    def mark_mine(cls, x, y):
+        cls.cells[y][x].marked = True</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="messy_pypi.main_minesweeper.Grid.check_if_win"><code class="name flex">
-<span>def <span class="ident">check_if_win</span></span>(<span>self)</span>
+<span>def <span class="ident">check_if_win</span></span>(<span>cls)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -503,10 +503,10 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def check_if_win(self):
-    if self.player.health &lt; 1:
+<pre><code class="python">def check_if_win(cls):
+    if cls.player.health &lt; 1:
         return False
-    for row in self.cells:
+    for row in cls.cells:
         for cell in row:
             if not cell.visible and not cell.mine:
                 return False
@@ -514,7 +514,7 @@ class Grid:
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Grid.click"><code class="name flex">
-<span>def <span class="ident">click</span></span>(<span>self, x, y)</span>
+<span>def <span class="ident">click</span></span>(<span>cls, x, y)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -522,13 +522,13 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def click(self, x, y):
+<pre><code class="python">def click(cls, x, y):
     grid_x, grid_y = x // 30, y // 30
-    self.search(grid_x, grid_y)</code></pre>
+    cls.search(grid_x, grid_y)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Grid.draw"><code class="name flex">
-<span>def <span class="ident">draw</span></span>(<span>self, surface)</span>
+<span>def <span class="ident">draw</span></span>(<span>cls, surface)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -536,16 +536,16 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def draw(self, surface):
-    for row in self.cells:
+<pre><code class="python">def draw(cls, surface):
+    for row in cls.cells:
         for cell in row:
             cell.draw(surface)
-    for line in self.lines:
+    for line in cls.lines:
         pygame.draw.line(surface, (0, 125, 0), line[0], line[1])</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Grid.is_within_bounds"><code class="name flex">
-<span>def <span class="ident">is_within_bounds</span></span>(<span>self, x, y)</span>
+<span>def <span class="ident">is_within_bounds</span></span>(<span>cls, x, y)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -553,12 +553,12 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def is_within_bounds(self, x, y):
+<pre><code class="python">def is_within_bounds(cls, x, y):
     return x &gt;= 0 and x &lt; 30 and y &gt;= 0 and y &lt; 30</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Grid.mark_mine"><code class="name flex">
-<span>def <span class="ident">mark_mine</span></span>(<span>self, x, y)</span>
+<span>def <span class="ident">mark_mine</span></span>(<span>cls, x, y)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -566,12 +566,12 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def mark_mine(self, x, y):
-    self.cells[y][x].marked = True</code></pre>
+<pre><code class="python">def mark_mine(cls, x, y):
+    cls.cells[y][x].marked = True</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Grid.num_of_mines"><code class="name flex">
-<span>def <span class="ident">num_of_mines</span></span>(<span>self, x, y)</span>
+<span>def <span class="ident">num_of_mines</span></span>(<span>cls, x, y)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -579,16 +579,16 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def num_of_mines(self, x, y):
+<pre><code class="python">def num_of_mines(cls, x, y):
     counter = 0
-    for xx, yy in self.search_dirs:
-        if self.is_within_bounds(x + xx, y + yy) and self.cells[y + yy][x + xx].mine:
+    for xx, yy in cls.search_dirs:
+        if cls.is_within_bounds(x + xx, y + yy) and cls.cells[y + yy][x + xx].mine:
             counter += 1
     return counter</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Grid.random_mines"><code class="name flex">
-<span>def <span class="ident">random_mines</span></span>(<span>self)</span>
+<span>def <span class="ident">random_mines</span></span>(<span>cls)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -596,7 +596,7 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def random_mines(self):
+<pre><code class="python">def random_mines(cls):
     r = randint(0, 10)
     if r &gt; 9:
         return True
@@ -605,7 +605,7 @@ class Grid:
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Grid.reload"><code class="name flex">
-<span>def <span class="ident">reload</span></span>(<span>self)</span>
+<span>def <span class="ident">reload</span></span>(<span>cls)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -613,20 +613,20 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def reload(self):
-    self.player.health = 5
-    for row in self.cells:
+<pre><code class="python">def reload(cls):
+    cls.player.health = 5
+    for row in cls.cells:
         for cell in row:
             cell.visible = False
             cell.label = False
             cell.marked = False
             cell.show_mine = False
             cell.explosion = False
-            cell.mine = self.random_mines()</code></pre>
+            cell.mine = cls.random_mines()</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Grid.search"><code class="name flex">
-<span>def <span class="ident">search</span></span>(<span>self, x, y)</span>
+<span>def <span class="ident">search</span></span>(<span>cls, x, y)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -634,35 +634,35 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def search(self, x, y):
-    if not self.is_within_bounds(x, y):
+<pre><code class="python">def search(cls, x, y):
+    if not cls.is_within_bounds(x, y):
         return
 
-    cell = self.cells[y][x]
+    cell = cls.cells[y][x]
 
     if cell.visible:
         return
 
     if cell.mine:
         cell.explosion = True
-        self.player.sub_health()
+        cls.player.sub_health()
         return
 
     cell.visible = True
 
-    num_mines = self.num_of_mines(x, y)
+    num_mines = cls.num_of_mines(x, y)
 
     if num_mines &gt; 0:
         cell.label = True
         cell.mine_counter = str(num_mines)
         return
 
-    for xx, yy in self.search_dirs:
-        self.search(x + xx, y + yy)</code></pre>
+    for xx, yy in cls.search_dirs:
+        cls.search(x + xx, y + yy)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Grid.show_mines"><code class="name flex">
-<span>def <span class="ident">show_mines</span></span>(<span>self)</span>
+<span>def <span class="ident">show_mines</span></span>(<span>cls)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -670,8 +670,8 @@ class Grid:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def show_mines(self):
-    for row in self.cells:
+<pre><code class="python">def show_mines(cls):
+    for row in cls.cells:
         for cell in row:
             if not cell.show_mine:
                 cell.show_mine = True
@@ -805,19 +805,19 @@ def start():
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Player:
-    def __init__(self):
-        self.health = 5
+    def __init__(cls):
+        cls.health = 5
 
-    def sub_health(self):
-        self.health -= 1
+    def sub_health(cls):
+        cls.health -= 1
 
-    def get_health(self):
-        return self.health</code></pre>
+    def get_health(cls):
+        return cls.health</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="messy_pypi.main_minesweeper.Player.get_health"><code class="name flex">
-<span>def <span class="ident">get_health</span></span>(<span>self)</span>
+<span>def <span class="ident">get_health</span></span>(<span>cls)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -825,12 +825,12 @@ def start():
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_health(self):
-    return self.health</code></pre>
+<pre><code class="python">def get_health(cls):
+    return cls.health</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_minesweeper.Player.sub_health"><code class="name flex">
-<span>def <span class="ident">sub_health</span></span>(<span>self)</span>
+<span>def <span class="ident">sub_health</span></span>(<span>cls)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -838,8 +838,8 @@ def start():
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def sub_health(self):
-    self.health -= 1</code></pre>
+<pre><code class="python">def sub_health(cls):
+    cls.health -= 1</code></pre>
 </details>
 </dd>
 </dl>

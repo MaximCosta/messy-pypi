@@ -32,149 +32,149 @@ from typing import Iterator
 
 
 class List(list):
-    def __init__(self, *args, **kwargs):
+    def __init__(cls, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def prepend(self, value) -&gt; None:
-        self.insert(0, value)
+    def prepend(cls, value) -&gt; None:
+        cls.insert(0, value)
 
-    def rmAllBeside(self, elt: any = None, index: int = None):
+    def rmAllBeside(cls, elt: any = None, index: int = None):
         if index:
-            del self[index + 1:]
+            del cls[index + 1:]
         if elt:
-            del self[self.find(elt) + 1:]
+            del cls[cls.find(elt) + 1:]
 
-    def rmAllBehind(self, elt: any = None, index: int = None):
+    def rmAllBehind(cls, elt: any = None, index: int = None):
         if index:
-            del self[:index]
+            del cls[:index]
         if elt:
-            del self[:self.find(elt)]
+            del cls[:cls.find(elt)]
 
-    def rmMAll(self, elts: list[any]) -&gt; None:
+    def rmMAll(cls, elts: list[any]) -&gt; None:
         for elt in elts:
-            self.rmAll(elt)
+            cls.rmAll(elt)
 
-    def rmAll(self, elt: any) -&gt; None:
-        while elt in self:
-            self.remove(elt)
+    def rmAll(cls, elt: any) -&gt; None:
+        while elt in cls:
+            cls.remove(elt)
 
-    def rm(self, elt: any) -&gt; None:
-        if elt in self:
-            self.remove(elt)
+    def rm(cls, elt: any) -&gt; None:
+        if elt in cls:
+            cls.remove(elt)
 
-    def indexExist(self, index: int) -&gt; bool:
-        if 0 &lt;= index &lt; len(self):
+    def indexExist(cls, index: int) -&gt; bool:
+        if 0 &lt;= index &lt; len(cls):
             return True
         return False
 
-    def replace(self, start: any, end: any) -&gt; None:
-        if start in self:
-            self[self.index(start)] = end
+    def replace(cls, start: any, end: any) -&gt; None:
+        if start in cls:
+            cls[cls.index(start)] = end
 
-    def replaceAll(self, start: any, end: any, maxreplace: int = float(&#39;inf&#39;)) -&gt; None:
+    def replaceAll(cls, start: any, end: any, maxreplace: int = float(&#39;inf&#39;)) -&gt; None:
         i = 0
-        while (start in self) and i &lt; maxreplace:
-            self[self.index(start)] = end
+        while (start in cls) and i &lt; maxreplace:
+            cls[cls.index(start)] = end
 
-    def find(self, elt: any) -&gt; int:
-        if elt in self:
-            return self.index(elt)
+    def find(cls, elt: any) -&gt; int:
+        if elt in cls:
+            return cls.index(elt)
         return None
 
-    def findAll(self, elt: any) -&gt; list[int]:
+    def findAll(cls, elt: any) -&gt; list[int]:
         indexl = list()
-        for key, val in enumerate(self):
+        for key, val in enumerate(cls):
             if val == elt:
                 indexl.append(key)
         return indexl
 
-    def clearNotValue(self) -&gt; None:
-        for k, v in self.renumerate:
+    def clearNotValue(cls) -&gt; None:
+        for k, v in cls.renumerate:
             if not v:
-                del self[k]
+                del cls[k]
 
-    def clearDuplicate(self) -&gt; None:
-        dup = List(set(self))
-        self.clear()
-        self.extend(dup)
+    def clearDuplicate(cls) -&gt; None:
+        dup = List(set(cls))
+        cls.clear()
+        cls.extend(dup)
 
-    def showDuplicate(self) -&gt; list:
+    def showDuplicate(cls) -&gt; list:
         dup = []
-        counta = self.countAll()
+        counta = cls.countAll()
         for i in counta:
             if i[1] &gt; 1:
                 dup.append(i[0])
         return dup
 
-    def countAll(self) -&gt; list[tuple[any, int]]:
+    def countAll(cls) -&gt; list[tuple[any, int]]:
         counta = []
-        unique = list(set(self))
+        unique = list(set(cls))
         for elt in unique:
-            counta.append((elt, self.count(elt)))
+            counta.append((elt, cls.count(elt)))
         return counta
 
-    def toType(self) -&gt; None:
-        for key, val in enumerate(self):
+    def toType(cls) -&gt; None:
+        for key, val in enumerate(cls):
             if val.replace(&#39;.&#39;, &#39;&#39;, 1).lstrip(&#39;-&#39;).isdigit():
                 if &#39;.&#39; in val:
-                    self[key] = float(val)
+                    cls[key] = float(val)
                 else:
-                    self[key] = int(val)
+                    cls[key] = int(val)
 
-    def include(self, elt: any) -&gt; bool:
-        if elt in self:
+    def include(cls, elt: any) -&gt; bool:
+        if elt in cls:
             return True
         return False
 
-    def includes(self, elts: list) -&gt; bool:
+    def includes(cls, elts: list) -&gt; bool:
         for elt in elts:
-            if elt not in self:
+            if elt not in cls:
                 return False
         return True
 
-    def __copy__(self) -&gt; List:
-        return List(self)
+    def __copy__(cls) -&gt; List:
+        return List(cls)
 
-    def copy(self) -&gt; List:
-        return List(self)
-
-    @property
-    def enumerate(self) -&gt; enumerate:
-        return enumerate(self)
+    def copy(cls) -&gt; List:
+        return List(cls)
 
     @property
-    def renumerate(self) -&gt; Iterator:
-        return reversed(list(self.enumerate))
+    def enumerate(cls) -&gt; enumerate:
+        return enumerate(cls)
 
     @property
-    def maxv(self) -&gt; any:
-        return max(self)
+    def renumerate(cls) -&gt; Iterator:
+        return reversed(list(cls.enumerate))
 
     @property
-    def maxi(self) -&gt; int:
-        return self.index(max(self))
+    def maxv(cls) -&gt; any:
+        return max(cls)
 
     @property
-    def maxl(self) -&gt; any:
-        l = list(map(lambda x: len(x), self))
-        return self[l.index(max(l))]
+    def maxi(cls) -&gt; int:
+        return cls.index(max(cls))
 
     @property
-    def minv(self) -&gt; any:
-        return min(self)
+    def maxl(cls) -&gt; any:
+        l = list(map(lambda x: len(x), cls))
+        return cls[l.index(max(l))]
 
     @property
-    def mini(self) -&gt; int:
-        return self.index(min(self))
+    def minv(cls) -&gt; any:
+        return min(cls)
 
     @property
-    def minl(self) -&gt; any:
-        l = list(map(lambda x: len(x), self))
-        return self[l.index(min(l))]
+    def mini(cls) -&gt; int:
+        return cls.index(min(cls))
 
     @property
-    def length(self) -&gt; int:
-        return len(self)</code></pre>
+    def minl(cls) -&gt; any:
+        l = list(map(lambda x: len(x), cls))
+        return cls[l.index(min(l))]
+
+    @property
+    def length(cls) -&gt; int:
+        return len(cls)</code></pre>
 </details>
 </section>
 <section>
@@ -199,149 +199,149 @@ The argument must be an iterable if specified.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class List(list):
-    def __init__(self, *args, **kwargs):
+    def __init__(cls, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def prepend(self, value) -&gt; None:
-        self.insert(0, value)
+    def prepend(cls, value) -&gt; None:
+        cls.insert(0, value)
 
-    def rmAllBeside(self, elt: any = None, index: int = None):
+    def rmAllBeside(cls, elt: any = None, index: int = None):
         if index:
-            del self[index + 1:]
+            del cls[index + 1:]
         if elt:
-            del self[self.find(elt) + 1:]
+            del cls[cls.find(elt) + 1:]
 
-    def rmAllBehind(self, elt: any = None, index: int = None):
+    def rmAllBehind(cls, elt: any = None, index: int = None):
         if index:
-            del self[:index]
+            del cls[:index]
         if elt:
-            del self[:self.find(elt)]
+            del cls[:cls.find(elt)]
 
-    def rmMAll(self, elts: list[any]) -&gt; None:
+    def rmMAll(cls, elts: list[any]) -&gt; None:
         for elt in elts:
-            self.rmAll(elt)
+            cls.rmAll(elt)
 
-    def rmAll(self, elt: any) -&gt; None:
-        while elt in self:
-            self.remove(elt)
+    def rmAll(cls, elt: any) -&gt; None:
+        while elt in cls:
+            cls.remove(elt)
 
-    def rm(self, elt: any) -&gt; None:
-        if elt in self:
-            self.remove(elt)
+    def rm(cls, elt: any) -&gt; None:
+        if elt in cls:
+            cls.remove(elt)
 
-    def indexExist(self, index: int) -&gt; bool:
-        if 0 &lt;= index &lt; len(self):
+    def indexExist(cls, index: int) -&gt; bool:
+        if 0 &lt;= index &lt; len(cls):
             return True
         return False
 
-    def replace(self, start: any, end: any) -&gt; None:
-        if start in self:
-            self[self.index(start)] = end
+    def replace(cls, start: any, end: any) -&gt; None:
+        if start in cls:
+            cls[cls.index(start)] = end
 
-    def replaceAll(self, start: any, end: any, maxreplace: int = float(&#39;inf&#39;)) -&gt; None:
+    def replaceAll(cls, start: any, end: any, maxreplace: int = float(&#39;inf&#39;)) -&gt; None:
         i = 0
-        while (start in self) and i &lt; maxreplace:
-            self[self.index(start)] = end
+        while (start in cls) and i &lt; maxreplace:
+            cls[cls.index(start)] = end
 
-    def find(self, elt: any) -&gt; int:
-        if elt in self:
-            return self.index(elt)
+    def find(cls, elt: any) -&gt; int:
+        if elt in cls:
+            return cls.index(elt)
         return None
 
-    def findAll(self, elt: any) -&gt; list[int]:
+    def findAll(cls, elt: any) -&gt; list[int]:
         indexl = list()
-        for key, val in enumerate(self):
+        for key, val in enumerate(cls):
             if val == elt:
                 indexl.append(key)
         return indexl
 
-    def clearNotValue(self) -&gt; None:
-        for k, v in self.renumerate:
+    def clearNotValue(cls) -&gt; None:
+        for k, v in cls.renumerate:
             if not v:
-                del self[k]
+                del cls[k]
 
-    def clearDuplicate(self) -&gt; None:
-        dup = List(set(self))
-        self.clear()
-        self.extend(dup)
+    def clearDuplicate(cls) -&gt; None:
+        dup = List(set(cls))
+        cls.clear()
+        cls.extend(dup)
 
-    def showDuplicate(self) -&gt; list:
+    def showDuplicate(cls) -&gt; list:
         dup = []
-        counta = self.countAll()
+        counta = cls.countAll()
         for i in counta:
             if i[1] &gt; 1:
                 dup.append(i[0])
         return dup
 
-    def countAll(self) -&gt; list[tuple[any, int]]:
+    def countAll(cls) -&gt; list[tuple[any, int]]:
         counta = []
-        unique = list(set(self))
+        unique = list(set(cls))
         for elt in unique:
-            counta.append((elt, self.count(elt)))
+            counta.append((elt, cls.count(elt)))
         return counta
 
-    def toType(self) -&gt; None:
-        for key, val in enumerate(self):
+    def toType(cls) -&gt; None:
+        for key, val in enumerate(cls):
             if val.replace(&#39;.&#39;, &#39;&#39;, 1).lstrip(&#39;-&#39;).isdigit():
                 if &#39;.&#39; in val:
-                    self[key] = float(val)
+                    cls[key] = float(val)
                 else:
-                    self[key] = int(val)
+                    cls[key] = int(val)
 
-    def include(self, elt: any) -&gt; bool:
-        if elt in self:
+    def include(cls, elt: any) -&gt; bool:
+        if elt in cls:
             return True
         return False
 
-    def includes(self, elts: list) -&gt; bool:
+    def includes(cls, elts: list) -&gt; bool:
         for elt in elts:
-            if elt not in self:
+            if elt not in cls:
                 return False
         return True
 
-    def __copy__(self) -&gt; List:
-        return List(self)
+    def __copy__(cls) -&gt; List:
+        return List(cls)
 
-    def copy(self) -&gt; List:
-        return List(self)
-
-    @property
-    def enumerate(self) -&gt; enumerate:
-        return enumerate(self)
+    def copy(cls) -&gt; List:
+        return List(cls)
 
     @property
-    def renumerate(self) -&gt; Iterator:
-        return reversed(list(self.enumerate))
+    def enumerate(cls) -&gt; enumerate:
+        return enumerate(cls)
 
     @property
-    def maxv(self) -&gt; any:
-        return max(self)
+    def renumerate(cls) -&gt; Iterator:
+        return reversed(list(cls.enumerate))
 
     @property
-    def maxi(self) -&gt; int:
-        return self.index(max(self))
+    def maxv(cls) -&gt; any:
+        return max(cls)
 
     @property
-    def maxl(self) -&gt; any:
-        l = list(map(lambda x: len(x), self))
-        return self[l.index(max(l))]
+    def maxi(cls) -&gt; int:
+        return cls.index(max(cls))
 
     @property
-    def minv(self) -&gt; any:
-        return min(self)
+    def maxl(cls) -&gt; any:
+        l = list(map(lambda x: len(x), cls))
+        return cls[l.index(max(l))]
 
     @property
-    def mini(self) -&gt; int:
-        return self.index(min(self))
+    def minv(cls) -&gt; any:
+        return min(cls)
 
     @property
-    def minl(self) -&gt; any:
-        l = list(map(lambda x: len(x), self))
-        return self[l.index(min(l))]
+    def mini(cls) -&gt; int:
+        return cls.index(min(cls))
 
     @property
-    def length(self) -&gt; int:
-        return len(self)</code></pre>
+    def minl(cls) -&gt; any:
+        l = list(map(lambda x: len(x), cls))
+        return cls[l.index(min(l))]
+
+    @property
+    def length(cls) -&gt; int:
+        return len(cls)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -357,8 +357,8 @@ The argument must be an iterable if specified.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def enumerate(self) -&gt; enumerate:
-    return enumerate(self)</code></pre>
+def enumerate(cls) -&gt; enumerate:
+    return enumerate(cls)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.length"><code class="name">var <span class="ident">length</span> : int</code></dt>
@@ -369,8 +369,8 @@ def enumerate(self) -&gt; enumerate:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def length(self) -&gt; int:
-    return len(self)</code></pre>
+def length(cls) -&gt; int:
+    return len(cls)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.maxi"><code class="name">var <span class="ident">maxi</span> : int</code></dt>
@@ -381,8 +381,8 @@ def length(self) -&gt; int:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def maxi(self) -&gt; int:
-    return self.index(max(self))</code></pre>
+def maxi(cls) -&gt; int:
+    return cls.index(max(cls))</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.maxl"><code class="name">var <span class="ident">maxl</span> : <built-in function any></code></dt>
@@ -393,9 +393,9 @@ def maxi(self) -&gt; int:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def maxl(self) -&gt; any:
-    l = list(map(lambda x: len(x), self))
-    return self[l.index(max(l))]</code></pre>
+def maxl(cls) -&gt; any:
+    l = list(map(lambda x: len(x), cls))
+    return cls[l.index(max(l))]</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.maxv"><code class="name">var <span class="ident">maxv</span> : <built-in function any></code></dt>
@@ -406,8 +406,8 @@ def maxl(self) -&gt; any:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def maxv(self) -&gt; any:
-    return max(self)</code></pre>
+def maxv(cls) -&gt; any:
+    return max(cls)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.mini"><code class="name">var <span class="ident">mini</span> : int</code></dt>
@@ -418,8 +418,8 @@ def maxv(self) -&gt; any:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def mini(self) -&gt; int:
-    return self.index(min(self))</code></pre>
+def mini(cls) -&gt; int:
+    return cls.index(min(cls))</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.minl"><code class="name">var <span class="ident">minl</span> : <built-in function any></code></dt>
@@ -430,9 +430,9 @@ def mini(self) -&gt; int:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def minl(self) -&gt; any:
-    l = list(map(lambda x: len(x), self))
-    return self[l.index(min(l))]</code></pre>
+def minl(cls) -&gt; any:
+    l = list(map(lambda x: len(x), cls))
+    return cls[l.index(min(l))]</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.minv"><code class="name">var <span class="ident">minv</span> : <built-in function any></code></dt>
@@ -443,8 +443,8 @@ def minl(self) -&gt; any:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def minv(self) -&gt; any:
-    return min(self)</code></pre>
+def minv(cls) -&gt; any:
+    return min(cls)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.renumerate"><code class="name">var <span class="ident">renumerate</span> : Iterator</code></dt>
@@ -455,15 +455,15 @@ def minv(self) -&gt; any:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def renumerate(self) -&gt; Iterator:
-    return reversed(list(self.enumerate))</code></pre>
+def renumerate(cls) -&gt; Iterator:
+    return reversed(list(cls.enumerate))</code></pre>
 </details>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
 <dt id="messy_pypi.main_customElement.List.clearDuplicate"><code class="name flex">
-<span>def <span class="ident">clearDuplicate</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">clearDuplicate</span></span>(<span>cls) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -471,14 +471,14 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def clearDuplicate(self) -&gt; None:
-    dup = List(set(self))
-    self.clear()
-    self.extend(dup)</code></pre>
+<pre><code class="python">def clearDuplicate(cls) -&gt; None:
+    dup = List(set(cls))
+    cls.clear()
+    cls.extend(dup)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.clearNotValue"><code class="name flex">
-<span>def <span class="ident">clearNotValue</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">clearNotValue</span></span>(<span>cls) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -486,14 +486,14 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def clearNotValue(self) -&gt; None:
-    for k, v in self.renumerate:
+<pre><code class="python">def clearNotValue(cls) -&gt; None:
+    for k, v in cls.renumerate:
         if not v:
-            del self[k]</code></pre>
+            del cls[k]</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.copy"><code class="name flex">
-<span>def <span class="ident">copy</span></span>(<span>self) ‑> <a title="messy_pypi.main_customElement.List" href="#messy_pypi.main_customElement.List">List</a></span>
+<span>def <span class="ident">copy</span></span>(<span>cls) ‑> <a title="messy_pypi.main_customElement.List" href="#messy_pypi.main_customElement.List">List</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return a shallow copy of the list.</p></div>
@@ -501,12 +501,12 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def copy(self) -&gt; List:
-    return List(self)</code></pre>
+<pre><code class="python">def copy(cls) -&gt; List:
+    return List(cls)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.countAll"><code class="name flex">
-<span>def <span class="ident">countAll</span></span>(<span>self) ‑> list</span>
+<span>def <span class="ident">countAll</span></span>(<span>cls) ‑> list</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -514,16 +514,16 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def countAll(self) -&gt; list[tuple[any, int]]:
+<pre><code class="python">def countAll(cls) -&gt; list[tuple[any, int]]:
     counta = []
-    unique = list(set(self))
+    unique = list(set(cls))
     for elt in unique:
-        counta.append((elt, self.count(elt)))
+        counta.append((elt, cls.count(elt)))
     return counta</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.find"><code class="name flex">
-<span>def <span class="ident">find</span></span>(<span>self, elt: any) ‑> int</span>
+<span>def <span class="ident">find</span></span>(<span>cls, elt: any) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -531,14 +531,14 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def find(self, elt: any) -&gt; int:
-    if elt in self:
-        return self.index(elt)
+<pre><code class="python">def find(cls, elt: any) -&gt; int:
+    if elt in cls:
+        return cls.index(elt)
     return None</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.findAll"><code class="name flex">
-<span>def <span class="ident">findAll</span></span>(<span>self, elt: any) ‑> list</span>
+<span>def <span class="ident">findAll</span></span>(<span>cls, elt: any) ‑> list</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -546,16 +546,16 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def findAll(self, elt: any) -&gt; list[int]:
+<pre><code class="python">def findAll(cls, elt: any) -&gt; list[int]:
     indexl = list()
-    for key, val in enumerate(self):
+    for key, val in enumerate(cls):
         if val == elt:
             indexl.append(key)
     return indexl</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.include"><code class="name flex">
-<span>def <span class="ident">include</span></span>(<span>self, elt: any) ‑> bool</span>
+<span>def <span class="ident">include</span></span>(<span>cls, elt: any) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -563,14 +563,14 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def include(self, elt: any) -&gt; bool:
-    if elt in self:
+<pre><code class="python">def include(cls, elt: any) -&gt; bool:
+    if elt in cls:
         return True
     return False</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.includes"><code class="name flex">
-<span>def <span class="ident">includes</span></span>(<span>self, elts: list) ‑> bool</span>
+<span>def <span class="ident">includes</span></span>(<span>cls, elts: list) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -578,15 +578,15 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def includes(self, elts: list) -&gt; bool:
+<pre><code class="python">def includes(cls, elts: list) -&gt; bool:
     for elt in elts:
-        if elt not in self:
+        if elt not in cls:
             return False
     return True</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.indexExist"><code class="name flex">
-<span>def <span class="ident">indexExist</span></span>(<span>self, index: int) ‑> bool</span>
+<span>def <span class="ident">indexExist</span></span>(<span>cls, index: int) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -594,14 +594,14 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def indexExist(self, index: int) -&gt; bool:
-    if 0 &lt;= index &lt; len(self):
+<pre><code class="python">def indexExist(cls, index: int) -&gt; bool:
+    if 0 &lt;= index &lt; len(cls):
         return True
     return False</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.prepend"><code class="name flex">
-<span>def <span class="ident">prepend</span></span>(<span>self, value) ‑> NoneType</span>
+<span>def <span class="ident">prepend</span></span>(<span>cls, value) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -609,12 +609,12 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def prepend(self, value) -&gt; None:
-    self.insert(0, value)</code></pre>
+<pre><code class="python">def prepend(cls, value) -&gt; None:
+    cls.insert(0, value)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.replace"><code class="name flex">
-<span>def <span class="ident">replace</span></span>(<span>self, start: any, end: any) ‑> NoneType</span>
+<span>def <span class="ident">replace</span></span>(<span>cls, start: any, end: any) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -622,13 +622,13 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def replace(self, start: any, end: any) -&gt; None:
-    if start in self:
-        self[self.index(start)] = end</code></pre>
+<pre><code class="python">def replace(cls, start: any, end: any) -&gt; None:
+    if start in cls:
+        cls[cls.index(start)] = end</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.replaceAll"><code class="name flex">
-<span>def <span class="ident">replaceAll</span></span>(<span>self, start: any, end: any, maxreplace: int = inf) ‑> NoneType</span>
+<span>def <span class="ident">replaceAll</span></span>(<span>cls, start: any, end: any, maxreplace: int = inf) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -636,14 +636,14 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def replaceAll(self, start: any, end: any, maxreplace: int = float(&#39;inf&#39;)) -&gt; None:
+<pre><code class="python">def replaceAll(cls, start: any, end: any, maxreplace: int = float(&#39;inf&#39;)) -&gt; None:
     i = 0
-    while (start in self) and i &lt; maxreplace:
-        self[self.index(start)] = end</code></pre>
+    while (start in cls) and i &lt; maxreplace:
+        cls[cls.index(start)] = end</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.rm"><code class="name flex">
-<span>def <span class="ident">rm</span></span>(<span>self, elt: any) ‑> NoneType</span>
+<span>def <span class="ident">rm</span></span>(<span>cls, elt: any) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -651,13 +651,13 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def rm(self, elt: any) -&gt; None:
-    if elt in self:
-        self.remove(elt)</code></pre>
+<pre><code class="python">def rm(cls, elt: any) -&gt; None:
+    if elt in cls:
+        cls.remove(elt)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.rmAll"><code class="name flex">
-<span>def <span class="ident">rmAll</span></span>(<span>self, elt: any) ‑> NoneType</span>
+<span>def <span class="ident">rmAll</span></span>(<span>cls, elt: any) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -665,13 +665,13 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def rmAll(self, elt: any) -&gt; None:
-    while elt in self:
-        self.remove(elt)</code></pre>
+<pre><code class="python">def rmAll(cls, elt: any) -&gt; None:
+    while elt in cls:
+        cls.remove(elt)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.rmAllBehind"><code class="name flex">
-<span>def <span class="ident">rmAllBehind</span></span>(<span>self, elt: any = None, index: int = None)</span>
+<span>def <span class="ident">rmAllBehind</span></span>(<span>cls, elt: any = None, index: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -679,15 +679,15 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def rmAllBehind(self, elt: any = None, index: int = None):
+<pre><code class="python">def rmAllBehind(cls, elt: any = None, index: int = None):
     if index:
-        del self[:index]
+        del cls[:index]
     if elt:
-        del self[:self.find(elt)]</code></pre>
+        del cls[:cls.find(elt)]</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.rmAllBeside"><code class="name flex">
-<span>def <span class="ident">rmAllBeside</span></span>(<span>self, elt: any = None, index: int = None)</span>
+<span>def <span class="ident">rmAllBeside</span></span>(<span>cls, elt: any = None, index: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -695,15 +695,15 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def rmAllBeside(self, elt: any = None, index: int = None):
+<pre><code class="python">def rmAllBeside(cls, elt: any = None, index: int = None):
     if index:
-        del self[index + 1:]
+        del cls[index + 1:]
     if elt:
-        del self[self.find(elt) + 1:]</code></pre>
+        del cls[cls.find(elt) + 1:]</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.rmMAll"><code class="name flex">
-<span>def <span class="ident">rmMAll</span></span>(<span>self, elts: list[any]) ‑> NoneType</span>
+<span>def <span class="ident">rmMAll</span></span>(<span>cls, elts: list[any]) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -711,13 +711,13 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def rmMAll(self, elts: list[any]) -&gt; None:
+<pre><code class="python">def rmMAll(cls, elts: list[any]) -&gt; None:
     for elt in elts:
-        self.rmAll(elt)</code></pre>
+        cls.rmAll(elt)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.showDuplicate"><code class="name flex">
-<span>def <span class="ident">showDuplicate</span></span>(<span>self) ‑> list</span>
+<span>def <span class="ident">showDuplicate</span></span>(<span>cls) ‑> list</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -725,9 +725,9 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def showDuplicate(self) -&gt; list:
+<pre><code class="python">def showDuplicate(cls) -&gt; list:
     dup = []
-    counta = self.countAll()
+    counta = cls.countAll()
     for i in counta:
         if i[1] &gt; 1:
             dup.append(i[0])
@@ -735,7 +735,7 @@ def renumerate(self) -&gt; Iterator:
 </details>
 </dd>
 <dt id="messy_pypi.main_customElement.List.toType"><code class="name flex">
-<span>def <span class="ident">toType</span></span>(<span>self) ‑> NoneType</span>
+<span>def <span class="ident">toType</span></span>(<span>cls) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -743,13 +743,13 @@ def renumerate(self) -&gt; Iterator:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def toType(self) -&gt; None:
-    for key, val in enumerate(self):
+<pre><code class="python">def toType(cls) -&gt; None:
+    for key, val in enumerate(cls):
         if val.replace(&#39;.&#39;, &#39;&#39;, 1).lstrip(&#39;-&#39;).isdigit():
             if &#39;.&#39; in val:
-                self[key] = float(val)
+                cls[key] = float(val)
             else:
-                self[key] = int(val)</code></pre>
+                cls[key] = int(val)</code></pre>
 </details>
 </dd>
 </dl>

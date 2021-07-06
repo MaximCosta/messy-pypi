@@ -33,18 +33,18 @@ import pygame
 
 
 class tetris:
-    def __init__(self):
+    def __init__(cls):
         pygame.font.init()
 
         # GLOBALS VARS
-        self.s_width = 800
-        self.s_height = 700
-        self.play_width = 300  # meaning 300 // 10 = 30 width per block
-        self.play_height = 600  # meaning 600 // 20 = 30 height per block
-        self.block_size = 30
+        cls.s_width = 800
+        cls.s_height = 700
+        cls.play_width = 300  # meaning 300 // 10 = 30 width per block
+        cls.play_height = 600  # meaning 600 // 20 = 30 height per block
+        cls.block_size = 30
 
-        self.top_left_x = (self.s_width - self.play_width) // 2
-        self.top_left_y = self.s_height - self.play_height
+        cls.top_left_x = (cls.s_width - cls.play_width) // 2
+        cls.top_left_y = cls.s_height - cls.play_height
 
         # SHAPE FORMATS
 
@@ -150,8 +150,8 @@ class tetris:
               &#39;..0..&#39;,
               &#39;.....&#39;]]
 
-        self.shapes = [S, Z, I, O, J, L, T]
-        self.shape_colors = [(0, 255, 0),
+        cls.shapes = [S, Z, I, O, J, L, T]
+        cls.shape_colors = [(0, 255, 0),
                              (255, 0, 0),
                              (0, 255, 255),
                              (255, 255, 0),
@@ -159,10 +159,10 @@ class tetris:
                              (0, 0, 255),
                              (128, 0, 128)]
 
-        self.win = pygame.display.set_mode((self.s_width, self.s_height))
+        cls.win = pygame.display.set_mode((cls.s_width, cls.s_height))
         pygame.display.set_caption(&#39;Tetris&#39;)
 
-    def create_grid(self, locked_pos={}):  # *
+    def create_grid(cls, locked_pos={}):  # *
         grid = [[(0, 0, 0) for _ in range(10)] for _ in range(20)]
 
         for i in range(len(grid)):
@@ -172,7 +172,7 @@ class tetris:
                     grid[i][j] = c
         return grid
 
-    def convert_shape_format(self, shape):
+    def convert_shape_format(cls, shape):
         positions = []
         format = shape.shape[shape.rotation % len(shape.shape)]
 
@@ -187,11 +187,11 @@ class tetris:
 
         return positions
 
-    def valid_space(self, shape, grid):
+    def valid_space(cls, shape, grid):
         accepted_pos = [[(j, i) for j in range(10) if grid[i][j] == (0, 0, 0)] for i in range(20)]
         accepted_pos = [j for sub in accepted_pos for j in sub]
 
-        formatted = self.convert_shape_format(shape)
+        formatted = cls.convert_shape_format(shape)
 
         for pos in formatted:
             if pos not in accepted_pos:
@@ -199,7 +199,7 @@ class tetris:
                     return False
         return True
 
-    def check_lost(self, positions):
+    def check_lost(cls, positions):
         for pos in positions:
             x, y = pos
             if y &lt; 1:
@@ -207,29 +207,29 @@ class tetris:
 
         return False
 
-    def get_shape(self):
-        return Piece(5, 0, random.choice(self.shapes), self.shapes, self.shape_colors)
+    def get_shape(cls):
+        return Piece(5, 0, random.choice(cls.shapes), cls.shapes, cls.shape_colors)
 
-    def draw_text_middle(self, surface, text, size, color):
+    def draw_text_middle(cls, surface, text, size, color):
         font = pygame.font.SysFont(&#34;comicsans&#34;, size, bold=True)
         label = font.render(text, 1, color)
 
         surface.blit(label, (
-            self.top_left_x + self.play_width / 2 - (label.get_width() / 2),
-            self.top_left_y + self.play_height / 2 - label.get_height() / 2))
+            cls.top_left_x + cls.play_width / 2 - (label.get_width() / 2),
+            cls.top_left_y + cls.play_height / 2 - label.get_height() / 2))
 
-    def draw_grid(self, surface, grid):
-        sx = self.top_left_x
-        sy = self.top_left_y
+    def draw_grid(cls, surface, grid):
+        sx = cls.top_left_x
+        sy = cls.top_left_y
 
         for i in range(len(grid)):
-            pygame.draw.line(surface, (128, 128, 128), (sx, sy + i * self.block_size),
-                             (sx + self.play_width, sy + i * self.block_size))
+            pygame.draw.line(surface, (128, 128, 128), (sx, sy + i * cls.block_size),
+                             (sx + cls.play_width, sy + i * cls.block_size))
             for j in range(len(grid[i])):
-                pygame.draw.line(surface, (128, 128, 128), (sx + j * self.block_size, sy),
-                                 (sx + j * self.block_size, sy + self.play_height))
+                pygame.draw.line(surface, (128, 128, 128), (sx + j * cls.block_size, sy),
+                                 (sx + j * cls.block_size, sy + cls.play_height))
 
-    def clear_rows(self, grid, locked):
+    def clear_rows(cls, grid, locked):
         inc = 0
         for i in range(len(grid) - 1, -1, -1):
             row = grid[i]
@@ -249,12 +249,12 @@ class tetris:
                     locked[newKey] = locked.pop(key)
         return inc
 
-    def draw_next_shape(self, shape, surface):
+    def draw_next_shape(cls, shape, surface):
         font = pygame.font.SysFont(&#39;comicsans&#39;, 30)
         label = font.render(&#39;Next Shape&#39;, 1, (255, 255, 255))
 
-        sx = self.top_left_x + self.play_width + 50
-        sy = self.top_left_y + self.play_height / 2 - 100
+        sx = cls.top_left_x + cls.play_width + 50
+        sy = cls.top_left_y + cls.play_height / 2 - 100
         format = shape.shape[shape.rotation % len(shape.shape)]
 
         for i, line in enumerate(format):
@@ -262,13 +262,13 @@ class tetris:
             for j, column in enumerate(row):
                 if column == &#39;0&#39;:
                     pygame.draw.rect(surface, shape.color,
-                                     (sx + j * self.block_size, sy + i * self.block_size, self.block_size,
-                                      self.block_size), 0)
+                                     (sx + j * cls.block_size, sy + i * cls.block_size, cls.block_size,
+                                      cls.block_size), 0)
 
         surface.blit(label, (sx + 10, sy - 30))
 
-    def update_score(self, nscore):
-        score = self.max_score()
+    def update_score(cls, nscore):
+        score = cls.max_score()
 
         with open(&#39;resources/tetris/scores.txt&#39;, &#39;w&#39;) as f:
             if int(score) &gt; nscore:
@@ -276,7 +276,7 @@ class tetris:
             else:
                 f.write(str(nscore))
 
-    def max_score(self):
+    def max_score(cls):
         if os.path.exists(&#39;resources/tetris/scores.txt&#39;):
             with open(&#39;resources/tetris/scores.txt&#39;, &#39;r&#39;) as f:
                 lines = f.readlines()
@@ -286,51 +286,51 @@ class tetris:
 
         return score
 
-    def draw_window(self, surface, grid, score=0, last_score=0):
+    def draw_window(cls, surface, grid, score=0, last_score=0):
         surface.fill((0, 0, 0))
 
         pygame.font.init()
         font = pygame.font.SysFont(&#39;comicsans&#39;, 60)
         label = font.render(&#39;Tetris&#39;, 1, (255, 255, 255))
 
-        surface.blit(label, (self.top_left_x + self.play_width / 2 - (label.get_width() / 2), 30))
+        surface.blit(label, (cls.top_left_x + cls.play_width / 2 - (label.get_width() / 2), 30))
 
         # current score
         font = pygame.font.SysFont(&#39;comicsans&#39;, 30)
         label = font.render(&#39;Score: &#39; + str(score), 1, (255, 255, 255))
 
-        sx = self.top_left_x + self.play_width + 50
-        sy = self.top_left_y + self.play_height / 2 - 100
+        sx = cls.top_left_x + cls.play_width + 50
+        sy = cls.top_left_y + cls.play_height / 2 - 100
 
         surface.blit(label, (sx + 20, sy + 160))
         # last score
         label = font.render(&#39;High Score: &#39; + last_score, 1, (255, 255, 255))
 
-        sx = self.top_left_x - 200
-        sy = self.top_left_y + 200
+        sx = cls.top_left_x - 200
+        sy = cls.top_left_y + 200
 
         surface.blit(label, (sx + 20, sy + 160))
 
         for i in range(len(grid)):
             for j in range(len(grid[i])):
                 pygame.draw.rect(surface, grid[i][j],
-                                 (self.top_left_x + j * self.block_size, self.top_left_y + i * self.block_size,
-                                  self.block_size, self.block_size), 0)
+                                 (cls.top_left_x + j * cls.block_size, cls.top_left_y + i * cls.block_size,
+                                  cls.block_size, cls.block_size), 0)
 
-        pygame.draw.rect(surface, (255, 0, 0), (self.top_left_x, self.top_left_y, self.play_width, self.play_height), 5)
+        pygame.draw.rect(surface, (255, 0, 0), (cls.top_left_x, cls.top_left_y, cls.play_width, cls.play_height), 5)
 
-        self.draw_grid(surface, grid)
+        cls.draw_grid(surface, grid)
         # pygame.display.update()
 
-    def main(self):  # *
-        last_score = self.max_score()
+    def main(cls):  # *
+        last_score = cls.max_score()
         locked_positions = {}
-        grid = self.create_grid(locked_positions)
+        grid = cls.create_grid(locked_positions)
 
         change_piece = False
         run = True
-        current_piece = self.get_shape()
-        next_piece = self.get_shape()
+        current_piece = cls.get_shape()
+        next_piece = cls.get_shape()
         clock = pygame.time.Clock()
         fall_time = 0
         fall_speed = 0.27
@@ -338,7 +338,7 @@ class tetris:
         score = 0
 
         while run:
-            grid = self.create_grid(locked_positions)
+            grid = cls.create_grid(locked_positions)
             fall_time += clock.get_rawtime()
             level_time += clock.get_rawtime()
             clock.tick()
@@ -351,7 +351,7 @@ class tetris:
             if fall_time / 1000 &gt; fall_speed:
                 fall_time = 0
                 current_piece.y += 1
-                if not (self.valid_space(current_piece, grid)) and current_piece.y &gt; 0:
+                if not (cls.valid_space(current_piece, grid)) and current_piece.y &gt; 0:
                     current_piece.y -= 1
                     change_piece = True
 
@@ -363,22 +363,22 @@ class tetris:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         current_piece.x -= 1
-                        if not (self.valid_space(current_piece, grid)):
+                        if not (cls.valid_space(current_piece, grid)):
                             current_piece.x += 1
                     if event.key == pygame.K_RIGHT:
                         current_piece.x += 1
-                        if not (self.valid_space(current_piece, grid)):
+                        if not (cls.valid_space(current_piece, grid)):
                             current_piece.x -= 1
                     if event.key == pygame.K_DOWN:
                         current_piece.y += 1
-                        if not (self.valid_space(current_piece, grid)):
+                        if not (cls.valid_space(current_piece, grid)):
                             current_piece.y -= 1
                     if event.key == pygame.K_UP:
                         current_piece.rotation += 1
-                        if not (self.valid_space(current_piece, grid)):
+                        if not (cls.valid_space(current_piece, grid)):
                             current_piece.rotation -= 1
 
-            shape_pos = self.convert_shape_format(current_piece)
+            shape_pos = cls.convert_shape_format(current_piece)
 
             for i in range(len(shape_pos)):
                 x, y = shape_pos[i]
@@ -390,43 +390,43 @@ class tetris:
                     p = (pos[0], pos[1])
                     locked_positions[p] = current_piece.color
                 current_piece = next_piece
-                next_piece = self.get_shape()
+                next_piece = cls.get_shape()
                 change_piece = False
-                score += self.clear_rows(grid, locked_positions) * 10
+                score += cls.clear_rows(grid, locked_positions) * 10
 
-            self.draw_window(self.win, grid, score, last_score)
-            self.draw_next_shape(next_piece, self.win)
+            cls.draw_window(cls.win, grid, score, last_score)
+            cls.draw_next_shape(next_piece, cls.win)
             pygame.display.update()
 
-            if self.check_lost(locked_positions):
-                self.draw_text_middle(self.win, &#34;YOU LOST!&#34;, 80, (255, 255, 255))
+            if cls.check_lost(locked_positions):
+                cls.draw_text_middle(cls.win, &#34;YOU LOST!&#34;, 80, (255, 255, 255))
                 pygame.display.update()
                 pygame.time.delay(1500)
                 run = False
-                self.update_score(score)
+                cls.update_score(score)
 
-    def main_menu(self):  # *
+    def main_menu(cls):  # *
         run = True
         while run:
-            self.win.fill((0, 0, 0))
-            self.draw_text_middle(self.win, &#39;Press Any Key To Play&#39;, 60, (255, 255, 255))
+            cls.win.fill((0, 0, 0))
+            cls.draw_text_middle(cls.win, &#39;Press Any Key To Play&#39;, 60, (255, 255, 255))
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
                 if event.type == pygame.KEYDOWN:
-                    self.main()
+                    cls.main()
 
         pygame.display.quit()
 
 
 class Piece(object):  # *
-    def __init__(self, x, y, shape, shapes, shape_colors):
-        self.x = x
-        self.y = y
-        self.shape = shape
-        self.color = shape_colors[shapes.index(shape)]
-        self.rotation = 0</code></pre>
+    def __init__(cls, x, y, shape, shapes, shape_colors):
+        cls.x = x
+        cls.y = y
+        cls.shape = shape
+        cls.color = shape_colors[shapes.index(shape)]
+        cls.rotation = 0</code></pre>
 </details>
 </section>
 <section>
@@ -449,12 +449,12 @@ class Piece(object):  # *
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Piece(object):  # *
-    def __init__(self, x, y, shape, shapes, shape_colors):
-        self.x = x
-        self.y = y
-        self.shape = shape
-        self.color = shape_colors[shapes.index(shape)]
-        self.rotation = 0</code></pre>
+    def __init__(cls, x, y, shape, shapes, shape_colors):
+        cls.x = x
+        cls.y = y
+        cls.shape = shape
+        cls.color = shape_colors[shapes.index(shape)]
+        cls.rotation = 0</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris"><code class="flex name class">
@@ -467,18 +467,18 @@ class Piece(object):  # *
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class tetris:
-    def __init__(self):
+    def __init__(cls):
         pygame.font.init()
 
         # GLOBALS VARS
-        self.s_width = 800
-        self.s_height = 700
-        self.play_width = 300  # meaning 300 // 10 = 30 width per block
-        self.play_height = 600  # meaning 600 // 20 = 30 height per block
-        self.block_size = 30
+        cls.s_width = 800
+        cls.s_height = 700
+        cls.play_width = 300  # meaning 300 // 10 = 30 width per block
+        cls.play_height = 600  # meaning 600 // 20 = 30 height per block
+        cls.block_size = 30
 
-        self.top_left_x = (self.s_width - self.play_width) // 2
-        self.top_left_y = self.s_height - self.play_height
+        cls.top_left_x = (cls.s_width - cls.play_width) // 2
+        cls.top_left_y = cls.s_height - cls.play_height
 
         # SHAPE FORMATS
 
@@ -584,8 +584,8 @@ class Piece(object):  # *
               &#39;..0..&#39;,
               &#39;.....&#39;]]
 
-        self.shapes = [S, Z, I, O, J, L, T]
-        self.shape_colors = [(0, 255, 0),
+        cls.shapes = [S, Z, I, O, J, L, T]
+        cls.shape_colors = [(0, 255, 0),
                              (255, 0, 0),
                              (0, 255, 255),
                              (255, 255, 0),
@@ -593,10 +593,10 @@ class Piece(object):  # *
                              (0, 0, 255),
                              (128, 0, 128)]
 
-        self.win = pygame.display.set_mode((self.s_width, self.s_height))
+        cls.win = pygame.display.set_mode((cls.s_width, cls.s_height))
         pygame.display.set_caption(&#39;Tetris&#39;)
 
-    def create_grid(self, locked_pos={}):  # *
+    def create_grid(cls, locked_pos={}):  # *
         grid = [[(0, 0, 0) for _ in range(10)] for _ in range(20)]
 
         for i in range(len(grid)):
@@ -606,7 +606,7 @@ class Piece(object):  # *
                     grid[i][j] = c
         return grid
 
-    def convert_shape_format(self, shape):
+    def convert_shape_format(cls, shape):
         positions = []
         format = shape.shape[shape.rotation % len(shape.shape)]
 
@@ -621,11 +621,11 @@ class Piece(object):  # *
 
         return positions
 
-    def valid_space(self, shape, grid):
+    def valid_space(cls, shape, grid):
         accepted_pos = [[(j, i) for j in range(10) if grid[i][j] == (0, 0, 0)] for i in range(20)]
         accepted_pos = [j for sub in accepted_pos for j in sub]
 
-        formatted = self.convert_shape_format(shape)
+        formatted = cls.convert_shape_format(shape)
 
         for pos in formatted:
             if pos not in accepted_pos:
@@ -633,7 +633,7 @@ class Piece(object):  # *
                     return False
         return True
 
-    def check_lost(self, positions):
+    def check_lost(cls, positions):
         for pos in positions:
             x, y = pos
             if y &lt; 1:
@@ -641,29 +641,29 @@ class Piece(object):  # *
 
         return False
 
-    def get_shape(self):
-        return Piece(5, 0, random.choice(self.shapes), self.shapes, self.shape_colors)
+    def get_shape(cls):
+        return Piece(5, 0, random.choice(cls.shapes), cls.shapes, cls.shape_colors)
 
-    def draw_text_middle(self, surface, text, size, color):
+    def draw_text_middle(cls, surface, text, size, color):
         font = pygame.font.SysFont(&#34;comicsans&#34;, size, bold=True)
         label = font.render(text, 1, color)
 
         surface.blit(label, (
-            self.top_left_x + self.play_width / 2 - (label.get_width() / 2),
-            self.top_left_y + self.play_height / 2 - label.get_height() / 2))
+            cls.top_left_x + cls.play_width / 2 - (label.get_width() / 2),
+            cls.top_left_y + cls.play_height / 2 - label.get_height() / 2))
 
-    def draw_grid(self, surface, grid):
-        sx = self.top_left_x
-        sy = self.top_left_y
+    def draw_grid(cls, surface, grid):
+        sx = cls.top_left_x
+        sy = cls.top_left_y
 
         for i in range(len(grid)):
-            pygame.draw.line(surface, (128, 128, 128), (sx, sy + i * self.block_size),
-                             (sx + self.play_width, sy + i * self.block_size))
+            pygame.draw.line(surface, (128, 128, 128), (sx, sy + i * cls.block_size),
+                             (sx + cls.play_width, sy + i * cls.block_size))
             for j in range(len(grid[i])):
-                pygame.draw.line(surface, (128, 128, 128), (sx + j * self.block_size, sy),
-                                 (sx + j * self.block_size, sy + self.play_height))
+                pygame.draw.line(surface, (128, 128, 128), (sx + j * cls.block_size, sy),
+                                 (sx + j * cls.block_size, sy + cls.play_height))
 
-    def clear_rows(self, grid, locked):
+    def clear_rows(cls, grid, locked):
         inc = 0
         for i in range(len(grid) - 1, -1, -1):
             row = grid[i]
@@ -683,12 +683,12 @@ class Piece(object):  # *
                     locked[newKey] = locked.pop(key)
         return inc
 
-    def draw_next_shape(self, shape, surface):
+    def draw_next_shape(cls, shape, surface):
         font = pygame.font.SysFont(&#39;comicsans&#39;, 30)
         label = font.render(&#39;Next Shape&#39;, 1, (255, 255, 255))
 
-        sx = self.top_left_x + self.play_width + 50
-        sy = self.top_left_y + self.play_height / 2 - 100
+        sx = cls.top_left_x + cls.play_width + 50
+        sy = cls.top_left_y + cls.play_height / 2 - 100
         format = shape.shape[shape.rotation % len(shape.shape)]
 
         for i, line in enumerate(format):
@@ -696,13 +696,13 @@ class Piece(object):  # *
             for j, column in enumerate(row):
                 if column == &#39;0&#39;:
                     pygame.draw.rect(surface, shape.color,
-                                     (sx + j * self.block_size, sy + i * self.block_size, self.block_size,
-                                      self.block_size), 0)
+                                     (sx + j * cls.block_size, sy + i * cls.block_size, cls.block_size,
+                                      cls.block_size), 0)
 
         surface.blit(label, (sx + 10, sy - 30))
 
-    def update_score(self, nscore):
-        score = self.max_score()
+    def update_score(cls, nscore):
+        score = cls.max_score()
 
         with open(&#39;resources/tetris/scores.txt&#39;, &#39;w&#39;) as f:
             if int(score) &gt; nscore:
@@ -710,7 +710,7 @@ class Piece(object):  # *
             else:
                 f.write(str(nscore))
 
-    def max_score(self):
+    def max_score(cls):
         if os.path.exists(&#39;resources/tetris/scores.txt&#39;):
             with open(&#39;resources/tetris/scores.txt&#39;, &#39;r&#39;) as f:
                 lines = f.readlines()
@@ -720,51 +720,51 @@ class Piece(object):  # *
 
         return score
 
-    def draw_window(self, surface, grid, score=0, last_score=0):
+    def draw_window(cls, surface, grid, score=0, last_score=0):
         surface.fill((0, 0, 0))
 
         pygame.font.init()
         font = pygame.font.SysFont(&#39;comicsans&#39;, 60)
         label = font.render(&#39;Tetris&#39;, 1, (255, 255, 255))
 
-        surface.blit(label, (self.top_left_x + self.play_width / 2 - (label.get_width() / 2), 30))
+        surface.blit(label, (cls.top_left_x + cls.play_width / 2 - (label.get_width() / 2), 30))
 
         # current score
         font = pygame.font.SysFont(&#39;comicsans&#39;, 30)
         label = font.render(&#39;Score: &#39; + str(score), 1, (255, 255, 255))
 
-        sx = self.top_left_x + self.play_width + 50
-        sy = self.top_left_y + self.play_height / 2 - 100
+        sx = cls.top_left_x + cls.play_width + 50
+        sy = cls.top_left_y + cls.play_height / 2 - 100
 
         surface.blit(label, (sx + 20, sy + 160))
         # last score
         label = font.render(&#39;High Score: &#39; + last_score, 1, (255, 255, 255))
 
-        sx = self.top_left_x - 200
-        sy = self.top_left_y + 200
+        sx = cls.top_left_x - 200
+        sy = cls.top_left_y + 200
 
         surface.blit(label, (sx + 20, sy + 160))
 
         for i in range(len(grid)):
             for j in range(len(grid[i])):
                 pygame.draw.rect(surface, grid[i][j],
-                                 (self.top_left_x + j * self.block_size, self.top_left_y + i * self.block_size,
-                                  self.block_size, self.block_size), 0)
+                                 (cls.top_left_x + j * cls.block_size, cls.top_left_y + i * cls.block_size,
+                                  cls.block_size, cls.block_size), 0)
 
-        pygame.draw.rect(surface, (255, 0, 0), (self.top_left_x, self.top_left_y, self.play_width, self.play_height), 5)
+        pygame.draw.rect(surface, (255, 0, 0), (cls.top_left_x, cls.top_left_y, cls.play_width, cls.play_height), 5)
 
-        self.draw_grid(surface, grid)
+        cls.draw_grid(surface, grid)
         # pygame.display.update()
 
-    def main(self):  # *
-        last_score = self.max_score()
+    def main(cls):  # *
+        last_score = cls.max_score()
         locked_positions = {}
-        grid = self.create_grid(locked_positions)
+        grid = cls.create_grid(locked_positions)
 
         change_piece = False
         run = True
-        current_piece = self.get_shape()
-        next_piece = self.get_shape()
+        current_piece = cls.get_shape()
+        next_piece = cls.get_shape()
         clock = pygame.time.Clock()
         fall_time = 0
         fall_speed = 0.27
@@ -772,7 +772,7 @@ class Piece(object):  # *
         score = 0
 
         while run:
-            grid = self.create_grid(locked_positions)
+            grid = cls.create_grid(locked_positions)
             fall_time += clock.get_rawtime()
             level_time += clock.get_rawtime()
             clock.tick()
@@ -785,7 +785,7 @@ class Piece(object):  # *
             if fall_time / 1000 &gt; fall_speed:
                 fall_time = 0
                 current_piece.y += 1
-                if not (self.valid_space(current_piece, grid)) and current_piece.y &gt; 0:
+                if not (cls.valid_space(current_piece, grid)) and current_piece.y &gt; 0:
                     current_piece.y -= 1
                     change_piece = True
 
@@ -797,22 +797,22 @@ class Piece(object):  # *
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         current_piece.x -= 1
-                        if not (self.valid_space(current_piece, grid)):
+                        if not (cls.valid_space(current_piece, grid)):
                             current_piece.x += 1
                     if event.key == pygame.K_RIGHT:
                         current_piece.x += 1
-                        if not (self.valid_space(current_piece, grid)):
+                        if not (cls.valid_space(current_piece, grid)):
                             current_piece.x -= 1
                     if event.key == pygame.K_DOWN:
                         current_piece.y += 1
-                        if not (self.valid_space(current_piece, grid)):
+                        if not (cls.valid_space(current_piece, grid)):
                             current_piece.y -= 1
                     if event.key == pygame.K_UP:
                         current_piece.rotation += 1
-                        if not (self.valid_space(current_piece, grid)):
+                        if not (cls.valid_space(current_piece, grid)):
                             current_piece.rotation -= 1
 
-            shape_pos = self.convert_shape_format(current_piece)
+            shape_pos = cls.convert_shape_format(current_piece)
 
             for i in range(len(shape_pos)):
                 x, y = shape_pos[i]
@@ -824,39 +824,39 @@ class Piece(object):  # *
                     p = (pos[0], pos[1])
                     locked_positions[p] = current_piece.color
                 current_piece = next_piece
-                next_piece = self.get_shape()
+                next_piece = cls.get_shape()
                 change_piece = False
-                score += self.clear_rows(grid, locked_positions) * 10
+                score += cls.clear_rows(grid, locked_positions) * 10
 
-            self.draw_window(self.win, grid, score, last_score)
-            self.draw_next_shape(next_piece, self.win)
+            cls.draw_window(cls.win, grid, score, last_score)
+            cls.draw_next_shape(next_piece, cls.win)
             pygame.display.update()
 
-            if self.check_lost(locked_positions):
-                self.draw_text_middle(self.win, &#34;YOU LOST!&#34;, 80, (255, 255, 255))
+            if cls.check_lost(locked_positions):
+                cls.draw_text_middle(cls.win, &#34;YOU LOST!&#34;, 80, (255, 255, 255))
                 pygame.display.update()
                 pygame.time.delay(1500)
                 run = False
-                self.update_score(score)
+                cls.update_score(score)
 
-    def main_menu(self):  # *
+    def main_menu(cls):  # *
         run = True
         while run:
-            self.win.fill((0, 0, 0))
-            self.draw_text_middle(self.win, &#39;Press Any Key To Play&#39;, 60, (255, 255, 255))
+            cls.win.fill((0, 0, 0))
+            cls.draw_text_middle(cls.win, &#39;Press Any Key To Play&#39;, 60, (255, 255, 255))
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
                 if event.type == pygame.KEYDOWN:
-                    self.main()
+                    cls.main()
 
         pygame.display.quit()</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="messy_pypi.main_tetris.tetris.check_lost"><code class="name flex">
-<span>def <span class="ident">check_lost</span></span>(<span>self, positions)</span>
+<span>def <span class="ident">check_lost</span></span>(<span>cls, positions)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -864,7 +864,7 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def check_lost(self, positions):
+<pre><code class="python">def check_lost(cls, positions):
     for pos in positions:
         x, y = pos
         if y &lt; 1:
@@ -874,7 +874,7 @@ class Piece(object):  # *
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.clear_rows"><code class="name flex">
-<span>def <span class="ident">clear_rows</span></span>(<span>self, grid, locked)</span>
+<span>def <span class="ident">clear_rows</span></span>(<span>cls, grid, locked)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -882,7 +882,7 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def clear_rows(self, grid, locked):
+<pre><code class="python">def clear_rows(cls, grid, locked):
     inc = 0
     for i in range(len(grid) - 1, -1, -1):
         row = grid[i]
@@ -904,7 +904,7 @@ class Piece(object):  # *
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.convert_shape_format"><code class="name flex">
-<span>def <span class="ident">convert_shape_format</span></span>(<span>self, shape)</span>
+<span>def <span class="ident">convert_shape_format</span></span>(<span>cls, shape)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -912,7 +912,7 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def convert_shape_format(self, shape):
+<pre><code class="python">def convert_shape_format(cls, shape):
     positions = []
     format = shape.shape[shape.rotation % len(shape.shape)]
 
@@ -929,7 +929,7 @@ class Piece(object):  # *
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.create_grid"><code class="name flex">
-<span>def <span class="ident">create_grid</span></span>(<span>self, locked_pos={})</span>
+<span>def <span class="ident">create_grid</span></span>(<span>cls, locked_pos={})</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -937,7 +937,7 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create_grid(self, locked_pos={}):  # *
+<pre><code class="python">def create_grid(cls, locked_pos={}):  # *
     grid = [[(0, 0, 0) for _ in range(10)] for _ in range(20)]
 
     for i in range(len(grid)):
@@ -949,7 +949,7 @@ class Piece(object):  # *
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.draw_grid"><code class="name flex">
-<span>def <span class="ident">draw_grid</span></span>(<span>self, surface, grid)</span>
+<span>def <span class="ident">draw_grid</span></span>(<span>cls, surface, grid)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -957,20 +957,20 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def draw_grid(self, surface, grid):
-    sx = self.top_left_x
-    sy = self.top_left_y
+<pre><code class="python">def draw_grid(cls, surface, grid):
+    sx = cls.top_left_x
+    sy = cls.top_left_y
 
     for i in range(len(grid)):
-        pygame.draw.line(surface, (128, 128, 128), (sx, sy + i * self.block_size),
-                         (sx + self.play_width, sy + i * self.block_size))
+        pygame.draw.line(surface, (128, 128, 128), (sx, sy + i * cls.block_size),
+                         (sx + cls.play_width, sy + i * cls.block_size))
         for j in range(len(grid[i])):
-            pygame.draw.line(surface, (128, 128, 128), (sx + j * self.block_size, sy),
-                             (sx + j * self.block_size, sy + self.play_height))</code></pre>
+            pygame.draw.line(surface, (128, 128, 128), (sx + j * cls.block_size, sy),
+                             (sx + j * cls.block_size, sy + cls.play_height))</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.draw_next_shape"><code class="name flex">
-<span>def <span class="ident">draw_next_shape</span></span>(<span>self, shape, surface)</span>
+<span>def <span class="ident">draw_next_shape</span></span>(<span>cls, shape, surface)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -978,12 +978,12 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def draw_next_shape(self, shape, surface):
+<pre><code class="python">def draw_next_shape(cls, shape, surface):
     font = pygame.font.SysFont(&#39;comicsans&#39;, 30)
     label = font.render(&#39;Next Shape&#39;, 1, (255, 255, 255))
 
-    sx = self.top_left_x + self.play_width + 50
-    sy = self.top_left_y + self.play_height / 2 - 100
+    sx = cls.top_left_x + cls.play_width + 50
+    sy = cls.top_left_y + cls.play_height / 2 - 100
     format = shape.shape[shape.rotation % len(shape.shape)]
 
     for i, line in enumerate(format):
@@ -991,14 +991,14 @@ class Piece(object):  # *
         for j, column in enumerate(row):
             if column == &#39;0&#39;:
                 pygame.draw.rect(surface, shape.color,
-                                 (sx + j * self.block_size, sy + i * self.block_size, self.block_size,
-                                  self.block_size), 0)
+                                 (sx + j * cls.block_size, sy + i * cls.block_size, cls.block_size,
+                                  cls.block_size), 0)
 
     surface.blit(label, (sx + 10, sy - 30))</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.draw_text_middle"><code class="name flex">
-<span>def <span class="ident">draw_text_middle</span></span>(<span>self, surface, text, size, color)</span>
+<span>def <span class="ident">draw_text_middle</span></span>(<span>cls, surface, text, size, color)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1006,17 +1006,17 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def draw_text_middle(self, surface, text, size, color):
+<pre><code class="python">def draw_text_middle(cls, surface, text, size, color):
     font = pygame.font.SysFont(&#34;comicsans&#34;, size, bold=True)
     label = font.render(text, 1, color)
 
     surface.blit(label, (
-        self.top_left_x + self.play_width / 2 - (label.get_width() / 2),
-        self.top_left_y + self.play_height / 2 - label.get_height() / 2))</code></pre>
+        cls.top_left_x + cls.play_width / 2 - (label.get_width() / 2),
+        cls.top_left_y + cls.play_height / 2 - label.get_height() / 2))</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.draw_window"><code class="name flex">
-<span>def <span class="ident">draw_window</span></span>(<span>self, surface, grid, score=0, last_score=0)</span>
+<span>def <span class="ident">draw_window</span></span>(<span>cls, surface, grid, score=0, last_score=0)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1024,45 +1024,45 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def draw_window(self, surface, grid, score=0, last_score=0):
+<pre><code class="python">def draw_window(cls, surface, grid, score=0, last_score=0):
     surface.fill((0, 0, 0))
 
     pygame.font.init()
     font = pygame.font.SysFont(&#39;comicsans&#39;, 60)
     label = font.render(&#39;Tetris&#39;, 1, (255, 255, 255))
 
-    surface.blit(label, (self.top_left_x + self.play_width / 2 - (label.get_width() / 2), 30))
+    surface.blit(label, (cls.top_left_x + cls.play_width / 2 - (label.get_width() / 2), 30))
 
     # current score
     font = pygame.font.SysFont(&#39;comicsans&#39;, 30)
     label = font.render(&#39;Score: &#39; + str(score), 1, (255, 255, 255))
 
-    sx = self.top_left_x + self.play_width + 50
-    sy = self.top_left_y + self.play_height / 2 - 100
+    sx = cls.top_left_x + cls.play_width + 50
+    sy = cls.top_left_y + cls.play_height / 2 - 100
 
     surface.blit(label, (sx + 20, sy + 160))
     # last score
     label = font.render(&#39;High Score: &#39; + last_score, 1, (255, 255, 255))
 
-    sx = self.top_left_x - 200
-    sy = self.top_left_y + 200
+    sx = cls.top_left_x - 200
+    sy = cls.top_left_y + 200
 
     surface.blit(label, (sx + 20, sy + 160))
 
     for i in range(len(grid)):
         for j in range(len(grid[i])):
             pygame.draw.rect(surface, grid[i][j],
-                             (self.top_left_x + j * self.block_size, self.top_left_y + i * self.block_size,
-                              self.block_size, self.block_size), 0)
+                             (cls.top_left_x + j * cls.block_size, cls.top_left_y + i * cls.block_size,
+                              cls.block_size, cls.block_size), 0)
 
-    pygame.draw.rect(surface, (255, 0, 0), (self.top_left_x, self.top_left_y, self.play_width, self.play_height), 5)
+    pygame.draw.rect(surface, (255, 0, 0), (cls.top_left_x, cls.top_left_y, cls.play_width, cls.play_height), 5)
 
-    self.draw_grid(surface, grid)
+    cls.draw_grid(surface, grid)
     # pygame.display.update()</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.get_shape"><code class="name flex">
-<span>def <span class="ident">get_shape</span></span>(<span>self)</span>
+<span>def <span class="ident">get_shape</span></span>(<span>cls)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1070,12 +1070,12 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_shape(self):
-    return Piece(5, 0, random.choice(self.shapes), self.shapes, self.shape_colors)</code></pre>
+<pre><code class="python">def get_shape(cls):
+    return Piece(5, 0, random.choice(cls.shapes), cls.shapes, cls.shape_colors)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.main"><code class="name flex">
-<span>def <span class="ident">main</span></span>(<span>self)</span>
+<span>def <span class="ident">main</span></span>(<span>cls)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1083,15 +1083,15 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def main(self):  # *
-    last_score = self.max_score()
+<pre><code class="python">def main(cls):  # *
+    last_score = cls.max_score()
     locked_positions = {}
-    grid = self.create_grid(locked_positions)
+    grid = cls.create_grid(locked_positions)
 
     change_piece = False
     run = True
-    current_piece = self.get_shape()
-    next_piece = self.get_shape()
+    current_piece = cls.get_shape()
+    next_piece = cls.get_shape()
     clock = pygame.time.Clock()
     fall_time = 0
     fall_speed = 0.27
@@ -1099,7 +1099,7 @@ class Piece(object):  # *
     score = 0
 
     while run:
-        grid = self.create_grid(locked_positions)
+        grid = cls.create_grid(locked_positions)
         fall_time += clock.get_rawtime()
         level_time += clock.get_rawtime()
         clock.tick()
@@ -1112,7 +1112,7 @@ class Piece(object):  # *
         if fall_time / 1000 &gt; fall_speed:
             fall_time = 0
             current_piece.y += 1
-            if not (self.valid_space(current_piece, grid)) and current_piece.y &gt; 0:
+            if not (cls.valid_space(current_piece, grid)) and current_piece.y &gt; 0:
                 current_piece.y -= 1
                 change_piece = True
 
@@ -1124,22 +1124,22 @@ class Piece(object):  # *
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     current_piece.x -= 1
-                    if not (self.valid_space(current_piece, grid)):
+                    if not (cls.valid_space(current_piece, grid)):
                         current_piece.x += 1
                 if event.key == pygame.K_RIGHT:
                     current_piece.x += 1
-                    if not (self.valid_space(current_piece, grid)):
+                    if not (cls.valid_space(current_piece, grid)):
                         current_piece.x -= 1
                 if event.key == pygame.K_DOWN:
                     current_piece.y += 1
-                    if not (self.valid_space(current_piece, grid)):
+                    if not (cls.valid_space(current_piece, grid)):
                         current_piece.y -= 1
                 if event.key == pygame.K_UP:
                     current_piece.rotation += 1
-                    if not (self.valid_space(current_piece, grid)):
+                    if not (cls.valid_space(current_piece, grid)):
                         current_piece.rotation -= 1
 
-        shape_pos = self.convert_shape_format(current_piece)
+        shape_pos = cls.convert_shape_format(current_piece)
 
         for i in range(len(shape_pos)):
             x, y = shape_pos[i]
@@ -1151,24 +1151,24 @@ class Piece(object):  # *
                 p = (pos[0], pos[1])
                 locked_positions[p] = current_piece.color
             current_piece = next_piece
-            next_piece = self.get_shape()
+            next_piece = cls.get_shape()
             change_piece = False
-            score += self.clear_rows(grid, locked_positions) * 10
+            score += cls.clear_rows(grid, locked_positions) * 10
 
-        self.draw_window(self.win, grid, score, last_score)
-        self.draw_next_shape(next_piece, self.win)
+        cls.draw_window(cls.win, grid, score, last_score)
+        cls.draw_next_shape(next_piece, cls.win)
         pygame.display.update()
 
-        if self.check_lost(locked_positions):
-            self.draw_text_middle(self.win, &#34;YOU LOST!&#34;, 80, (255, 255, 255))
+        if cls.check_lost(locked_positions):
+            cls.draw_text_middle(cls.win, &#34;YOU LOST!&#34;, 80, (255, 255, 255))
             pygame.display.update()
             pygame.time.delay(1500)
             run = False
-            self.update_score(score)</code></pre>
+            cls.update_score(score)</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.main_menu"><code class="name flex">
-<span>def <span class="ident">main_menu</span></span>(<span>self)</span>
+<span>def <span class="ident">main_menu</span></span>(<span>cls)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1176,23 +1176,23 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def main_menu(self):  # *
+<pre><code class="python">def main_menu(cls):  # *
     run = True
     while run:
-        self.win.fill((0, 0, 0))
-        self.draw_text_middle(self.win, &#39;Press Any Key To Play&#39;, 60, (255, 255, 255))
+        cls.win.fill((0, 0, 0))
+        cls.draw_text_middle(cls.win, &#39;Press Any Key To Play&#39;, 60, (255, 255, 255))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.KEYDOWN:
-                self.main()
+                cls.main()
 
     pygame.display.quit()</code></pre>
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.max_score"><code class="name flex">
-<span>def <span class="ident">max_score</span></span>(<span>self)</span>
+<span>def <span class="ident">max_score</span></span>(<span>cls)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1200,7 +1200,7 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def max_score(self):
+<pre><code class="python">def max_score(cls):
     if os.path.exists(&#39;resources/tetris/scores.txt&#39;):
         with open(&#39;resources/tetris/scores.txt&#39;, &#39;r&#39;) as f:
             lines = f.readlines()
@@ -1212,7 +1212,7 @@ class Piece(object):  # *
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.update_score"><code class="name flex">
-<span>def <span class="ident">update_score</span></span>(<span>self, nscore)</span>
+<span>def <span class="ident">update_score</span></span>(<span>cls, nscore)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1220,8 +1220,8 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def update_score(self, nscore):
-    score = self.max_score()
+<pre><code class="python">def update_score(cls, nscore):
+    score = cls.max_score()
 
     with open(&#39;resources/tetris/scores.txt&#39;, &#39;w&#39;) as f:
         if int(score) &gt; nscore:
@@ -1231,7 +1231,7 @@ class Piece(object):  # *
 </details>
 </dd>
 <dt id="messy_pypi.main_tetris.tetris.valid_space"><code class="name flex">
-<span>def <span class="ident">valid_space</span></span>(<span>self, shape, grid)</span>
+<span>def <span class="ident">valid_space</span></span>(<span>cls, shape, grid)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1239,11 +1239,11 @@ class Piece(object):  # *
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def valid_space(self, shape, grid):
+<pre><code class="python">def valid_space(cls, shape, grid):
     accepted_pos = [[(j, i) for j in range(10) if grid[i][j] == (0, 0, 0)] for i in range(20)]
     accepted_pos = [j for sub in accepted_pos for j in sub]
 
-    formatted = self.convert_shape_format(shape)
+    formatted = cls.convert_shape_format(shape)
 
     for pos in formatted:
         if pos not in accepted_pos:

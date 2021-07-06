@@ -39,7 +39,6 @@ class Nonblocking(object):
         fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl)
 
 """
-
 In [24]: input_key = ""
     ...: clean_key = ""
     ...: while True:
