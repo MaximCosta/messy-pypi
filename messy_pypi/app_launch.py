@@ -10,6 +10,7 @@ helpmenu = """
 
 """
 
+
 def launch():
     print("---")
     print("1: demineur terminal")
@@ -37,11 +38,12 @@ def launch():
             if menu == "1":
                 count_number_of_lines_in_folder(input("folder"), input("match"))
             elif menu == "2":
-                print("DOSSIER "+ str(os.getcwd())+"/../")
+                print("DOSSIER " + str(os.getcwd()) + "/../")
                 print("All Ext\t", count_number_of_lines_in_folder("../", "(.py$|.md$|.png$|.txt$|LICENCE|.json$)"),
                       "\t Pour être plus précis: (.py$|.md$|.png$|.txt$|LICENCE|.json$)")
                 print("py$ md$\t", count_number_of_lines_in_folder("../", "(.py$|.md$)"))
                 print("py$\t", count_number_of_lines_in_folder("../", ".py$"))
+
 
 def clilaunch():
     """
@@ -49,20 +51,20 @@ def clilaunch():
     autoreadme, compressint, countligne, ?duplicateFile, keyboardGenerator, minesweeper, readmereader, getbyteskey, tetris
     """
     from main_terminalGetKey import getKey
-    global current_menu # 0 = Normal, 1=CountLine, 
-    current_menu = 0 # 0 = Normal, 1=CountLine, 
+    global current_menu  # 0 = Normal, 1=CountLine,
+    current_menu = 0  # 0 = Normal, 1=CountLine,
     Apps_to_launch = [
         {
-            '0':('demineur',lambda: demineur()),
-            '1':('menu count ligne', lambda: change_current_menu(1))
+            '0': ('demineur', lambda: demineur()),
+            '1': ('menu count ligne', lambda: change_current_menu(1))
         },
         {
-            '0':('print ok', lambda: print("ok")),
-            '1':('print okj2', lambda: print('ojk2'))
+            '0': ('print ok', lambda: print("ok")),
+            '1': ('print okj2', lambda: print('ojk2'))
         }
     ]
     while True:
-        #TODO Afficher les aides
+        # TODO Afficher les aides
         key = getKey(debug=True)
         if key in Apps_to_launch[current_menu]:
             clear()
@@ -71,9 +73,11 @@ def clilaunch():
             print("Commande Inconnue")
         print(current_menu)
 
+
 def change_current_menu(x):
     global current_menu
     current_menu = x
+
 
 def guilaunch():
     import gi
@@ -91,8 +95,10 @@ def guilaunch():
     app.connect('activate', on_activate)
     app.run(None)
 
+
 if __name__ == "__main__":
     import sys
+
     args = sys.argv
     if "--help" in args:
         print(helpmenu)
@@ -102,4 +108,3 @@ if __name__ == "__main__":
         clilaunch()
     else:
         launch()
-

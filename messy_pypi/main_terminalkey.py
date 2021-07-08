@@ -4,6 +4,7 @@ import sys
 import threading
 import os
 import termios
+import time
 import tty
 from select import select
 import re
@@ -85,6 +86,46 @@ mouse_state = {
 }
 
 
+class Actions:
+    # mouse_pos=mouse_pos,             click_state=click_state, clean_key=clean_key             ,input_save=input_save
+    # Pos mouse type: (x, y), up or down            , key du type: escape ou mouse_..., key du type: \033[..
+
+    # If
+    dico_actions = {}
+
+    @classmethod
+    def set_action(cls):
+        cls.dico_actions = {
+            "z": cls.avancer,
+            "mouse_left_click": cls.left_click
+        }
+
+    @classmethod
+    def avancer(cls, **kwargs):
+        Draw.x += 1
+        print("avancer")
+
+    @classmethod
+    def left_click(cls, **kwargs):
+        if cls.pos_in_square(kwargs["mouse_pos"], 15, 15, 20, 20):
+            print("click inside 15,15,20,20")
+        if cls.pos_in_circle(kwargs["mouse_pos"], 20, 50, 10):
+            print("click circle 20,50")
+
+    @classmethod
+    def pos_in_square(cls, mouse_pos: tuple[int, int], x1: int, y1: int, x2: int, y2: int) -> bool:
+        # Verifies si mouse_pos(tuple: (int, int)) est dans le rectangle x1, y1, x2, y2
+        return x1 <= mouse_pos[0] < x2 and y1 <= mouse_pos[0] < y2
+
+    @classmethod
+    def pos_in_circle(cls, mouse_pos: tuple[int, int], x1: int, y1: int, rayon: int) -> bool:
+        return (x1 - mouse_pos[0]) ** 2 + (y1 - mouse_pos[1]) ** 2 < rayon ** 2
+
+    @classmethod
+    def pos_in_pos(cls, mouse_pos: tuple[int, int], x1: int, y1: int, rayon: int) -> bool:
+        return (x1 == mouse_pos[0]) and (y1 == mouse_pos[1])
+
+
 class Key:
     mouse_pos = None
     list = None
@@ -105,8 +146,7 @@ class Key:
             cls.stopping = True
             try:
                 cls.reader.join()
-                print("join success", cls.reader.is_alive())
-            except:
+            except RuntimeError:
                 pass
 
     @classmethod
@@ -138,8 +178,7 @@ class Key:
     @classmethod
     def _get_key(cls):
         input_key = ""
-        liste = [""]
-        mouse_pos = (0, 0)
+        mouse_pos = None
         while not cls.stopping:
             with Raw(sys.stdin):
                 if exit_event.is_set():
@@ -167,18 +206,57 @@ class Key:
                     clean_key = "\\"
                 else:
                     clean_key = input_key
-                if not clean_key == "":
-                    liste.append(clean_key)
-                    if len(liste) > 10:
-                        del liste[0]
-                    clean_key = ""
                 input_save = input_key
                 input_key = ""
-                # cls.stopping = False
 
-            print(f"{str(liste[-1].encode('utf-8')).center(50)},"+
-                  f"\t {mouse_pos=},\t {click_state=},\t {input_save=}")
+            if clean_key in Actions.dico_actions.keys():
+                if mouse_pos is not None:  # Si c'est une action souris
+                    Actions.dico_actions[clean_key](mouse_pos=mouse_pos, click_state=click_state,
+                                                    clean_key=clean_key, input_save=input_save)
+                else:
+                    Actions.dico_actions[clean_key](clean_key=clean_key, input_save=input_save)
+            if debug:
+                print(f"{clean_key=},\t {mouse_pos=},\t {click_state=},\t {input_save=}")
         clean_quit()
+
+
+class Draw:
+    menu = False
+    x: int = 0
+
+    @classmethod
+    def show_menu(cls):
+        cls.menu = not cls.menu
+
+    @classmethod
+    def _do_draw(cls):
+        while not cls.stopping:
+            if exit_event.is_set():
+                break
+            # SET CODE HERE: ne pas metre de code bloquant: code qui nécessite une action de l'utilisateur
+            print("Hello")
+            time.sleep(1)
+
+    # ---------------------------------------
+    stopping: bool = False
+    started: bool = False
+    reader: threading.Thread
+
+    @classmethod
+    def start(cls):
+        cls.stopping = False
+        cls.reader = threading.Thread(target=cls._do_draw)
+        cls.reader.start()
+        cls.started = True
+
+    @classmethod
+    def stop(cls):
+        if cls.started and cls.reader.is_alive():
+            cls.stopping = True
+            try:
+                cls.reader.join()
+            except RuntimeError:
+                pass
 
 
 class Raw(object):
@@ -227,23 +305,39 @@ def sigint_quit(s, f):
 def clean_quit(errcode: int = 0):
     exit_event.set()
     print(show_cursor, mouse_off, mouse_direct_off)  # normal_screen
-    print("Fin")
+    print("Fin du programme")
     Key.stop()
+    Draw.stop()
     raise SystemExit(errcode)
+
+
+# config
+mouse = True
 
 
 def main():
     # https://blog.miguelgrinberg.com/post/how-to-kill-a-python-thread
     global exit_event
     exit_event = threading.Event()
+    # Signals Events
     signal.signal(signal.SIGINT, sigint_quit)
-
-    def run():
+    # Define Initial Actions:
+    Actions.set_action()
+    # Set config
+    if mouse:
         print(mouse_on)
+
+    # Start Program
+    def run():
         Key.start()
+        Draw.start()
 
     run()
 
 
 if __name__ == "__main__":
+    if "--debug" in sys.argv:
+        debug = True
+    else:
+        debug = False
     main()
