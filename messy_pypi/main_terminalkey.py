@@ -1,42 +1,79 @@
-import fcntl
-import signal
+from msvcrt import open_osfhandle
 import sys
-import threading
 import os
-import termios
+
+on_linux = not("win" in sys.platform)
+if on_linux:
+    import fcntl
+    import termios
+    import tty
+else:
+    import ctypes
+    import msvcrt
+import signal
+import threading
 import time
-import tty
 from select import select
 import re
 
-escape = {
-    "\n": "enter",
-    ("\x7f", "\x08"): "backspace",
-    ("[A", "OA"): "up",
-    ("[B", "OB"): "down",
-    ("[D", "OD"): "left",
-    ("[C", "OC"): "right",
-    "[2~": "insert",
-    "[3~": "delete",
-    "[H": "home",
-    "[F": "end",
-    "[5~": "page_up",
-    "[6~": "page_down",
-    "\t": "tab",
-    "[Z": "shift_tab",
-    "OP": "f1",
-    "OQ": "f2",
-    "OR": "f3",
-    "OS": "f4",
-    "[15": "f5",
-    "[17": "f6",
-    "[18": "f7",
-    "[19": "f8",
-    "[20": "f9",
-    "[21": "f10",
-    "[23": "f11",
-    "[24": "f12"
-}
+
+if on_linux:
+    escape = {
+        "\n": "enter",
+        ("\x7f", "\x08"): "backspace",
+        ("[A", "OA"): "up",
+        ("[B", "OB"): "down",
+        ("[D", "OD"): "left",
+        ("[C", "OC"): "right",
+        "[2~": "insert",
+        "[3~": "delete",
+        "[H": "home",
+        "[F": "end",
+        "[5~": "page_up",
+        "[6~": "page_down",
+        "\t": "tab",
+        "[Z": "shift_tab",
+        "OP": "f1",
+        "OQ": "f2",
+        "OR": "f3",
+        "OS": "f4",
+        "[15": "f5",
+        "[17": "f6",
+        "[18": "f7",
+        "[19": "f8",
+        "[20": "f9",
+        "[21": "f10",
+        "[23": "f11",
+        "[24": "f12"
+    }
+else:
+    escape = {
+        # lazy(flemme) do ctrl key
+        "\r": "\n",
+        "\x1b": "escape",
+        "key3b": "f1",
+        "key3c": "f2",
+        "key3d": "f3",
+        "key3e": "f4",
+        "key3f": "f5",
+        "key40": "f6",
+        "key41": "f7",
+        "key42": "f8",
+        "key43": "f9",
+        "key44": "f10",
+        "key86": "f12",
+        "key47": "\x1B[7~",
+        "key4f": "\x1B[8~",
+        "key52": "\x1B[2~",
+        "key53": "\x1B[3~",
+        "\x08": "\x7f",
+        "key48": "\x1b[A",
+        "key50": "\x1b[B",
+        "key4d": "\x1b[C",
+        "key4b": "\x1b[D",
+        "key4b": "\x1b[D",
+
+    }
 mouse_state = {
     # Changer le regex si supérieur a la key  \033[<100;: passer le {1,2} à {1,3}ou+
     # mouse_.._click
@@ -136,7 +173,10 @@ class Key:
     @classmethod
     def start(cls):
         cls.stopping = False
-        cls.reader = threading.Thread(target=cls._get_key)
+        if on_linux:
+            cls.reader = threading.Thread(target=cls._get_key)
+        else:
+            cls.reader = threading.Thread(target=cls._win_get_key)
         cls.reader.start()
         cls.started = True
 
@@ -220,14 +260,39 @@ class Key:
                 print(f"{clean_key=},\t {mouse_pos=},\t {click_state=},\t {input_save=}")
         clean_quit()
 
-
-class Draw:
-    menu = False
-    x: int = 0
-
     @classmethod
-    def show_menu(cls):
-        cls.menu = not cls.menu
+    def _win_get_key(cls):
+
+        def getch():
+            n = ord(ctypes.c_char(msvcrt.getch()).value)
+            try:
+                c = chr(n)
+            except:
+                c = '\0'
+            return n, c
+
+        def getkey():
+            n, c = getch()
+            # 0xE0 is 'grey' keys.  change this if you don't like it, but I don't care what color the key is.  IMHO it just confuses the end-user if they need to know.
+            if n == 0 or n == 0xE0:
+                n, c = getch()
+                return "key%x" % n
+            return c
+        while not cls.stopping:
+            if exit_event.is_set():
+                break
+            key = getkey()
+            input_save = key
+            if key in escape.keys():
+                key = escape[key]
+            if key=="\x03":
+                sigint_quit(0, None)
+            if key in Actions.dico_actions.keys():
+                Actions.dico_actions[key](clean_key=key, input_save=input_save)
+            if debug:
+                print(f"{key=}, {input_save=}")
+class Draw:
+    x: int = 0
 
     @classmethod
     def _do_draw(cls):
@@ -259,33 +324,33 @@ class Draw:
             except RuntimeError:
                 pass
 
+if on_linux:
+    class Raw(object):
+        def __init__(self, stream):
+            self.stream = stream
+            self.fd = self.stream.fileno()
 
-class Raw(object):
-    def __init__(self, stream):
-        self.stream = stream
-        self.fd = self.stream.fileno()
+        def __enter__(self):
+            self.original_stty = termios.tcgetattr(self.stream)
+            tty.setcbreak(self.stream)
 
-    def __enter__(self):
-        self.original_stty = termios.tcgetattr(self.stream)
-        tty.setcbreak(self.stream)
-
-    def __exit__(self, type_, value, traceback):
-        termios.tcsetattr(self.stream, termios.TCSANOW, self.original_stty)
+        def __exit__(self, type_, value, traceback):
+            termios.tcsetattr(self.stream, termios.TCSANOW, self.original_stty)
 
 
-class Nonblocking(object):
-    """Set nonblocking mode for device"""
+    class Nonblocking(object):
+        """Set nonblocking mode for device"""
 
-    def __init__(self, stream):
-        self.stream = stream
-        self.fd = self.stream.fileno()
+        def __init__(self, stream):
+            self.stream = stream
+            self.fd = self.stream.fileno()
 
-    def __enter__(self):
-        self.orig_fl = fcntl.fcntl(self.fd, fcntl.F_GETFL)
-        fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl | os.O_NONBLOCK)
+        def __enter__(self):
+            self.orig_fl = fcntl.fcntl(self.fd, fcntl.F_GETFL)
+            fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl | os.O_NONBLOCK)
 
-    def __exit__(self, *args):
-        fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl)
+        def __exit__(self, *args):
+            fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl)
 
 
 hide_cursor = "\033[?25l"  # * Hide terminal cursor
@@ -320,13 +385,16 @@ def main():
     # https://blog.miguelgrinberg.com/post/how-to-kill-a-python-thread
     global exit_event
     exit_event = threading.Event()
-    # Signals Events
-    signal.signal(signal.SIGINT, sigint_quit)
+
+    if on_linux:
+        # Signals Events
+        signal.signal(signal.SIGINT, sigint_quit)
     # Define Initial Actions:
     Actions.set_action()
-    # Set config
-    if mouse:
-        print(mouse_on)
+    if on_linux:  # No mouse terminal on windows :(
+        # Set config
+        if mouse:
+            print(mouse_on)
 
     # Start Program
     def run():
