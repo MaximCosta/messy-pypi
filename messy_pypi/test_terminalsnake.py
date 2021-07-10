@@ -7,6 +7,7 @@ import os
 import termios
 import time
 import tty
+import types
 from select import select
 from random import randint
 
@@ -16,9 +17,25 @@ from random import randint
 # -? Mouse control menu
 # - Options
 # - Débogage
-# - Dotfiles
+# - Dot files
 # - Theme
 # - Fix bug qui fait que on peux revenir sur son chemin avec un lock
+# - Fix bug: redessiner la queue quand le menu s'enlève
+# - Resize screen signal
+# - Windows Adaptations
+# - FPS, SPEED
+
+
+def sigint_quit(s, f):
+    exit_event.set()
+
+
+def clean_quit(errcode: int = 0):
+    exit_event.set()
+    print("Fin du programme")
+    Key.stop()
+    Draw.stop()
+    raise SystemExit(errcode)
 
 
 escape = {
@@ -115,8 +132,26 @@ class Actions:
             "\x1b[B": cls.change_direction,
             "\x1b[C": cls.change_direction,
             "\x1b[D": cls.change_direction,
-            "p": Draw.show_menu,
+            "m": Draw.show_menu,
             "escape": Draw.show_menu,
+            "r": Draw.restart,
+        }
+
+    @classmethod
+    def set_menu_action(cls):
+        cls.dico_actions = {
+            "r": Draw.restart,
+            "m": Draw.show_menu,
+            "escape": Draw.show_menu,
+            "z": cls.change_option_menu,
+            "\x1b[A": cls.change_option_menu,
+            "s": cls.change_option_menu,
+            "\x1b[B": cls.change_option_menu,
+            "\n": cls.do_option_action,
+            "q": cls.do_option_action,  # TODO
+            "\x1b[D": cls.do_option_action,  # TODO
+            "d": cls.do_option_action,  # TODO
+            "\x1b[C": cls.do_option_action,  # TODO
         }
 
     @classmethod
@@ -134,18 +169,87 @@ class Actions:
         if directions[kwargs["clean_key"]] % 2 != Draw.facing % 2:
             Draw.facing = directions[kwargs["clean_key"]]
 
+    @classmethod
+    def change_option_menu(cls, **kwargs):
+        if kwargs["clean_key"] in ["z", "\x1b[A"]:
+            Draw.option_number = (Draw.option_number - 1)
+        if kwargs["clean_key"] in ["s", "\x1b[B"]:
+            Draw.option_number = (Draw.option_number + 1)
+        Draw.option_number %= len(Draw.menu_options)
+        Draw.draw_options()
+
+    @classmethod
+    def do_option_action(cls, **kwargs):
+        option = tuple(Draw.menu_options.keys())[Draw.option_number]
+        func = Draw.menu_options[option]
+        if isinstance(func, types.FunctionType) and kwargs["clean_key"]=="\n":
+            if option=="Quit":
+                func(0, None)
+            else:
+                func()
+        elif isinstance(func, list):
+            print("\033[50;50H TOUCHED")
+            if kwargs["clean_key"] in ["q", "\x1b[C", "\n"]:
+                func[0] += 1
+            if kwargs["clean_key"] in ["d", "\x1b[D"]:
+                func[0] -= 1
+
+
+def game_restart(**kwargs):
+    Draw.menu = False
+    Draw.snake_pos = [(Draw.size // 2, Draw.size // 2)]
+    Draw.facing = 0  # 0 right, 1: up, 2: left 3: down
+    Draw.snake_long = 10
+    # back position -> Head
+    Draw.points = 0
+    Draw.draw_box()
+    Draw.set_a_apple()
+    Actions.set_action()
+
+
+def show_shortcuts():
+    pass
+
 
 class Draw:
     menu = False
     size = 32 + 2  # 2 pour les bordures
-    snake_head_pos = [size // 2, size // 2]
-    x: int = size // 2
-    y: int = size // 2
     facing = 0  # 0 right, 1: up, 2: left 3: down
     snake_long = 10
     # back position -> Head
     snake_pos = [(size // 2, size // 2)]
     random_pos = ()
+    points = 0
+    logo_menu = (
+        "███ █   █ ████ █  █ ████",
+        "█   ██  █ █  █ █ █  █   ",
+        "███ █ █ █ ████ ██   ███ ",
+        "  █ █  ██ █  █ █ █  █   ",
+        "███ █   █ █  █ █  █ ████",
+    )
+
+    @classmethod
+    def restart(cls, **kwargs):
+        cls.menu = False
+        cls.snake_pos = [(cls.size // 2, cls.size // 2)]
+        cls.facing = 0  # 0 right, 1: up, 2: left 3: down
+        cls.snake_long = 10
+        # back position -> Head
+        cls.points = 0
+        cls.draw_box()
+        cls.set_a_apple()
+
+    menu_options = {
+        # OPTION: [Curent_option(Default_option), [selectable options]]
+        "FPS": [0, [10, 15, 24, 30, 60, 120]],
+        "Speed": [1, [.01, .1, .3, .5, 1]],
+        "Size": [1, [16 + 2, 32 + 2, 64 + 2]],  # NEED TO RESTART
+        "Themes": [0, ["Normal", "Full", "Custom"]],
+        "Show Shortcut": show_shortcuts,
+        "Restart": game_restart,
+        "Quit": sigint_quit,
+    }
+    option_number = 0
 
     @classmethod
     def set_a_apple(cls):
@@ -162,8 +266,28 @@ class Draw:
                     print(f"\033[{cls.random_pos[1] + 1};{cls.random_pos[0] + 1}HX")
 
     @classmethod
+    def draw_options(cls):
+        for i in range(len(cls.menu_options.keys())):
+            if cls.option_number == i:
+                print(f"\033[33m\033[{i * 2 + 11};8H{tuple(cls.menu_options.keys())[i]}\033[0m")
+            else:
+                print(f"\033[{i * 2 + 11};8H{tuple(cls.menu_options.keys())[i]}")
+
+    @classmethod
     def show_menu(cls, **kwargs):
-        cls.menu = not cls.menu
+        if cls.menu:
+            cls.menu = False
+            Actions.set_action()
+            # print("\033[2J\033[1;1H")  # CLEAR SCREEN
+            cls.draw_box()
+            print(f"\033[{cls.random_pos[1] + 1};{cls.random_pos[0] + 1}HX")
+        else:
+            cls.menu = True
+            Actions.set_menu_action()
+            for i in range(len(cls.logo_menu)):
+                print(f"\033[{i + 5};5H{cls.logo_menu[i]}")
+            cls.option_number = 0
+            cls.draw_options()
         print(f"\033[35;40HMenu is {cls.menu} ")
 
     @classmethod
@@ -183,37 +307,6 @@ class Draw:
             if exit_event.is_set():
                 break
 
-            """
-            # SET CODE HERE: ne pas metre de code bloquant: code qui nécessite une action de l'utilisateur
-            # Affiche la tête du snake
-            print(f"\033[{cls.snake_head_pos[1]};{cls.snake_head_pos[0]}H{['←', '↑', '→', '↓'][cls.facing]}")
-
-            # Déplacement f(facing)
-            if cls.facing == 0:
-                cls.snake_head_pos[0] = cls.snake_head_pos[0] - 1
-            elif cls.facing == 1:
-                cls.snake_head_pos[1] = cls.snake_head_pos[1] - 1
-            elif cls.facing == 2:
-                cls.snake_head_pos[0] = cls.snake_head_pos[0] + 1
-            elif cls.facing == 3:
-                cls.snake_head_pos[1] = cls.snake_head_pos[1] + 1
-
-            if 1 < cls.snake_head_pos[1] <= cls.size - 1 and 1 < cls.snake_head_pos[0] <= cls.size - 1:
-                pass
-            else:
-                # Si bord et touché
-                print("GameOver")
-
-            # if cls.facing == 0:
-            #     cls.x = max(0, cls.x - 1)
-            # elif cls.facing == 1:
-            #     cls.y = max(0, cls.y - 1)
-            # elif cls.facing == 2:
-            #     cls.x = min(cls.size, cls.x + 1)
-            # elif cls.facing == 3:
-            #    cls.y = min(cls.size, cls.y + 1)
-            time.sleep(.1)
-            """
             if cls.menu:
                 pass
             else:
@@ -223,13 +316,13 @@ class Draw:
 
                 # Déplacement f(facing)
                 if cls.facing == 0:
-                    cls.snake_pos += [(cls.snake_pos[-1][0] - 1, cls.snake_pos[-1][1])]  # ls.snake_head_pos[0] - 1
+                    cls.snake_pos += [(cls.snake_pos[-1][0] - 1, cls.snake_pos[-1][1])]
                 elif cls.facing == 1:
-                    cls.snake_pos += [(cls.snake_pos[-1][0], cls.snake_pos[-1][1] - 1)]  # ls.snake_head_pos[0] - 1
+                    cls.snake_pos += [(cls.snake_pos[-1][0], cls.snake_pos[-1][1] - 1)]
                 elif cls.facing == 2:
-                    cls.snake_pos += [(cls.snake_pos[-1][0] + 1, cls.snake_pos[-1][1])]  # ls.snake_head_pos[0] - 1
+                    cls.snake_pos += [(cls.snake_pos[-1][0] + 1, cls.snake_pos[-1][1])]
                 elif cls.facing == 3:
-                    cls.snake_pos += [(cls.snake_pos[-1][0], cls.snake_pos[-1][1] + 1)]  # ls.snake_head_pos[0] - 1
+                    cls.snake_pos += [(cls.snake_pos[-1][0], cls.snake_pos[-1][1] + 1)]
 
                 if True:  # A remove Condition gameover
                     if 1 < cls.snake_pos[-1][0] <= cls.size - 1 and 1 < cls.snake_pos[-1][1] <= cls.size - 1:
@@ -238,21 +331,35 @@ class Draw:
                         # Si bord et touché
                         print("\33[3;35HGameOver")
                     if (cls.snake_pos[-1][0], cls.snake_pos[-1][1]) in cls.snake_pos[:-1]:
-                        # Verifie si il se touche la queue
+                        # Vérifier si il se touche la queue
                         # tuple((cls.snake_pos[i][0], cls.snake_pos[i][1]) for i in range(len(cls.snake_pos)-1)):
                         print("\33[3;46HGameOver")
                     else:
                         print("\33[3;46H        ")
-                if (cls.random_pos[0] + 1, cls.random_pos[1] + 1) == cls.snake_pos[-1]:
-                    cls.set_a_apple()
-                    cls.snake_long += 1
-                    print(f"\033[5;35H TOUCH2 ")
+                if True:  # Si la tête du serpent touche une pomme
+                    if (cls.random_pos[0] + 1, cls.random_pos[1] + 1) == cls.snake_pos[-1]:
+                        cls.set_a_apple()
+                        cls.snake_long += 1
+                        cls.points += 1
+                        print(f"\033[5;35H TOUCH2 ")
+                    else:
+                        print(f"\033[5;35H        ")
+
+                # Supprime le queue qui disparait
                 if len(cls.snake_pos) > cls.snake_long:
                     print(f"\033[{cls.snake_pos[0][1]};{cls.snake_pos[0][0]}H ")
                     cls.snake_pos.pop(0)
-                print(f"\033[1;35HSnake = {cls.snake_pos}")
-                print(f"\033[2;35HSnake = {cls.random_pos}")
-                time.sleep(.1)
+
+            if True:  # DEBUG VAR
+                print(f"\033[40;1HSnake = {cls.snake_pos}")
+                print(f"\033[2;35HRandom Apple= {cls.random_pos}")
+                print(f"\033[3;35HPoints= {cls.points}")
+                # TO DELETE
+                i = 0
+                for c, v in cls.menu_options.items():
+                    i += 1
+                    print(f"\033[{40 + i};40H{c}, {v}")
+            time.sleep(.1)
 
     # ---------------------------------------
     stopping: bool = False
@@ -380,18 +487,6 @@ class Nonblocking(object):
 
     def __exit__(self, *args):
         fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl)
-
-
-def sigint_quit(s, f):
-    exit_event.set()
-
-
-def clean_quit(errcode: int = 0):
-    exit_event.set()
-    print("Fin du programme")
-    Key.stop()
-    Draw.stop()
-    raise SystemExit(errcode)
 
 
 def main():

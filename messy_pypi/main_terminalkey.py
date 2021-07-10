@@ -195,10 +195,11 @@ class Key:
                 if input_key == "\033":
                     clean_key = "escape"
                 elif not re.search("\x1b\[<[0-9]{1,2};", input_key) is None:
+                    # With some terminals it possible to drag out of terminal, they setup negative number, do careful with that: can ["urxvt"], dont update out ["kitty"], update but not negative out of size ["xterm"]
                     escape_element = re.search("\x1b\[<[0-9]{1,2};", input_key).group(0)
                     if escape_element in mouse_state.keys() and \
-                            not re.search("\x1b\[<[0-9]{1,2};[0-9]+;[0-9]+[mM]", input_key) is None:
-                        regex = re.search('\x1b\[<[0-9]{1,2};([0-9]+);([0-9]+)([mM])', input_key)
+                            not re.search("\x1b\[<[0-9]{1,2};-?[0-9]+;-?[0-9]+[mM]", input_key) is None:
+                        regex = re.search('\x1b\[<[0-9]{1,2};(-?[0-9]+);(-?[0-9]+)([mM])', input_key)
                         mouse_pos = (int(regex.group(1)), int(regex.group(2)))
                         click_state = {"m": "up", "M": "down"}[regex.group(3)]
                     clean_key = mouse_state[escape_element]
