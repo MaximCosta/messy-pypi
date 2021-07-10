@@ -1,4 +1,3 @@
-from msvcrt import open_osfhandle
 import sys
 import os
 
@@ -10,6 +9,7 @@ if on_linux:
 else:
     import ctypes
     import msvcrt
+    from msvcrt import open_osfhandle
 import signal
 import threading
 import time
