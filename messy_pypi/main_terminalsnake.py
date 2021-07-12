@@ -20,21 +20,19 @@ Themes = {
 
 
 # TODO:
-# - GameOver
-# - Débogage
-# - Resize screen signal
 # - Windows Adaptations
 # - Cleanup
 
-#--- BUGS
+# --- BUGS
 # - Bug: Apple spawn inside snake
 # - Fix bug: redessiner la queue quand le menu s'enlève
 
-#--- NOT URGENT
+# --- NOT URGENT
 # - Keyboard Option
 # - CustomTheme
 # - Theme Head
 # - --help menu
+# - Save Config
 
 def sigint_quit(s, f):
     exit_event.set()
@@ -148,6 +146,34 @@ class Actions:
         }
 
     @classmethod
+    def change_option_dead(cls, **kwargs):
+        if kwargs["clean_key"] in ["z", "\x1b[A"]:
+            Draw.dead_option_number = (Draw.dead_option_number - 1)
+        if kwargs["clean_key"] in ["s", "\x1b[B"]:
+            Draw.dead_option_number = (Draw.dead_option_number + 1)
+        Draw.dead_option_number %= 2  # CAR y a 2 options Quit, Restart
+        Draw.draw_dead_options()
+
+    @classmethod
+    def set_dead_action(cls):
+        cls.dico_actions = {
+            "r": Draw.restart,  # restart
+            "escape": Draw.show_menu,  # restart
+            "z": cls.change_option_dead,
+            "\x1b[A": cls.change_option_dead,
+            "s": cls.change_option_dead,
+            "\x1b[B": cls.change_option_dead,
+            "\n": cls.do_dead_option_action,
+        }
+
+    @classmethod
+    def do_dead_option_action(cls, **kwargs):
+        if Draw.dead_option_number == 0:
+            Draw.restart()
+        if Draw.dead_option_number == 1:
+            sigint_quit(0, None)
+
+    @classmethod
     def set_menu_action(cls):
         cls.dico_actions = {
             "r": Draw.restart,
@@ -219,6 +245,7 @@ def game_restart(**kwargs):
     Draw.points = 0
     Draw.draw_box()
     Draw.set_a_apple()
+    Draw.dead = False
     Actions.set_action()
 
 
@@ -233,6 +260,7 @@ def quit_menu():
 class Draw:
     lock = False  # Pour éviter le double action sur la meme frame
     menu = False
+    dead = False
     size = 32 + 2  # 2 pour les bordures
     facing = 0  # 0 right, 1: up, 2: left 3: down
     snake_long = 10
@@ -257,6 +285,8 @@ class Draw:
         # back position -> Head
         cls.points = 0
         cls.draw_box()
+        cls.dead = False
+        Actions.set_action()
         cls.set_a_apple()
 
     @classmethod
@@ -281,15 +311,17 @@ class Draw:
         # "FPS": [0, [10, 15, 24, 30, 60, 120]],
         "Speed": [1, [.05, .1, .3, .5, 1]],
         "Size": [1, [16 + 2, 32 + 2, 64 + 2]],  # NEED TO RESTART
-        "Themes": [0, ["Normal", "Full", "Custom"]],
+        "Themes": [0, ["Normal", "Full"]],      #, "Custom"]],
         # "Show Shortcut": show_shortcuts,
+        "Continue": quit_menu,
         "Restart": game_restart,
         "Quit": sigint_quit,
-        "Continue": quit_menu,
     }
-    option_number = 0
-    speed = menu_options["Speed"][1][menu_options["Speed"][0]]
-    current_theme = menu_options["Themes"][1][menu_options["Themes"][0]]
+    option_number: int = 0
+    dead_option_number: int = 0
+    speed: float = menu_options["Speed"][1][menu_options["Speed"][0]]
+    current_theme: str = str(menu_options["Themes"][1][menu_options["Themes"][0]])
+    dead_options: tuple = ("Restart", "Quit")
 
     @classmethod
     def set_a_apple(cls):
@@ -329,9 +361,29 @@ class Draw:
                 Draw.speed = func[1][func[0]]
 
     @classmethod
+    def draw_dead_options(cls):
+        cls.logo_dead = (
+            "████ ████ █   █ ███  ████ █   █ ███ ███  ",
+            "█    █  █ ██ ██ █    █  █ █   █ █   █ █  ",
+            "█ ██ ████ █ █ █ ██   █  █  █ █  ██  ██   ",
+            "█  █ █  █ █   █ █    █  █  █ █  █   █ █  ",
+            "████ █  █ █   █ ███  ████   █   ███ █  █ ",
+        )
+        for j in range(len(cls.logo_dead)):
+            print(f"\033[{j + 5};5H{cls.logo_dead[j]}")
+        for i in range(2):
+            # Draw Gameover
+            # : ← {func[1][func[0]]}
+            if cls.dead_option_number == i:
+                message = f"\033[33m\033[{i * 2 + 11};8H{cls.dead_options[i]}\033[0m"
+            else:
+                message = f"\033[{i * 2 + 11};8H{cls.dead_options[i]}"
+            print(message)
+
+    @classmethod
     def draw_box(cls):
         print("\033[2J\033[1;1H")  # CLEAR SCREEN
-        print(f"\033[1;1H" +Themes[cls.current_theme][0] * cls.size)
+        print(f"\033[1;1H" + Themes[cls.current_theme][0] * cls.size)
         print(f"\033[{cls.size};1H" + Themes[cls.current_theme][0] * cls.size)
         for i in range(2, cls.size):
             print(f"\033[{i};1H{Themes[cls.current_theme][0]}")
@@ -343,6 +395,16 @@ class Draw:
             print(f"\033[{j};{i}H{Themes[cls.current_theme][3]}")
 
     @classmethod
+    def set_dead(cls):
+        # Set dead menu option
+        # Reset points
+        cls.dead = True
+        cls.draw_dead_options()
+        Actions.set_dead_action()
+
+        pass
+
+    @classmethod
     def _do_draw(cls):
         cls.draw_box()
         cls.set_a_apple()
@@ -350,7 +412,7 @@ class Draw:
             if exit_event.is_set():
                 break
 
-            if cls.menu:
+            if cls.menu or cls.dead:
                 pass
             else:
                 # SET CODE HERE: ne pas metre de code bloquant: code qui nécessite une action de l'utilisateur
@@ -369,31 +431,27 @@ class Draw:
 
                 if True:  # A remove Condition gameover
                     if 1 < cls.snake_pos[-1][0] <= cls.size - 1 and 1 < cls.snake_pos[-1][1] <= cls.size - 1:
-                        print("\33[3;35H        ")
+                        pass
                     else:
                         # Si bord et touché
-                        print("\33[3;35HGameOver")
+                        cls.set_dead()
                     if (cls.snake_pos[-1][0], cls.snake_pos[-1][1]) in cls.snake_pos[:-1]:
                         # Vérifier si il se touche la queue
                         # tuple((cls.snake_pos[i][0], cls.snake_pos[i][1]) for i in range(len(cls.snake_pos)-1)):
-                        print("\33[3;46HGameOver")
-                    else:
-                        print("\33[3;46H        ")
+                        cls.set_dead()
+
                 if True:  # Si la tête du serpent touche une pomme
                     if (cls.random_pos[0] + 1, cls.random_pos[1] + 1) == cls.snake_pos[-1]:
                         cls.set_a_apple()
                         cls.snake_long += 1
                         cls.points += 1
-                        print(f"\033[5;35H TOUCH2 ")
-                    else:
-                        print(f"\033[5;35H        ")
 
                 # Supprime le queue qui disparait
                 if len(cls.snake_pos) > cls.snake_long:
                     print(f"\033[{cls.snake_pos[0][1]};{cls.snake_pos[0][0]}H ")
                     cls.snake_pos.pop(0)
 
-            if True:  # DEBUG VAR
+            if debug:  # DEBUG VAR
                 # print(f"\033[40;1HSnake = {cls.snake_pos}")
                 print(f"\033[2;35HRandom Apple= {cls.random_pos}")
                 print(f"\033[3;35HPoints= {cls.points}")
