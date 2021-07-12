@@ -11,20 +11,30 @@ import types
 from select import select
 from random import randint
 
+# ["BORDURE", ["Snake directions", ,,,,,], "Apple", "Réactualise snake directions"]
+Themes = {
+    "Normal": ["\u2588", ['←', '↑', '→', '↓'], "X", "\u00B7"],
+    "Full": ["=", ["\u2588", "\u2588", "\u2588", "\u2588"], "\u2600", "?"],
+    "Custom": ["\u2588", ['←', '↑', '→', '↓'], "X", "\u00B7"],
+}
+
+
 # TODO:
 # - GameOver
-# - Menu
-# -? Mouse control menu
-# - Options
 # - Débogage
-# - Dot files
-# - Theme
-# - Fix bug qui fait que on peux revenir sur son chemin avec un lock
-# - Fix bug: redessiner la queue quand le menu s'enlève
 # - Resize screen signal
 # - Windows Adaptations
-# - FPS, SPEED
+# - Cleanup
 
+#--- BUGS
+# - Bug: Apple spawn inside snake
+# - Fix bug: redessiner la queue quand le menu s'enlève
+
+#--- NOT URGENT
+# - Keyboard Option
+# - CustomTheme
+# - Theme Head
+# - --help menu
 
 def sigint_quit(s, f):
     exit_event.set()
@@ -148,10 +158,10 @@ class Actions:
             "s": cls.change_option_menu,
             "\x1b[B": cls.change_option_menu,
             "\n": cls.do_option_action,
-            "q": cls.do_option_action,  # TODO
-            "\x1b[D": cls.do_option_action,  # TODO
-            "d": cls.do_option_action,  # TODO
-            "\x1b[C": cls.do_option_action,  # TODO
+            "q": cls.do_option_action,
+            "\x1b[D": cls.do_option_action,
+            "d": cls.do_option_action,
+            "\x1b[C": cls.do_option_action,
         }
 
     @classmethod
@@ -166,8 +176,10 @@ class Actions:
             "s": 3,
             "\x1b[B": 3,
         }
-        if directions[kwargs["clean_key"]] % 2 != Draw.facing % 2:
-            Draw.facing = directions[kwargs["clean_key"]]
+        if not Draw.lock:
+            if directions[kwargs["clean_key"]] % 2 != Draw.facing % 2:
+                Draw.facing = directions[kwargs["clean_key"]]
+                Draw.lock = True
 
     @classmethod
     def change_option_menu(cls, **kwargs):
@@ -182,17 +194,20 @@ class Actions:
     def do_option_action(cls, **kwargs):
         option = tuple(Draw.menu_options.keys())[Draw.option_number]
         func = Draw.menu_options[option]
-        if isinstance(func, types.FunctionType) and kwargs["clean_key"]=="\n":
-            if option=="Quit":
+        if isinstance(func, types.FunctionType) and kwargs["clean_key"] == "\n":
+            if option == "Quit":
                 func(0, None)
             else:
                 func()
         elif isinstance(func, list):
-            print("\033[50;50H TOUCHED")
             if kwargs["clean_key"] in ["q", "\x1b[C", "\n"]:
                 func[0] += 1
-            if kwargs["clean_key"] in ["d", "\x1b[D"]:
+            elif kwargs["clean_key"] in ["d", "\x1b[D"]:
                 func[0] -= 1
+            func[0] = func[0] % len(func[1])
+            # TODO Actualiser la valeur
+            # Avec FPS = func[1][func[0]
+            Draw.draw_options()
 
 
 def game_restart(**kwargs):
@@ -207,11 +222,16 @@ def game_restart(**kwargs):
     Actions.set_action()
 
 
-def show_shortcuts():
+def show_shortcuts():  # TODO ou a remove
     pass
 
 
+def quit_menu():
+    Draw.show_menu()
+
+
 class Draw:
+    lock = False  # Pour éviter le double action sur la meme frame
     menu = False
     size = 32 + 2  # 2 pour les bordures
     facing = 0  # 0 right, 1: up, 2: left 3: down
@@ -239,17 +259,37 @@ class Draw:
         cls.draw_box()
         cls.set_a_apple()
 
+    @classmethod
+    def show_menu(cls, **kwargs):
+        if cls.menu:
+            cls.menu = False
+            Actions.set_action()
+            # print("\033[2J\033[1;1H")  # CLEAR SCREEN
+            cls.draw_box()
+            print(f"\033[{cls.random_pos[1] + 1};{cls.random_pos[0] + 1}H{Themes[cls.current_theme][2]}")
+            cls.redraw_queue()
+        else:
+            cls.menu = True
+            Actions.set_menu_action()
+            for i in range(len(cls.logo_menu)):
+                print(f"\033[{i + 5};5H{cls.logo_menu[i]}")
+            cls.option_number = 0
+            cls.draw_options()
+
     menu_options = {
         # OPTION: [Curent_option(Default_option), [selectable options]]
-        "FPS": [0, [10, 15, 24, 30, 60, 120]],
-        "Speed": [1, [.01, .1, .3, .5, 1]],
+        # "FPS": [0, [10, 15, 24, 30, 60, 120]],
+        "Speed": [1, [.05, .1, .3, .5, 1]],
         "Size": [1, [16 + 2, 32 + 2, 64 + 2]],  # NEED TO RESTART
         "Themes": [0, ["Normal", "Full", "Custom"]],
-        "Show Shortcut": show_shortcuts,
+        # "Show Shortcut": show_shortcuts,
         "Restart": game_restart,
         "Quit": sigint_quit,
+        "Continue": quit_menu,
     }
     option_number = 0
+    speed = menu_options["Speed"][1][menu_options["Speed"][0]]
+    current_theme = menu_options["Themes"][1][menu_options["Themes"][0]]
 
     @classmethod
     def set_a_apple(cls):
@@ -263,41 +303,44 @@ class Draw:
                     current_point += 1
                 if current_point == pos_of_point:
                     cls.random_pos = (i, j)
-                    print(f"\033[{cls.random_pos[1] + 1};{cls.random_pos[0] + 1}HX")
+                    print(f"\033[{cls.random_pos[1] + 1};{cls.random_pos[0] + 1}H{Themes[cls.current_theme][2]}")
 
     @classmethod
     def draw_options(cls):
         for i in range(len(cls.menu_options.keys())):
+            # : ← {func[1][func[0]]} →
             if cls.option_number == i:
-                print(f"\033[33m\033[{i * 2 + 11};8H{tuple(cls.menu_options.keys())[i]}\033[0m")
+                message = f"\033[33m\033[{i * 2 + 11};8H{tuple(cls.menu_options.keys())[i]}\033[0m"
             else:
-                print(f"\033[{i * 2 + 11};8H{tuple(cls.menu_options.keys())[i]}")
+                message = f"\033[{i * 2 + 11};8H{tuple(cls.menu_options.keys())[i]}"
 
-    @classmethod
-    def show_menu(cls, **kwargs):
-        if cls.menu:
-            cls.menu = False
-            Actions.set_action()
-            # print("\033[2J\033[1;1H")  # CLEAR SCREEN
-            cls.draw_box()
-            print(f"\033[{cls.random_pos[1] + 1};{cls.random_pos[0] + 1}HX")
-        else:
-            cls.menu = True
-            Actions.set_menu_action()
-            for i in range(len(cls.logo_menu)):
-                print(f"\033[{i + 5};5H{cls.logo_menu[i]}")
-            cls.option_number = 0
-            cls.draw_options()
-        print(f"\033[35;40HMenu is {cls.menu} ")
+            option = tuple(Draw.menu_options.keys())[i]
+            func = Draw.menu_options[option]
+            # replace func[1] by menu_option
+            if isinstance(func, list):
+                message += f": ← {func[1][func[0]]} →    "
+            print(message)
+            if option == "Themes":
+                Draw.current_theme = func[1][func[0]]
+            if option == "Size":
+                Draw.size = func[1][func[0]]
+                # Restart
+            if option == "Speed":
+                Draw.speed = func[1][func[0]]
 
     @classmethod
     def draw_box(cls):
         print("\033[2J\033[1;1H")  # CLEAR SCREEN
-        print(f"\033[1;1H" + "\u2588" * cls.size)
-        print(f"\033[{cls.size};1H" + "\u2588" * cls.size)
+        print(f"\033[1;1H" +Themes[cls.current_theme][0] * cls.size)
+        print(f"\033[{cls.size};1H" + Themes[cls.current_theme][0] * cls.size)
         for i in range(2, cls.size):
-            print(f"\033[{i};1H\u2588")
-            print(f"\033[{i};{cls.size}H\u2588")
+            print(f"\033[{i};1H{Themes[cls.current_theme][0]}")
+            print(f"\033[{i};{cls.size}H{Themes[cls.current_theme][0]}")
+
+    @classmethod
+    def redraw_queue(cls):
+        for i, j in cls.snake_pos:
+            print(f"\033[{j};{i}H{Themes[cls.current_theme][3]}")
 
     @classmethod
     def _do_draw(cls):
@@ -312,7 +355,7 @@ class Draw:
             else:
                 # SET CODE HERE: ne pas metre de code bloquant: code qui nécessite une action de l'utilisateur
                 # Affiche la tête du snake
-                print(f"\033[{cls.snake_pos[-1][1]};{cls.snake_pos[-1][0]}H{['←', '↑', '→', '↓'][cls.facing]}")
+                print(f"\033[{cls.snake_pos[-1][1]};{cls.snake_pos[-1][0]}H{Themes[cls.current_theme][1][cls.facing]}")
 
                 # Déplacement f(facing)
                 if cls.facing == 0:
@@ -351,15 +394,12 @@ class Draw:
                     cls.snake_pos.pop(0)
 
             if True:  # DEBUG VAR
-                print(f"\033[40;1HSnake = {cls.snake_pos}")
+                # print(f"\033[40;1HSnake = {cls.snake_pos}")
                 print(f"\033[2;35HRandom Apple= {cls.random_pos}")
                 print(f"\033[3;35HPoints= {cls.points}")
-                # TO DELETE
-                i = 0
-                for c, v in cls.menu_options.items():
-                    i += 1
-                    print(f"\033[{40 + i};40H{c}, {v}")
-            time.sleep(.1)
+                print(f"\033[4;35H{cls.current_theme=}")
+            cls.lock = False
+            time.sleep(cls.speed)
 
     # ---------------------------------------
     stopping: bool = False

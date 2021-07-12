@@ -1,7 +1,12 @@
 import sys
 import os
+import signal
+import threading
+import time
+from select import select
+import re
 
-on_linux = not("win" in sys.platform)
+on_linux = not ("win" in sys.platform)
 if on_linux:
     import fcntl
     import termios
@@ -9,13 +14,6 @@ if on_linux:
 else:
     import ctypes
     import msvcrt
-    from msvcrt import open_osfhandle
-import signal
-import threading
-import time
-from select import select
-import re
-
 
 if on_linux:
     escape = {
@@ -70,7 +68,6 @@ else:
         "key48": "\x1b[A",
         "key50": "\x1b[B",
         "key4d": "\x1b[C",
-        "key4b": "\x1b[D",
         "key4b": "\x1b[D",
 
     }
@@ -159,7 +156,7 @@ class Actions:
         return (x1 - mouse_pos[0]) ** 2 + (y1 - mouse_pos[1]) ** 2 < rayon ** 2
 
     @classmethod
-    def pos_in_pos(cls, mouse_pos: tuple[int, int], x1: int, y1: int, rayon: int) -> bool:
+    def pos_in_pos(cls, mouse_pos: tuple[int, int], x1: int, y1: int) -> bool:
         return (x1 == mouse_pos[0]) and (y1 == mouse_pos[1])
 
 
@@ -278,6 +275,7 @@ class Key:
                 n, c = getch()
                 return "key%x" % n
             return c
+
         while not cls.stopping:
             if exit_event.is_set():
                 break
@@ -285,12 +283,14 @@ class Key:
             input_save = key
             if key in escape.keys():
                 key = escape[key]
-            if key=="\x03":
+            if key == "\x03":
                 sigint_quit(0, None)
             if key in Actions.dico_actions.keys():
                 Actions.dico_actions[key](clean_key=key, input_save=input_save)
             if debug:
                 print(f"{key=}, {input_save=}")
+
+
 class Draw:
     x: int = 0
 
@@ -324,6 +324,7 @@ class Draw:
             except RuntimeError:
                 pass
 
+
 if on_linux:
     class Raw(object):
         def __init__(self, stream):
@@ -351,7 +352,6 @@ if on_linux:
 
         def __exit__(self, *args):
             fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl)
-
 
 hide_cursor = "\033[?25l"  # * Hide terminal cursor
 show_cursor = "\033[?25h"  # * Show terminal cursor
