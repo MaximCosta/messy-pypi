@@ -76,3 +76,11 @@ N+P = Nouvelle Partie# TODO
 hjkl ←↓↑→ Enter = Navigate# TODO
 
 q = exit
+
+Todo:
+    Finir
+        Box
+            Acctions
+        TODO Things
+    Eporter tout en html et le faire visible pour le mettre sur pages 
+    Faire une meilleur verison de vim

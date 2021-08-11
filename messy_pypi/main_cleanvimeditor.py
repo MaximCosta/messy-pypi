@@ -517,27 +517,38 @@ class Infos:
         print(f"\033[{cls.size[1]-1};{12}H\033[47m\033[30m{alpha_repr}\033[0m")
 
     @classmethod
+    def set_data(cls,id , x,y,width, height): # TODO
+        cls.sp_dico[id].x = x
+        cls.sp_dico[id].y = y
+        cls.sp_dico[id].width = width
+        cls.sp_dico[id].height = height 
+
+    @classmethod
     def view(cls):
         # ------------------ vsp and hsp
         vertical_windows = 0  #  | | 
         horizontal_windows = 0  # -_
         for i in range(0,2):  # Si box 0 ou 1 est visible 
             if cls.sp_alpha & 2**i != 0:
+                cls.set_data(2**i,1,1,1,1) # TODO
                 vertical_windows += 1
         if cls.sp_alpha/3 > 1.0:  # Si une des box [2-5] ext visible
             vertical_windows +=1
             if cls.sp_alpha & 2**5:  # Si box 5 est visible
+                print("\033["+str(i+9)+";4H"+cls.sp_dico[2**5].name)
                 horizontal_windows = 1
             else:
                 for i in range(2, 5):
                     if cls.sp_alpha & 2**i:  # Si box [2-4] est visible
+                        print("\033["+str(i+8)+";4H"+cls.sp_dico[2**i].name)
                         horizontal_windows += 1
+        print(f"\033[{cls.size[1]};1HBox : {str(cls.sp_dico)}")
         # ------------------------ view
         for border in range(1,vertical_windows):
             for i in range(cls.size[1]-1): # Pour tout la hauteur
                 print(f"\033[{i};{cls.size[0]//vertical_windows*border}H\033[47m\033[30m|\033[0m")
         for border in range(1,horizontal_windows):
-            for i in range(cls.size[0]//vertical_windows*(vertical_windows-1)+1,cls.size[0]+1): # Pour tout la longeur
+            for i in range(cls.size[0]//vertical_windows*(vertical_windows-1)+1,cls.size[0]+1): # For longeur
                 print(f"\033[{cls.size[1]//horizontal_windows*border};{i}H\033[47m\033[30m-\033[0m")
 
 
