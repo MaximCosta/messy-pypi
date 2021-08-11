@@ -309,7 +309,7 @@ class Draw:
     menu_options = {
         # OPTION: [Curent_option(Default_option), [selectable options]]
         # "FPS": [0, [10, 15, 24, 30, 60, 120]],
-        "Speed": [1, [.05, .1, .3, .5, 1]],
+        "Speed": [1, [.03, .05, .1, .3, .5, 1]],
         "Size": [1, [16 + 2, 32 + 2, 64 + 2]],  # NEED TO RESTART
         "Themes": [0, ["Normal", "Full"]],      #, "Custom"]],
         # "Show Shortcut": show_shortcuts,

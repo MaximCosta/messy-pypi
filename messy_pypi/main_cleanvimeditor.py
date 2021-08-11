@@ -1,16 +1,20 @@
-import sys
+#!/usr/bin/env python
+# https://stackoverflow.com/questions/13207678/whats-the-simplest-way-of-detecting-keyboard-input-in-a-script-from-the-terminal
+
+import re
 import os
+import sys
+import time
+import math
 import signal
 import threading
-import time
 from select import select
-import re
 
 on_linux = not ("win" in sys.platform)
 if on_linux:
+    import tty
     import fcntl
     import termios
-    import tty
 else:
     import ctypes
     import msvcrt
@@ -69,8 +73,8 @@ else:
         "key50": "\x1b[B",
         "key4d": "\x1b[C",
         "key4b": "\x1b[D",
-
     }
+
 mouse_state = {
     # Changer le regex si supérieur a la key  \033[<100;: passer le {1,2} à {1,3}ou+
     # mouse_.._click
@@ -119,25 +123,69 @@ mouse_state = {
     "\033[<89;": "mouse_scroll_ctrl_down",
 }
 
+hide_cursor = "\033[?25l"  # * Hide terminal cursor
+show_cursor = "\033[?25h"  # * Show terminal cursor
+alt_screen = "\033[?1049h"  # * Switch to alternate screen
+normal_screen = "\033[?1049l"  # * Switch to normal screen
+clear = "\033[2J\033[0;0f"  # * Clear screen and set cursor to position 0,0
+mouse_on = "\033[?1002h\033[?1015h\033[?1006h"  # * Enable reporting of mouse position on click and release
+mouse_off = "\033[?1002l"  # * Disable mouse reporting
+mouse_direct_on = "\033[?1003h"  # * Enable reporting of mouse position at any movement
+mouse_direct_off = "\033[?1003l"  # * Disable direct mouse reporting
+
 
 class Actions:
     # mouse_pos=mouse_pos,             click_state=click_state, clean_key=clean_key             ,input_save=input_save
     # Pos mouse type: (x, y), up or down            , key du type: escape ou mouse_..., key du type: \033[..
-
-    # If
     dico_actions = {}
 
     @classmethod
     def set_action(cls):
         cls.dico_actions = {
-            "z": cls.avancer,
-            "mouse_left_click": cls.left_click
+            "m": cls.change_args,
+            "c": cls.change_args,
+            "t": cls.change_args,
+            "i": cls.change_args,
+            "a": cls.change_args,
+            "v": cls.change_args,
+            "s": cls.change_opts,
+            "d": cls.change_opts,
+            "f": cls.change_opts,
+            "e": cls.export,
+            "backspace": cls.delete,
+            "q": cls.exit,
         }
 
     @classmethod
-    def avancer(cls, **kwargs):
-        Draw.x += 1
-        print("avancer")
+    def export(cls, **kwargs):
+        pass
+
+    @classmethod
+    def delete(cls, **kwargs):
+        pass
+
+    @classmethod
+    def exit(cls, **kwargs):
+        Infos.sig_quit(None, None)
+
+    @classmethod
+    def change_args(cls, **kwargs):
+        change_data = Infos.dico_name_id[kwargs["clean_key"]]
+        # Infos.sp_alpha 
+        if Infos.sp_alpha & 2**change_data != 0:
+            Infos.sp_alpha -= 2**change_data
+        else:
+            Infos.sp_alpha += 2**change_data
+        Infos.reload()
+
+    @classmethod
+    def change_opts(cls, **kwargs):
+        change_data = Infos.dico_opts_id[kwargs["clean_key"]]
+        if Infos.opts_alpha & 2**change_data != 0:
+            Infos.opts_alpha -= 2**change_data
+        else:
+            Infos.opts_alpha += 2**change_data
+        Infos.info_footer()
 
     @classmethod
     def left_click(cls, **kwargs):
@@ -255,11 +303,10 @@ class Key:
                     Actions.dico_actions[clean_key](clean_key=clean_key, input_save=input_save)
             if debug:
                 print(f"{clean_key=},\t {mouse_pos=},\t {click_state=},\t {input_save=}")
-        clean_quit()
+        Infos.sig_quit(None, None)
 
     @classmethod
     def _win_get_key(cls):
-
         def getch():
             n = ord(ctypes.c_char(msvcrt.getch()).value)
             try:
@@ -300,8 +347,7 @@ class Draw:
             if exit_event.is_set():
                 break
             # SET CODE HERE: ne pas metre de code bloquant: code qui nécessite une action de l'utilisateur
-            print("Hello")
-            time.sleep(1)
+            
 
     # ---------------------------------------
     stopping: bool = False
@@ -364,47 +410,169 @@ mouse_direct_on = "\033[?1003h"  # * Enable reporting of mouse position at any m
 mouse_direct_off = "\033[?1003l"  # * Disable direct mouse reporting
 
 
-def sigint_quit(s, f):
-    exit_event.set()
+class Box:
+    def __init__(self, initial, name, width=30, height=20, min_width=30, min_height=30, max_width=100, max_height=100):
+        self.initial = initial 
+        self.name = name 
+        self.x = 0
+        self.y = 0
+        self.width = width
+        self.height = height
+        self.min_width = min_width
+        self.min_height = min_height
+        self.max_width = max_width
+        self.max_height = max_height
+        self.visible = True
+    def get_box_info():
+        return (self.width)
+    def __repr__(self):
+        if self.visible:
+            return f"<\033[33m{self.name}, {self.width}x{self.height}\033[0m>"
+        return f"<\033[31m{self.name}, {self.width}x{self.height}\033[0m>"
+        
+
+class Infos:
+    size = os.get_terminal_size()
+    min_size = (30, 20)
+    sp_alpha = 1+2+8+16 # 1 = M, 2=C, 4=T, 8=I, 16=A, 32=V
+    #          0 1 2 3 4  5
+    opts_alpha = 1+2+4  # 1 = math, 2=Dark, 4=css
+
+    sp_dico = {
+        1: Box("M", "Matière"), 
+        2: Box("C", "Cours"),
+        4: Box("T", "Toc"), 
+        8: Box("I", "Infos"), 
+        16: Box("A", "Attributes"),
+        32: Box("V", "Visual")
+    }
+    Mode = "Normal"
+    dico_name_id = {
+        "m": 0,
+        "c": 1,
+        "t": 2,
+        "i": 3,
+        "a": 4,
+        "v": 5
+    }
+    dico_opts_id = {
+        "s": 0,
+        "d": 1,
+        "f": 2
+    }
+
+    # Is call at every time terminal is resized
+    @classmethod
+    def sig_resize_term(cls, s=None, f=None):
+        cls.reload()
+
+    @classmethod
+    def sig_quit(cls, s, f):
+        cls.clear()
+        exit_event.set()
+        print(show_cursor, mouse_off, mouse_direct_off)  # normal_screen
+        print("Fin du programme vim editor")
+        Key.stop()
+        Draw.stop()
+        try:
+            exit(0)
+        except:
+            pass
+        # raise SystemExit(0)
+        #cls.clear()
+        #exit(0)
+
+    @classmethod
+    def reload(cls):
+        cls.size = os.get_terminal_size()
+        cls.clear()
+        cls.footer()
+        cls.view()
+
+    @classmethod
+    def footer(cls):
+        print(f"\033[{cls.size[1]-1};1H\033[47m{' '*int(cls.size[0])}\033[0m")
+        cls.info_footer()
+
+    @classmethod
+    def info_footer(cls):
+        alpha_repr = ""
+        for i in range(6):
+            if cls.sp_alpha & 2**i != 0:
+                alpha_repr += cls.sp_dico[2**i].initial
+            else:
+                alpha_repr += "-"
+        print(f"\033[{cls.size[1]-1};{3}H\033[47m\033[30m{alpha_repr}\033[0m")
+
+        cls.info_opts()
+
+    @classmethod
+    def info_opts(cls):
+        alpha_repr = ""
+        for i in cls.dico_opts_id.keys():
+            if cls.opts_alpha & 2**cls.dico_opts_id[i] != 0:
+                alpha_repr += i 
+            else:
+                alpha_repr += "-"
+        print(f"\033[{cls.size[1]-1};{12}H\033[47m\033[30m{alpha_repr}\033[0m")
+
+    @classmethod
+    def view(cls):
+        # ------------------ vsp and hsp
+        vertical_windows = 0  #  | | 
+        horizontal_windows = 0  # -_
+        for i in range(0,2):  # Si box 0 ou 1 est visible 
+            if cls.sp_alpha & 2**i != 0:
+                vertical_windows += 1
+        if cls.sp_alpha/3 > 1.0:  # Si une des box [2-5] ext visible
+            vertical_windows +=1
+            if cls.sp_alpha & 2**5:  # Si box 5 est visible
+                horizontal_windows = 1
+            else:
+                for i in range(2, 5):
+                    if cls.sp_alpha & 2**i:  # Si box [2-4] est visible
+                        horizontal_windows += 1
+        # ------------------------ view
+        for border in range(1,vertical_windows):
+            for i in range(cls.size[1]-1): # Pour tout la hauteur
+                print(f"\033[{i};{cls.size[0]//vertical_windows*border}H\033[47m\033[30m|\033[0m")
+        for border in range(1,horizontal_windows):
+            for i in range(cls.size[0]//vertical_windows*(vertical_windows-1)+1,cls.size[0]+1): # Pour tout la longeur
+                print(f"\033[{cls.size[1]//horizontal_windows*border};{i}H\033[47m\033[30m-\033[0m")
 
 
-def clean_quit(errcode: int = 0):
-    exit_event.set()
-    print(show_cursor, mouse_off, mouse_direct_off)  # normal_screen
-    print("Fin du programme")
-    Key.stop()
-    Draw.stop()
-    raise SystemExit(errcode)
+
+            
 
 
-# config
-mouse = True
-
+    @classmethod
+    def clear(cls):
+        sys.stdout.write("\033[2J\033[1;1H")
 
 def main():
-    # https://blog.miguelgrinberg.com/post/how-to-kill-a-python-thread
     global exit_event
     exit_event = threading.Event()
 
     if on_linux:
         # Signals Events
-        signal.signal(signal.SIGINT, sigint_quit)
+        signal.signal(signal.SIGINT, Infos.sig_quit)
+        # SIGNAL Resize terminal
+        signal.signal(signal.SIGWINCH, Infos.sig_resize_term)
     # Define Initial Actions:
     Actions.set_action()
     if on_linux:  # No mouse terminal on windows :(
         # Set config
-        if mouse:
-            print(mouse_on)
+        print(mouse_on)
 
     # Start Program
     def run():
+        Infos.reload()
         Key.start()
         Draw.start()
 
     run()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     if "--debug" in sys.argv:
         debug = True
     else:
