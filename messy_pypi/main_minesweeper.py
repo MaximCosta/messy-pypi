@@ -233,3 +233,7 @@ class Grid:
 
     def mark_mine(self, x, y):
         self.cells[y][x].marked = True
+
+
+if __name__ == "__main__":
+    Main.start()

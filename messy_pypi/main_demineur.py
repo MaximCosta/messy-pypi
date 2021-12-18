@@ -3,14 +3,8 @@ from main_terminalFunctions import print_char, clear, terminal_size, message_pag
 from random import randint
 
 
-def message_config_demineur():
-    mines = int(input("mines : "))
-    size = int(input("size : "))
-
-
-def demineur():
+def demineur(size: int = 10):
     game_open = True
-    size = 10
     drapeau_map = [
         [
             False for j in range(size)
@@ -156,3 +150,15 @@ def demineur():
                     drapeau_map[x][y] = not drapeau_map[x][y]
                 # DrawChar((TerminalSize("Y")//2), 10, "Y")
             # ⓪①②③④⑤⑥⑦⑧ ⓵⓶⓷⓸⓹⓺⓻⓼⓽⓾
+
+if __name__ == "__main__":
+    import sys
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print("Affichier le message d'aide: (Celui ci)")
+        print("\tdemineur --help")
+        print("Jouer:")
+        print("\tdemineur [size]")
+    elif len(sys.argv) > 1 and sys.argv[1].isdigit():
+        demineur(int(sys.argv[1]))
+    else:
+        demineur()
