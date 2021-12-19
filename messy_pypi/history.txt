@@ -1,0 +1,9 @@
+helol
+help
+help me
+help
+ls
+for i in {1..10}; echo $i; done
+
+for i in {1..10}; echo $i
+

@@ -145,3 +145,8 @@ def getKey(debug: bool = False) -> str:
 
 def get_key_bytes(debug: bool = False) -> str:
     return getKey(debug=debug).encode()
+
+
+if __name__ == "__main__":
+    while 1:
+        print(get_key_bytes(debug = True))

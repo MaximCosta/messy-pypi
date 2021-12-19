@@ -6,7 +6,8 @@ import os
 helpmenu = """
 --help: Affiche ceci\n
 --gui: Affiche une interface graphique avec GTK3
---cli: Affiche une interface en ligne de commande
+--cli: En ligne de commande
+--tli: Affiche une interface en ligne de commande
 
 """
 
@@ -15,6 +16,8 @@ def launch():
     print("---")
     print("1: demineur terminal")
     print("2: conter le nombre de lignes")
+    print("3: graphical demineur")
+    print("4: terminal snake")
     print("---")
     menu = input("Menu: ")
     # TODO match
@@ -43,6 +46,15 @@ def launch():
                       "\t Pour être plus précis: (.py$|.md$|.png$|.txt$|LICENCE|.json$)")
                 print("py$ md$\t", count_number_of_lines_in_folder("../", "(.py$|.md$)"))
                 print("py$\t", count_number_of_lines_in_folder("../", ".py$"))
+    if menu == "3":
+        import main_minesweeper
+        import os
+        os.chdir("./resources")
+        main_minesweeper.Main.start()
+    if menu == "4":
+        import main_terminalsnake
+        debug = False
+        main_terminalsnake.main()
 
 
 def clilaunch():

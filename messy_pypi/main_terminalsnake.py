@@ -451,7 +451,7 @@ class Draw:
                     print(f"\033[{cls.snake_pos[0][1]};{cls.snake_pos[0][0]}H ")
                     cls.snake_pos.pop(0)
 
-            if debug:  # DEBUG VAR
+            if "--debug" in sys.argv:  # DEBUG VAR
                 # print(f"\033[40;1HSnake = {cls.snake_pos}")
                 print(f"\033[2;35HRandom Apple= {cls.random_pos}")
                 print(f"\033[3;35HPoints= {cls.points}")
@@ -553,8 +553,6 @@ class Key:
 
             if clean_key in Actions.dico_actions.keys():
                 Actions.dico_actions[clean_key](clean_key=clean_key, input_save=input_save)
-            if debug:
-                print(f"{clean_key=},\t {mouse_pos=},\t {click_state=},\t {input_save=}")
         clean_quit()
 
 
@@ -588,6 +586,13 @@ class Nonblocking(object):
 
 
 def main():
+    if "--debug" in sys.argv:
+        debug = True
+    else:
+        debug = False
+    if "--help" in sys.argv:
+        print("--debug : affiche le arguments des keys")
+        print("--help : affiche cd message")
     # https://blog.miguelgrinberg.com/post/how-to-kill-a-python-thread
     global exit_event
     exit_event = threading.Event()
@@ -607,11 +612,4 @@ def main():
 
 
 if __name__ == "__main__":
-    if "--debug" in sys.argv:
-        debug = True
-    else:
-        debug = False
-    if "--help" in sys.argv:
-        print("--debug : affiche le arguments des keys")
-        print("--help : affiche cd message")
     main()
