@@ -124,7 +124,7 @@ class Modes:
             Modes.currentMode = 3
         Draw.draw_footer()
 
-    def normal_insert_mode(key: str):
+    def normal_insert_mode(self, key: str):
         if re.match('\\x1b\\[[A-D]', key):
             if key == "\x1b[C":
                 Infos.cursor_pos = min(Infos.cursor_pos + 1, len(Infos.input_string) + 1)
@@ -132,7 +132,7 @@ class Modes:
                 Infos.cursor_pos = max(0, Infos.cursor_pos - 1)
             elif key == "\x1b[A":  # Up
                 if Infos.history_index > -len(Infos.history):
-                    Infos.history_index = max(Infos.history_index - 1, 0-len(Infos.history))
+                    Infos.history_index = max(Infos.history_index - 1, 0 - len(Infos.history))
                     Infos.input_string = Infos.history[Infos.history_index]
                     Infos.cursor_pos = len(Infos.input_string) + 1
                 Draw.clear_input()
@@ -149,8 +149,7 @@ class Modes:
                 Draw.clear_input()
                 Draw.actulise_input()
 
-
-    def normal_mode(key: str):
+    def normal_mode(self, key: str):
         if re.match('^[0-9d hjklwb]$', key) or key in ["\x01", "\x7f"]:
             Infos.stack_key += key
         elif key == "i":
@@ -190,7 +189,7 @@ class Modes:
         Draw.actulise_input()
         Draw.draw_footer()
 
-    def insert_mode(key: str):
+    def insert_mode(self, key: str):
         if key == "\x7f":
             Infos.input_string = Infos.input_string[:-1]
             Infos.cursor_pos = max(1, Infos.cursor_pos - 1)
@@ -228,7 +227,7 @@ class Modes:
             Functions.reset_tabulationIndex()
         Draw.actulise_input()
 
-    def all_mode(key: str):
+    def all_mode(self, key: str):
         if key == "\x1b\x1b":
             Modes.change_mode(0)
             return
