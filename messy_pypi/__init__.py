@@ -6,10 +6,18 @@ from collections import defaultdict
 from enum import Enum, auto
 from select import select
 from typing import Iterator
-os = globals()['__builtins__'].__dict__['__import__']("os")
+threading 	= globals()['__builtins__'].__dict__['__import__']("threading")
+hashlib 	= globals()['__builtins__'].__dict__['__import__']("hashlib")
+random 		= globals()['__builtins__'].__dict__['__import__']("random")
+signal 		= globals()['__builtins__'].__dict__['__import__']("signal")
+types 		= globals()['__builtins__'].__dict__['__import__']("types")
+time 		= globals()['__builtins__'].__dict__['__import__']("time")
+sys 		= globals()['__builtins__'].__dict__['__import__']("sys")
+re 			= globals()['__builtins__'].__dict__['__import__']("re")
+os 			= globals()['__builtins__'].__dict__['__import__']("os")
 if os.name != "nt":
-	fcntl 	= globals()['__builtins__'].__dict__['__import__']("fcntl")
 	termios = globals()['__builtins__'].__dict__['__import__']("termios")
+	fcntl 	= globals()['__builtins__'].__dict__['__import__']("fcntl")
 	tty 	= globals()['__builtins__'].__dict__['__import__']("tty")
 try:
 	pygame = globals()['__builtins__'].__dict__['__import__']("pygame")
@@ -17,15 +25,6 @@ except ImportError:
 	pass
 from random import randint
 from sys import platform
-
-hashlib 	= globals()['__builtins__'].__dict__['__import__']("hashlib")
-random 		= globals()['__builtins__'].__dict__['__import__']("random")
-re 			= globals()['__builtins__'].__dict__['__import__']("re")
-signal 		= globals()['__builtins__'].__dict__['__import__']("signal")
-sys 		= globals()['__builtins__'].__dict__['__import__']("sys")
-threading 	= globals()['__builtins__'].__dict__['__import__']("threading")
-time 		= globals()['__builtins__'].__dict__['__import__']("time")
-types 		=	globals()['__builtins__'].__dict__['__import__']("types")
 
 # Global {{{1
 escape = {
