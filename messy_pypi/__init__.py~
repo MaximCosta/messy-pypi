@@ -10,7 +10,6 @@ import os
 if os.name != "nt":
     import fcntl
     import termios
-    import tty
 import hashlib
 from os import get_terminal_size
 try:
@@ -26,6 +25,7 @@ import sys
 from sys import platform
 import threading
 import time
+import tty
 import types
 # Global {{{1
 escape = {
