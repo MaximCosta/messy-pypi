@@ -37,35 +37,6 @@ Maxio && ArkanYota
 
 ## Installer en tant que app
 
-Pour les utilisateurs Linux seleuement :
+Pour les utilisateurs Linux seleuement:
 Possibilité exécuter le Makefile :warning: seulement si vous savez ce que sa fait \
-```make ...```
-
-## TODO
-
-### ArkanYota
-- :check: Demineur
-- Snake
-- printColor
-- Insert https://github.com/ARKANYOTA/ImageEnPoints
-- GameMakerTerminal
-- Tri par insertion avec recherche dichotomique
-- Recherche dichotomique dans JSON
-- Tri un base de donnée de façon dichotomique (potentiellement avec sort()) 
-- App launcher for use app functions `app_lanuch.py` ->  Add interface graphique 
-- Reader of readme terminal
-- Tableau dans le terminal
-- Shell dans le terminal: basée sur vim
-- autocompletion, with /bin files
-
-### Maxio
-- Minesweeper (pygame)
-- Tetris (pygame)
-- duplicateFile	
-- CustomElement
-- messy
-
-### Nous 2
-
-- Translate for all. Francais anglais
-- Documentation
+```make install```

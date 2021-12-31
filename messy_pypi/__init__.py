@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # vim: set sw=4 sts=4 et fdm=marker:
 from __future__ import print_function, annotations
+
 from collections import defaultdict
 from enum import Enum, auto
 from select import select
@@ -9,7 +10,10 @@ import fcntl
 import hashlib
 import os
 from os import get_terminal_size
-import pygame
+try:
+    import pygame
+except ImportError:
+    pass
 import random
 from random import randint
 import re
