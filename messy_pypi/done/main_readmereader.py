@@ -1,3 +1,4 @@
+from collections import deque  # Implement Mathematiques Stacks
 # from main_terminalFunctions import
 from os import get_terminal_size
 from main_terminalGetKey import getKey

@@ -3,18 +3,21 @@
 from __future__ import print_function, annotations
 from collections import defaultdict
 from enum import Enum, auto
-from main_terminalFunctions import print_char, clear, terminal_size, message_page_trop_petite
 from main_terminalGetKey import getKey
 from select import select
 from typing import Iterator
 import fcntl
 import hashlib
 import os
+from os import get_terminal_size
 import pygame
 import random
 from random import randint
+import re
+from re import search
 import signal
 import sys
+from sys import platform
 import termios
 import threading
 import time
@@ -116,6 +119,177 @@ class Nonblocking(object):
         fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl | os.O_NONBLOCK)
     def __exit__(self, *args):
         fcntl.fcntl(self.fd, fcntl.F_SETFL, self.orig_fl)
+def print_char(x: int, y: int, char: str) -> None:
+    """
+    x: >
+    y: \\/
+    """
+    print(f"\033[{y};{x}H{char}")
+def clear() -> None:
+    # os.system("cls||clear")
+    if os.name == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
+def terminal_size(item: str = None) -> (tuple[int, int] or int):
+    """
+    X: >
+    Y: \\/
+    """
+    size = os.get_terminal_size()
+    if item is None:
+        return size[0], size[1]
+    elif item == "X":
+        return size[0]
+    elif item == "Y":
+        return size[1]
+def message_page_trop_petite(sizex, sizey) -> bool:
+    """
+    sizex, sizey: int
+    """
+    if sizex > terminal_size("X") or sizey > terminal_size("Y"):
+        print("Trop petit")
+        time.sleep(.50)
+        return True
+    return False
+def terminal_dico(table, name_bar=["name", "ligne"]):
+    len_of_each_elements = [0]*len(name_bar)
+    for i in range(len(len_of_each_elements)):
+        for j in range(len(table)):
+            len_of_each_elements[i] = max(len_of_each_elements[i], len(str(list(table.items())[j][i])))
+    for i in table:
+        print(str(i).center(len_of_each_elements[0]) + " | "+ str(table[i]).center(len_of_each_elements[1]))
+def getKey(debug: bool = False) -> str:
+    """
+    Warning: Ne renvoie pas la même valeur entre Windows et Linux/MacOs
+    Warning2: Sur Linux/MacOs, Il faut presser 2 foix le button Echap pour que il soit effectuer
+    Pause le terminal jusqu'a la rentrer d'un input
+    """
+    if platform[:3] == 'win':
+        __keydict = {
+            0x3b: 'f1',
+            0x3c: 'f2',
+            0x3d: 'f3',
+            0x3e: 'f4',
+            0x3f: 'f5',
+            0x40: 'f6',
+            0x41: 'f7',
+            0x42: 'f8',
+            0x43: 'f9',
+            0x44: 'f10',
+            0x68: 'altf1',
+            0x69: 'altf2',
+            0x6a: 'altf3',
+            0x6b: 'altf4',
+            0x6c: 'altf5',
+            0x6d: 'altf6',
+            0x6e: 'altf7',
+            0x6f: 'altf8',
+            0x70: 'altf9',
+            0x71: 'altf10',
+            0x5e: 'ctrlf1',
+            0x5f: 'ctrlf2',
+            0x60: 'ctrlf3',
+            0x61: 'ctrlf4',
+            0x62: 'ctrlf5',
+            0x63: 'ctrlf6',
+            0x64: 'ctrlf7',
+            0x65: 'ctrlf8',
+            0x66: 'ctrlf9',
+            0x67: 'ctrlf10',
+            0x54: 'shiftf1',
+            0x55: 'shiftf2',
+            0x56: 'shiftf3',
+            0x57: 'shiftf4',
+            0x58: 'shiftf5',
+            0x59: 'shiftf6',
+            0x5a: 'shiftf7',
+            0x5b: 'shiftf8',
+            0x5c: 'shiftf9',
+            0x5d: 'shiftf10',
+            0x52: 'ins',
+            0x53: 'del',
+            0x4f: 'end',
+            0x50: 'down',
+            0x51: 'pgdn',
+            0x4b: 'left',
+            0x4d: 'right',
+            0x47: 'home',
+            0x48: 'up',
+            0x49: 'pgup',
+            0xa2: 'altins',
+            0xa3: 'altdel',
+            0x9f: 'altend',
+            0xa0: 'altdown',
+            0xa1: 'altpgdn',
+            0x9b: 'altleft',
+            0x9d: 'altright',
+            0x97: 'althome',
+            0x98: 'altup',
+            0x99: 'altpgup',
+            0x92: 'ctrlins',
+            0x93: 'ctrldel',
+            0x75: 'ctrlend',
+            0x91: 'ctrldown',
+            0x76: 'ctrlpgdn',
+            0x73: 'ctrlleft',
+            0x74: 'ctrlright',
+            0x77: 'ctrlhome',
+            0x8d: 'ctrlup',
+            0x84: 'ctrlpgup',
+            3: 'ctrl2'
+        }
+        import ctypes
+        import msvcrt
+        def getch():
+            n = ord(ctypes.c_char(msvcrt.getch()).value)
+            try:
+                c = chr(n)
+            except:
+                c = '\0'
+            return n, c
+        def getkey():
+            n, c = getch()
+            # 0xE0 is 'grey' keys.  change this if you don't like it, but I don't care what color the key is.  IMHO it just confuses the end-user if they need to know.
+            if n == 0 or n == 0xE0:
+                n, c = getch()
+                if n in __keydict:
+                    return __keydict[n]
+                return "key%x" % n
+            return c
+    elif platform[:3] == 'lin' or platform[:3] == 'dar':
+        import tty
+        import termios
+        from sys import stdin
+        def getch():
+            fd = stdin.fileno()
+            old_settings = termios.tcgetattr(fd)
+            try:
+                tty.setraw(stdin.fileno())
+                ch = stdin.read(1)
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+            return ch
+        def getkey():
+            getchar = getch
+            c1 = getchar()
+            if ord(c1) != 0x1b:
+                return c1
+            c2 = getchar()
+            if ord(c2) != 0x5b:
+                return c1 + c2
+            c3 = getchar()
+            if ord(c3) != 0x33:
+                return c1 + c2 + c3
+            c4 = getchar()
+            return c1 + c2 + c3 + c4
+    key = getkey()
+    if debug and key == "\x03":
+        exit()
+    else:
+        return key
+def get_key_bytes(debug: bool = False) -> str:
+    return getKey(debug=debug).encode()
 # All {{{1
 # Launch and import {{{2
 # COMPRESSINT {{{3
@@ -134,7 +308,7 @@ class CompressInt:
     def randomnombre(self, lenNb):
         # Entree: lenNb: int
         # Sortie: str
-        # Renvoi un nombre de longeur `lenNb` 
+        # Renvoi un nombre de longeur `lenNb`
         stringNb = ""
         for _ in range(lenNb):
             stringNb += str(random.randint(0, 9))
@@ -711,7 +885,7 @@ class SnakeDraw:
         # "FPS": [0, [10, 15, 24, 30, 60, 120]],
         "Speed": [1, [.03, .05, .1, .3, .5, 1]],
         "Size": [1, [16 + 2, 32 + 2, 64 + 2]],  # NEED TO RESTART
-        "Themes": [0, ["Normal", "Full"]],      #, "Custom"]],
+        "Themes": [0, ["Normal", "Full"]],  #, "Custom"]],
         # "Show Shortcut": show_shortcuts,
         "Continue": quit_menu,
         "Restart": game_restart,
@@ -747,7 +921,7 @@ class SnakeDraw:
             func = SnakeDraw.menu_options[option]
             # replace func[1] by menu_option
             if isinstance(func, list):
-                message += f": ← {func[1][func[0]]} →    "
+                message += f": ← {func[1][func[0]]} →   "
             print(message)
             if option == "Themes":
                 SnakeDraw.current_theme = func[1][func[0]]
@@ -1343,6 +1517,407 @@ def LaunchDuplicate():
         check_for_duplicates(sys.argv[1:])
     else:
         check_for_duplicates(["./"])
+# README Reader {{{3
+def readfile(file):
+    #       Gras, Italique,             Strike, code, Mcode, Hilight
+    #      0**    1*     2__    3_     4~~    5`     6```   7==
+    etat = [False, False, False, False, False, False, False, False]
+    to_printfile = []
+    with open(file, "r") as f:
+        a = f.readlines()
+    for i in a:
+        current_ligne = i.rstrip()  # Fro keep \t
+        if current_ligne == "---" or current_ligne == "___" or current_ligne == "***":
+            current_ligne = get_terminal_size()[0] * "─"
+        elif current_ligne[0:6] == "######":
+            current_ligne = "\033[33mh6\u2588\u2588\u2588\u2588" + current_ligne[6:] + "\033[0m"
+        elif current_ligne[0:5] == "#####":
+            current_ligne = "\033[33mh5\u2588\u2588\u2588" + current_ligne[5:] + "\033[0m"
+        elif current_ligne[0:4] == "####":
+            current_ligne = "\033[33mH4\u2588\u2588" + current_ligne[4:] + "\033[0m"
+        elif current_ligne[0:3] == "###":
+            current_ligne = "\033[32m\033[1m" + (' ' + current_ligne[3:] + " ").center(get_terminal_size()[0], ".") + "\033[0m"
+        elif current_ligne[0:2] == "##":
+            current_ligne = "\033[34m\033[1m" + (' ' + current_ligne[2:] + " ").center(get_terminal_size()[0], "─") + "\033[0m"
+        elif current_ligne[0:1] == "#":
+            current_ligne = "\033[31m\033[1m\033[4m" + (' ' + current_ligne[1:] + " ").center(get_terminal_size()[0], "\u2588") + "\033[0m"
+        # While "**" or "~~" or "*" or "==" or "__" not i current line
+        if "**" in current_ligne and not etat[0]:
+            etat[0] = True
+            current_ligne = current_ligne.replace("**", "\033[1m\033[91m", 1)
+        if "**" in current_ligne and etat[0]:
+            etat[0] = False
+            current_ligne = current_ligne.replace("**", "\033[0m", 1)
+        if "__" in current_ligne and not etat[2]:
+            etat[2] = True
+            current_ligne = current_ligne.replace("__", "\033[1m", 1)
+        if "__" in current_ligne and etat[2]:
+            etat[2] = False
+            current_ligne = current_ligne.replace("__", "\033[0m", 1)
+        if "==" in current_ligne and not etat[7]:
+            etat[7] = True
+            current_ligne = current_ligne.replace("==", "\033[103m\033[30m", 1)
+        if "==" in current_ligne and etat[7]:
+            etat[7] = False
+            current_ligne = current_ligne.replace("==", "\033[0m", 1)
+        to_printfile.append(current_ligne)
+    return to_printfile
+def printontermnal(to_printfile):
+    for i in to_printfile:
+        print(i)
+def LauchPrintMd():
+    if sys.argv[1:]:
+        printontermnal(readfile(sys.argv[1]))
+    else:
+        printontermnal(readfile(input("Ficher Markdown: ")))
+# Count Line {{{3
+def count_number_of_lines_in_file(file: str) -> int:
+    """
+    Entrée: file: str
+    Sortie: int
+    Compte le nombre de lignes dans un fichier
+    """
+    with open(file, "r", encoding="latin-1") as f:
+        text = f.readlines()
+        text = [e for e in text if e.strip() not in {""}]
+        return len(text)
+def count_number_of_lines_in_folder(folder: str, match: str = "(.py$|.md$)") -> int:
+    """
+    Info: You can set "../../Here"
+    Info: C'est le fichier a partir du dossier de ce fichier
+    """
+    nombres_lignes = 0
+    for root, directories, files in os.walk(folder, topdown=False):
+        for name in files:
+            if re.search(match, name):
+                nombres_lignes += count_number_of_lines_in_file(os.path.join(root, name))
+    return nombres_lignes
+def count_number_of_lines_in_folder_verbose(folder: str, match: str = "(.py$|.md$)", otherinfo=False) -> int:
+    """
+    Info: You can set "../../Here"
+    Info: C'est le fichier a partir du dossier de ce fichier
+    """
+    dico_otherinfo = {}
+    nombres_lignes = 0
+    for root, directories, files in os.walk(folder, topdown=False):
+        print("\033[31mroot:\033[0m " + root)
+        print("\033[32mdirectories:\033[0m " + str(directories))
+        print("\033[33mfiles:\033[0m " + str(files))
+        for name in files:
+            if re.search(match, name):
+                print("\033[31m---\033[0m")
+                print("\033[36mname:\033[0m " + str(name))
+                print("\033[34mpath:\033[0m " + str(os.path.join(root, name)))
+                ligne = count_number_of_lines_in_file(os.path.join(root, name))
+                print("\033[35mlignes:\033[0m " + str(ligne))
+                if otherinfo:
+                    if name in dico_otherinfo:
+                        if isinstance(dico_otherinfo[name], list):
+                            dico_otherinfo[name] = dico_otherinfo[name] + [ligne]
+                        else:
+                            dico_otherinfo[name] = [dico_otherinfo[name], ligne]
+                    else:
+                        dico_otherinfo[name] = ligne
+                nombres_lignes += ligne
+        try:
+            print("\n" + "=" * (os.get_terminal_size()[0]) + "\n")
+        except:
+            print("\n" + "=" * 25 + "\n")
+    if otherinfo:
+        print(dico_otherinfo)
+        max_len = 0
+        info_byext = {}
+        for i in dico_otherinfo.keys():
+            max_len = max(len(i), max_len)
+        for i, j in dico_otherinfo.items():
+            l = 0
+            if isinstance(j, list):
+                for k in j:
+                    l += k
+            else:
+                l = j
+            print("name: " + str(i.center(max_len)) + "\t list: " + str(j) + "\t ligne: " + str(l) + "\t ext:" + str(
+                i.split('.')[-1]))
+            if i.split('.')[-1] in info_byext:
+                info_byext[i.split('.')[-1]] += l
+            else:
+                info_byext[i.split('.')[-1]] = l
+        print("==-==-==-==-==-==")
+        for i, j in info_byext.items():
+            print(str(i) + "\t: " + str(j))
+        try:
+            print("\n" + "=" * (os.get_terminal_size()[0]) + "\n")
+        except:
+            print("\n" + "=" * 25 + "\n")
+        return nombres_lignes
+    else:
+        return nombres_lignes
+def LaunchCountLines():
+    if len(sys.argv) > 1:
+        match = sys.argv[1]
+    else:
+        match = "\.py$|\.md$|\.html$|\.css$|\.txt$|LICENCE$|\.cfg$|\.json$"
+    print("nombre de lignes: " + str(count_number_of_lines_in_folder_verbose(".", match, otherinfo=True)))
+    print("match: " + match)
+    print("fichier courant: " + str(os.getcwd()))
+# Shell {{{3
+class ShellFunctions:
+    @classmethod
+    def auto_complete(cls, command, list_of_command):
+        """
+        This function is used to auto-complete the command.
+        """
+        command_list = []
+        for i in list_of_command:
+            if i.startswith(command):
+                command_list.append(i)
+        return command_list
+
+    @classmethod
+    def reset_tabulationIndex(cls):
+        ShellDraw.reload_all()
+        ShellInfos.tabulationIndex = -1
+
+
+class ShellDraw:
+    @classmethod
+    def draw_footer(cls):
+        x = os.get_terminal_size()[0]
+        y = os.get_terminal_size()[1]
+        sys.stdout.write(f"\033[{y - 1};0H" + "-" * x)
+        sys.stdout.write(f"\033[{y - 1};6H" + ShellModes.get_mode_name())
+        sys.stdout.write(f"\033[{y - 1};20H" + ShellInfos.stack_key)
+        sys.stdout.flush()
+
+    @classmethod
+    def cursor_key(cls):
+        sys.stdout.write(
+            f"\033[{ShellInfos.cursor_pos // os.get_terminal_size()[0] + 1};{ShellInfos.cursor_pos % os.get_terminal_size()[0]}H")
+
+    @classmethod
+    def actulise_input(cls):
+        sys.stdout.write("\033[0;0H" + ShellInfos.input_string + " ")
+
+    @classmethod
+    def clear_input(cls):
+        sys.stdout.write("\033[0;0H" + " " * os.get_terminal_size()[0])
+
+    @classmethod
+    def reload_all(cls):
+        clear()
+        cls.draw_footer()
+        cls.actulise_input()
+        cls.cursor_key()
+
+
+class ShellConfig:
+    @classmethod
+    def load_config(cls):
+        """
+        This function is used to load the configuration file.
+        """
+        try:
+            with open("config.txt", "r") as f:
+                config = f.readlines()
+            return config
+        except FileNotFoundError:
+            print("ShellConfiguration file not found.")
+            return False
+
+    @classmethod
+    def get_history(cls):
+        """
+        This function is used to get the history of commands.
+        """
+        try:
+            with open("history.txt", "r") as f:
+                history = [i.lstrip() for i in f.readlines()]
+            return history
+        except FileNotFoundError:
+            return []
+
+    @classmethod
+    def write_history(cls, command):
+        """
+        This function is used to write the history of commands.
+        """
+        with open("history.txt", "a") as f:
+            f.write(command + "\n")
+
+
+class ShellInfos:
+    stack_key = ""
+    input_string = ""
+    cursor_pos = 1
+    tabulationIndex = -1
+    history = ShellConfig.get_history()
+    history_index = 0
+
+
+class ShellModes:
+    allShellModes = []
+    currentMode = 0
+
+    def __init__(self, id, name, commands):
+        self.modId = id
+        self.modName = name
+        self.command = commands
+        self.allShellModes.append(self)
+
+    @staticmethod
+    def change_mode(new_mode: int):
+        if new_mode == 0:
+            ShellModes.currentMode = 0
+            ShellInfos.stack_key = ""
+        elif new_mode == 1:
+            ShellModes.currentMode = 1
+            ShellFunctions.reset_tabulationIndex()
+        elif new_mode == 2:
+            ShellModes.currentMode = 2
+        elif new_mode == 3:
+            ShellModes.currentMode = 3
+        ShellDraw.draw_footer()
+
+    def normal_insert_mode(key: str):
+        if re.match('\\x1b\\[[A-D]', key):
+            if key == "\x1b[C":
+                ShellInfos.cursor_pos = min(ShellInfos.cursor_pos + 1, len(ShellInfos.input_string) + 1)
+            elif key == "\x1b[D":
+                ShellInfos.cursor_pos = max(0, ShellInfos.cursor_pos - 1)
+            elif key == "\x1b[A":  # Up
+                if ShellInfos.history_index > -len(ShellInfos.history):
+                    ShellInfos.history_index = max(ShellInfos.history_index - 1, 0-len(ShellInfos.history))
+                    ShellInfos.input_string = ShellInfos.history[ShellInfos.history_index]
+                    ShellInfos.cursor_pos = len(ShellInfos.input_string) + 1
+                ShellDraw.clear_input()
+                ShellDraw.actulise_input()
+            elif key == "\x1b[B":  # Down
+                if ShellInfos.history_index < -1:
+                    ShellInfos.history_index += 1
+                    ShellInfos.input_string = ShellInfos.history[ShellInfos.history_index]
+                    ShellInfos.cursor_pos = len(ShellInfos.input_string) + 1
+                elif ShellInfos.history_index == -1:
+                    ShellInfos.history_index = 0
+                    ShellInfos.input_string = ""
+                    ShellInfos.cursor_pos = 1
+                ShellDraw.clear_input()
+                ShellDraw.actulise_input()
+
+
+    def normal_mode(key: str):
+        if re.match('^[0-9d hjklwb]$', key) or key in ["\x01", "\x7f"]:
+            ShellInfos.stack_key += key
+        elif key == "i":
+            ShellModes.change_mode(1)
+            return
+        elif key == "a":
+            ShellModes.change_mode(1)
+            if ShellInfos.cursor_pos < len(ShellInfos.input_string) + 1:
+                ShellInfos.cursor_pos += 1
+            return
+        elif key == "r":
+            ShellModes.change_mode(2)
+            return
+        elif key == ":":
+            ShellModes.change_mode(3)
+            return
+
+        if ShellInfos.stack_key[-2:] == "dd":
+            ShellInfos.input_string = ""
+            ShellInfos.cursor_pos = 1
+            ShellInfos.stack_key = ""
+            ShellDraw.clear_input()
+        elif ShellInfos.stack_key[-1:] == " ":
+            if ShellInfos.stack_key[:-1].isdigit():
+                ShellInfos.cursor_pos += int(ShellInfos.stack_key[:-1])
+            else:
+                ShellInfos.cursor_pos += 1
+            ShellInfos.cursor_pos = min(ShellInfos.cursor_pos, len(ShellInfos.input_string) + 1)
+            ShellInfos.stack_key = ""
+        elif ShellInfos.stack_key[-1:] == "\x7f":
+            if ShellInfos.stack_key[:-1].isdigit():
+                ShellInfos.cursor_pos -= int(ShellInfos.stack_key[:-1])
+            else:
+                ShellInfos.cursor_pos -= 1
+            ShellInfos.cursor_pos = max(ShellInfos.cursor_pos, 1)
+            ShellInfos.stack_key = ""
+        ShellDraw.actulise_input()
+        ShellDraw.draw_footer()
+
+    def insert_mode(key: str):
+        if key == "\x7f":
+            ShellInfos.input_string = ShellInfos.input_string[:-1]
+            ShellInfos.cursor_pos = max(1, ShellInfos.cursor_pos - 1)
+            ShellFunctions.reset_tabulationIndex()
+        elif key == "\r":
+            if ShellInfos.tabulationIndex == -1:
+                sys.stdout.write(f"\033[2J\033[0;0H{ShellInfos.input_string}\r\n")
+                os.system(ShellInfos.input_string)
+                ShellDraw.draw_footer()
+                ShellConfig.write_history(ShellInfos.input_string)
+                ShellInfos.history_index = 0
+                ShellInfos.history.append(ShellInfos.input_string)
+                ShellInfos.input_string = ""
+                ShellInfos.cursor_pos = 1
+            else:
+                ShellInfos.input_string = " ".join(ShellInfos.input_string.split(" ")[:-1]) + " " + \
+                                     ShellFunctions.auto_complete(ShellInfos.input_string.split(" ")[-1], os.listdir("."))[
+                                         ShellInfos.tabulationIndex]
+                ShellInfos.cursor_pos = len(ShellInfos.input_string) + 1
+                ShellFunctions.reset_tabulationIndex()
+        elif key == "\t":
+            list_autocomplete = ShellFunctions.auto_complete(ShellInfos.input_string.split(" ")[-1], os.listdir("."))
+            ShellInfos.tabulationIndex += 1
+            for ind, i in enumerate(list_autocomplete):
+                if ind == ShellInfos.tabulationIndex:
+                    sys.stdout.write(f"\033[33m\033[{ind + 2};1H{i}\033[0m")
+                else:
+                    sys.stdout.write(f"\033[{ind + 2};1H{i}")
+        else:
+            if ShellInfos.input_string == "":
+                ShellDraw.clear_input()
+            ShellInfos.input_string = ShellInfos.input_string[:ShellInfos.cursor_pos - 1] + key + ShellInfos.input_string[
+                                                                                   ShellInfos.cursor_pos - 1:]
+            ShellInfos.cursor_pos += 1
+            ShellFunctions.reset_tabulationIndex()
+        ShellDraw.actulise_input()
+
+    def all_mode(key: str):
+        if key == "\x1b\x1b":
+            ShellModes.change_mode(0)
+            return
+
+    @classmethod
+    def get_mode_name(self):
+        return self.allShellModes[self.currentMode].modName
+
+
+def ShellMain():
+    normalMode = ShellModes(0, "Normal", [])
+    insertMode = ShellModes(1, "Insert", [])
+    ReplaceMode = ShellModes(2, "Replace", [])
+    CommandMode = ShellModes(3, "Command", [])
+    clear()
+    ShellDraw.reload_all()
+    while True:
+        key = getKey(debug=True)
+        sys.stdout.write("\033[0;0H")
+        # print(get_key_bytes(True))
+        if ShellModes.currentMode == 0:  # Normal Mode
+            ShellModes.all_mode(key)
+            ShellModes.normal_mode(key)
+            ShellModes.normal_insert_mode(key)
+        elif ShellModes.currentMode == 1:
+            ShellModes.all_mode(key)
+            ShellModes.insert_mode(key)
+            ShellModes.normal_insert_mode(key)
+        elif ShellModes.currentMode == 2:
+            ShellModes.all_mode(key)
+        elif ShellModes.currentMode == 3:
+            ShellModes.all_mode(key)
+        ShellDraw.cursor_key()
+        sys.stdout.flush()
+
 # Imports Only {{{2
 class List(list):
     def __init__(self, *args, **kwargs):
@@ -1504,6 +2079,9 @@ def launch():
         ('SnakeTerminal', SnakeMain, None),
         ('TetrisPyGame', LaunchTetris, None),
         ('CheckDuplicateFile', LaunchDuplicate, None),
+        ('MarckDownOnTerminal', LauchPrintMd, None),
+        ('LaunchCountLines', LaunchCountLines, None),
+        ('Shell Vim', ShellMain, None),
         ('print ok', print, ("ok",)),
         ('print okj2', print, ('ojk2',))
     ]
@@ -1514,7 +2092,7 @@ def launch():
         choix = int(choix)
         if len(launcher[choix])>2 and launcher[choix][2] is not None:
             launcher[choix][1](*launcher[choix][2])
-        else: 
+        else:
             launcher[choix][1]()
 def clilaunch():
     pass
