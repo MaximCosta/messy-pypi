@@ -3,7 +3,6 @@
 from __future__ import print_function, annotations
 from collections import defaultdict
 from enum import Enum, auto
-from main_terminalGetKey import getKey
 from select import select
 from typing import Iterator
 import fcntl
@@ -2082,8 +2081,6 @@ def launch():
         ('MarckDownOnTerminal', LauchPrintMd, None),
         ('LaunchCountLines', LaunchCountLines, None),
         ('Shell Vim', ShellMain, None),
-        ('print ok', print, ("ok",)),
-        ('print okj2', print, ('ojk2',))
     ]
     for ind,i in enumerate(launcher):
         print(f"{ind}: {i[0]}")
